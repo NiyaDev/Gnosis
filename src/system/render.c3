@@ -5,6 +5,7 @@ import gnosis::system::camera;
 
 
 int[2] screen = {1280, 720};
+//int[2] screen = {1920, 1080};
 int[2] render = {640, 360};
 RenderTexture render_texture;
 Shader shader;
@@ -16,6 +17,7 @@ fn void! init() {
 	//* Setup raylib
 	rl::setTraceLogLevel(rl::TraceLogLevel.WARNING);
 	rl::initWindow(screen[0], screen[1], "Gnosis");
+	rl::setTargetFPS(60);
 
 	//* Set up render texture
 	render_texture = rl::loadRenderTexture(render[0], render[1]);
