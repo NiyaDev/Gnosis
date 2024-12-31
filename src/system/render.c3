@@ -36,20 +36,20 @@ fn void! close() {
 
 /** 
  **/
-fn void ui() {
+fn void content() {
 	rl::beginTextureMode(render_texture);
 	rl::clearBackground(rl::DARKGRAY);
+	rl::beginMode3D(camera::main);
 }
 /** 
  **/
-fn void content() {
-	rl::beginMode3D(camera::main);
+fn void ui() {
+	rl::endMode3D();
 }
 /** 
  **/
 fn void end() {
 	//* End rendering to texture
-	rl::endMode3D();
 	rl::endTextureMode();
 
 	//* Render texture to screen

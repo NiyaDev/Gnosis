@@ -3,7 +3,7 @@
 	"warnings": [ "no-unused" ],
 	"dependency-search-paths": [ "lib" ],
 	"dependencies": [ "raylib5" ],
-	"authors": [ "John Doe <john.doe@example.com>" ],
+	"authors": [ "Josh <Niya> Zemenski" ],
 	"version": "0.1.0",
 	"sources": [ "src/**" ],
 	"output": "build",
@@ -15,3 +15,4 @@
 	"cpu": "generic",
 	"opt": "O0",
 }
+

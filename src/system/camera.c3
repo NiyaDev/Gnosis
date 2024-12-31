@@ -16,7 +16,7 @@ struct Camera {
 	float rot_target;
 }
 
-/** 
+/** Initialize Camera structure 
  **/
 fn void! init() {
 	main.position = {0, 12, 10};
@@ -55,7 +55,7 @@ fn void! update(float delta_time) {
 
 	//* Calc rotation
 	main.position = main.target.rotate({0.0, 12.0 * main.zoom, 10.0 * main.zoom}, main.rotation);
-	io::printfn("{%d}", main.rotation);
+	//io::printfn("{%d}", main.rotation);
 }
 
 /** TEMP
@@ -82,7 +82,7 @@ fn Vector3 Vector3.rotate(&self, Vector3 dist, float rot) {
 	return position;
 }
 
-/** 
+/**  
  **/
 fn void move(Vector3 amount) {
 	main.position.x += amount.x;
@@ -104,3 +104,4 @@ fn void zoom(float change) {
 fn void rotate(float change) {
 	main.rot_target += change;
 }
+
