@@ -42,11 +42,10 @@ fn int main(String[] args) {
 	Texture mn_fl = rl::loadTexture("resources/spr_mana_fill.png");
 
 	//* Player
-	Player pl = {
-		.u.position = {8,9,8},
-		.u.sprite = player,
-	};
-	camera::main.unit = &pl;
+	Player* pl = player::init();
+	pl.position = {8,9,8};
+	pl.sprite = player;
+	camera::main.unit = pl;
 
 
 	for (int i = 0; i < 100; i++) { tiles[i] = true; }
@@ -57,10 +56,6 @@ fn int main(String[] args) {
 
 		// TODO: Move into player.c3
 		pl.update();
-		//if (rl::isKeyDown(rl::KEY_W)) pl.move(camera::ZERO.rotate({-5 * dt, 0, -5 * dt}, camera::main.rotation));	
-		//if (rl::isKeyDown(rl::KEY_S)) pl.move(camera::ZERO.rotate({ 5 * dt, 0,  5 * dt}, camera::main.rotation));
-		//if (rl::isKeyDown(rl::KEY_D)) pl.move(camera::ZERO.rotate({ 5 * dt, 0, -5 * dt}, camera::main.rotation));
-		//if (rl::isKeyDown(rl::KEY_A)) pl.move(camera::ZERO.rotate({-5 * dt, 0,  5 * dt}, camera::main.rotation));
 		if (rl::isKeyDown(rl::KEY_LEFT_SHIFT)) camera::move({0,-10 * dt, 0});
 		if (rl::isKeyDown(rl::KEY_SPACE)) camera::move({0,10 * dt, 0});
 		if (rl::isKeyPressed(rl::KEY_Q)) camera::rotate(90);

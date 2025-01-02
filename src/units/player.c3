@@ -1,6 +1,8 @@
 
 module gnosis::unit::player;
+import std::io;
 import gnosis::system::camera;
+import gnosis::unit;
 import raylib5::rl;
 
 
@@ -9,7 +11,21 @@ struct Player {
 }
 
 
-/** 
+/** Creates and initializes a player
+ **/
+fn Player* init() {
+  Player* output = mem::new(Player);
+  output.skills = mem::new_array(SkillData, skills::NUMBER_OF_SKILLS);
+
+  //* TEST
+  output.set_species(HUMAN);
+  //for (int i; i<(int)Skill.COUNT; i++) {
+  //  io::printfn("%s: %d", (Skill)i, output.skills[i].value);
+  //}
+
+  return output;
+}
+/** Updates player based on input
  **/
 fn void Player.update(&self) {
   Vector3 movement;
@@ -25,10 +41,4 @@ fn void Player.update(&self) {
 
   self.move(camera::ZERO.rotate(movement, camera::main.rotation));
 }
-/**
- **/
-fn void Player.move(&self, Vector3 movement) {
-  self.position.x += movement.x;
-  self.position.y += movement.y;
-  self.position.z += movement.z;
-}
+
