@@ -55,6 +55,7 @@ enum Skill : int () {
 
 struct SkillData {
   int value;
+  int max_value;
   bool discovered;
 }
 

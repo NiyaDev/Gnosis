@@ -2,7 +2,7 @@
 module gnosis;
 import std::io;
 import std::math::random;
-import raylib5::rl;
+import raylib;
 import gnosis::system::render;
 import gnosis::system::camera;
 import gnosis::chunks;

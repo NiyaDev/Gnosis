@@ -1,7 +1,7 @@
 
 module gnosis::unit;
 import std::io;
-import raylib5::rl;
+import raylib;
 
 
 
@@ -40,10 +40,7 @@ fn void Unit.set_species(&self, Species species) {
     switch (species) {
       case HUMAN:
         io::printfn("%s: %d", (Skill)i, species::HUMAN_BASE[i]);
-        self.skills[i] = {
-          .value = species::HUMAN_BASE[i],
-          .discovered = false,
-        };
+        self.skills[i] = {};
       default:
     }
   }

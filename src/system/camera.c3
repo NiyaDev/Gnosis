@@ -2,7 +2,7 @@
 module gnosis::system::camera;
 import std::io;
 import std::math;
-import raylib5::rl;
+import raylib;
 import gnosis;
 import gnosis::unit;
 
@@ -20,8 +20,7 @@ struct Camera {
 	Unit* unit;
 }
 
-/** Initialize Camera structure 
- **/
+<* Initialize Camera structure *>
 fn void! init() {
 	main.position = {0, 12, 10};
 	main.target = {0,0,0};
@@ -34,8 +33,7 @@ fn void! init() {
 	main.rotation = 0;
 	main.rot_target = 0;
 }
-/** 
- **/
+<* Update camera data *>
 fn void! update(float delta_time) {
 	//* Position
 	if (main.unit != null) {
@@ -73,8 +71,7 @@ fn void! update(float delta_time) {
 
 const Vector3 ZERO = {0,0,0};
 
-/**  
- **/
+<* Move camera by an amount *>
 fn void move(Vector3 amount) {
 	main.position.x += amount.x;
 	main.target.x += amount.x;
@@ -83,13 +80,11 @@ fn void move(Vector3 amount) {
 	main.position.z += amount.z;
 	main.target.z += amount.z;
 }
-/** 
- **/
+<* Change zoom level *>
 fn void zoom(float change) {
 	main.zoom = (change + main.zoom).clamp(0.25,2);
 }
-/** 
- **/
+<* Rotate camera by amount *>
 fn void rotate(float change) {
 	main.rot_target += change;
 }

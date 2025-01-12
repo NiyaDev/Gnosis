@@ -1,6 +1,6 @@
 
 module gnosis::system::render;
-import raylib5::rl;
+import raylib;
 import gnosis::system::camera;
 
 
@@ -15,47 +15,47 @@ Shader shader;
  **/
 fn void! init() {
 	//* Setup raylib
-	rl::setTraceLogLevel(rl::TraceLogLevel.WARNING);
-	rl::initWindow(screen[0], screen[1], "Gnosis");
-	rl::setTargetFPS(60);
+	raylib::setTraceLogLevel(rl::TraceLogLevel.WARNING);
+	raylib::initWindow(screen[0], screen[1], "Gnosis");
+	raylib::setTargetFPS(60);
 
 	//* Set up render texture
-	render_texture = rl::loadRenderTexture(render[0], render[1]);
+	render_texture = raylib::loadRenderTexture(render[0], render[1]);
 
 	//* Set up shader
-	shader = rl::loadShader(null, "resources/shader.fs");
+	shader = raylib::loadShader(null, "resources/shader.fs");
 }
 /** Close render system
  **/
 fn void! close() {
-	rl::unloadRenderTexture(render_texture);
-	rl::unloadShader(shader);
+	raylib::unloadRenderTexture(render_texture);
+	raylib::unloadShader(shader);
 
-	rl::closeWindow();
+	raylib::closeWindow();
 }
 
 /** 
  **/
 fn void content() {
-	rl::beginTextureMode(render_texture);
-	rl::clearBackground(rl::DARKGRAY);
-	rl::beginMode3D(camera::main);
+	raylib::beginTextureMode(render_texture);
+	raylib::clearBackground(raylib::DARKGRAY);
+	raylib::beginMode3D(camera::main);
 }
 /** 
  **/
 fn void ui() {
-	rl::endMode3D();
+	raylib::endMode3D();
 }
 /** 
  **/
 fn void end() {
 	//* End rendering to texture
-	rl::endTextureMode();
+	raylib::endTextureMode();
 
 	//* Render texture to screen
-	rl::beginDrawing();
-		rl::beginShaderMode(shader);
-			rl::drawTexturePro(render_texture.texture, {0,0,render[0],(float)-render[1]}, {0,0,screen[0],screen[1]}, {0,0}, 0, rl::WHITE);
-		rl::endShaderMode();
-	rl::endDrawing();
+	raylib::beginDrawing();
+		raylib::beginShaderMode(shader);
+			raylib::drawTexturePro(render_texture.texture, {0,0,render[0],(float)-render[1]}, {0,0,screen[0],screen[1]}, {0,0}, 0, rl::WHITE);
+		raylib::endShaderMode();
+	raylib::endDrawing();
 }

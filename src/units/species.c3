@@ -3,7 +3,12 @@ module gnosis::unit::species;
 import gnosis::unit;
 
 
-const int[skills::NUMBER_OF_SKILLS] HUMAN_BASE = {05,2, 5,2, 5,2, 05,2, 2, 0,05,05,05, 0,05,05,05,05,05, 0,05,05, 5, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0, 0,0,0, 0,0};
+//* Human constants
+const int[skills::NUMBER_OF_SKILLS] HUMAN_BASE        = {05,2, 5,2, 5,2, 05,2, 2, 0,05,05,05, 0,05,05,05,05,05, 0,05,05, 5, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0, 0,0,0, 0,0};
+const int[skills::NUMBER_OF_SKILLS] HUMAN_MAX         = {};
+const float                         HUMAN_CORE        = 97.5;
+const int[2]                        HUMAN_CORE_RANGE  = {40,10};
+
 enum Species : (int[skills::NUMBER_OF_SKILLS] base, int[skills::NUMBER_OF_SKILLS] max, float core_temp, int[2] temp_range) {
   NULL     = {{},{},0,{}},
   

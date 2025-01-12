@@ -3,7 +3,7 @@ module gnosis::unit::player;
 import std::io;
 import gnosis::system::camera;
 import gnosis::unit;
-import raylib5::rl;
+import raylib;
 
 
 struct Player {
