@@ -47,7 +47,7 @@ fn void! update(float delta_time) {
 	}
 
 	//* Rotation
-	if (!gnosis::close(main.rotation, main.rot_target, 5)) {
+	if (!raylib::close(main.rotation, main.rot_target, 5)) {
 		float dir = 0;
 		if ((main.rot_target - main.rotation) > 0) dir =  1;
 		if ((main.rot_target - main.rotation) < 0) dir = -1;

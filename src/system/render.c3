@@ -15,47 +15,47 @@ Shader shader;
  **/
 fn void! init() {
 	//* Setup raylib
-	raylib::setTraceLogLevel(rl::TraceLogLevel.WARNING);
-	raylib::initWindow(screen[0], screen[1], "Gnosis");
-	raylib::setTargetFPS(60);
+	raylib::set_trace_log_level(raylib::TraceLogLevel.WARNING);
+	raylib::init_window(screen[0], screen[1], "Gnosis");
+	raylib::set_target_fps(60);
 
 	//* Set up render texture
-	render_texture = raylib::loadRenderTexture(render[0], render[1]);
+	render_texture = raylib::load_render_texture(render[0], render[1]);
 
 	//* Set up shader
-	shader = raylib::loadShader(null, "resources/shader.fs");
+	shader = raylib::load_shader(null, "resources/shader.fs");
 }
 /** Close render system
  **/
 fn void! close() {
-	raylib::unloadRenderTexture(render_texture);
-	raylib::unloadShader(shader);
+	raylib::unload_render_texture(render_texture);
+	raylib::unload_shader(shader);
 
-	raylib::closeWindow();
+	raylib::close_window();
 }
 
 /** 
  **/
 fn void content() {
-	raylib::beginTextureMode(render_texture);
-	raylib::clearBackground(raylib::DARKGRAY);
-	raylib::beginMode3D(camera::main);
+	raylib::begin_texture_mode(render_texture);
+	raylib::clear_background(raylib::DARKGRAY);
+	raylib::begin_3d_mode(camera::main);
 }
 /** 
  **/
 fn void ui() {
-	raylib::endMode3D();
+	raylib::end_3d_mode();
 }
 /** 
  **/
 fn void end() {
 	//* End rendering to texture
-	raylib::endTextureMode();
+	raylib::end_texture_mode();
 
 	//* Render texture to screen
-	raylib::beginDrawing();
-		raylib::beginShaderMode(shader);
-			raylib::drawTexturePro(render_texture.texture, {0,0,render[0],(float)-render[1]}, {0,0,screen[0],screen[1]}, {0,0}, 0, rl::WHITE);
-		raylib::endShaderMode();
-	raylib::endDrawing();
+	raylib::begin_drawing();
+		raylib::begin_shader_mode(shader);
+			raylib::draw_texture_pro(render_texture.texture, {0,0,render[0],(float)-render[1]}, {0,0,screen[0],screen[1]}, {0,0}, 0, raylib::WHITE);
+		raylib::end_shader_mode();
+	raylib::end_drawing();
 }
