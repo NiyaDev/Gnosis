@@ -7,12 +7,15 @@ import raylib;
 
 struct Unit {
   Vector3 position;
-  Texture sprite;
+  Texture* sprite;
 
   //* Data
   Species species;
   //Body body;
   SkillData[] skills;
+  float hp_max, hp_cur;
+  float st_max, st_cur;
+  float mn_max, mn_cur;
 }
 
 /** Create new initialized unit
