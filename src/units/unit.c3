@@ -42,7 +42,7 @@ fn void Unit.set_species(&self, Species species) {
   for (int i; i<skills::NUMBER_OF_SKILLS; i++) {
     switch (species) {
       case HUMAN:
-        io::printfn("%s: %d", Skill.from_ordinal(i), species::HUMAN_BASE[i]);
+        //io::printfn("%s: %d", Skill.from_ordinal(i), species::HUMAN_BASE[i]);
         self.skills[i] = {};
       default:
     }
