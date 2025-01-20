@@ -22,15 +22,15 @@ fn Player* init() {
   output.set_species(HUMAN);
 
   output.hp_max = (float)output.skills[Skill.HEALTH.ordinal].value * 10;
-  output.hp_cur = output.hp_max / 2;
+  output.hp_cur = output.hp_max;
   output.skills[Skill.HEALTH.ordinal].discovered = true;
   output.st_max = (float)output.skills[Skill.STAMINA.ordinal].value * 10;
-  output.st_cur = output.st_max / 2;
+  output.st_cur = output.st_max;
   output.skills[Skill.STAMINA.ordinal].discovered = true;
   output.mn_max = (float)output.skills[Skill.MANA.ordinal].value * 10;
-  output.mn_cur = output.mn_max / 2;
+  output.mn_cur = output.mn_max;
   output.hn_max = (float)output.skills[Skill.BELLY.ordinal].value * 5;
-  output.hn_cur = output.hn_max / 10;
+  output.hn_cur = output.hn_max;
   output.skills[Skill.BELLY.ordinal].discovered = true;
 
   return output;

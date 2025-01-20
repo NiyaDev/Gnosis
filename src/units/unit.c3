@@ -19,9 +19,9 @@ struct Unit {
   float hn_max, hn_cur, hn_tick;
 }
 
-/** Create new initialized unit
+<* Create new initialized unit
   @param species "Species to set unit as. If left empty, doesn't set"
- **/
+ *>
 fn Unit* init(Species species = NULL) {
   Unit* output = mem::new(Unit);
   output.skills = mem::new_array(SkillData, skills::NUMBER_OF_SKILLS);
@@ -38,12 +38,10 @@ fn void Unit.set_species(&self, Species species) {
 
   //* Body
 
-  //io::printfn("%s ",species.base);
   //* skills
   for (int i; i<skills::NUMBER_OF_SKILLS; i++) {
     switch (species) {
       case HUMAN:
-        //io::printfn("%s: %d", Skill.from_ordinal(i), species::HUMAN_BASE[i]);
         self.skills[i] = {.value = species::HUMAN_BASE[i], .discovered = false};
       default:
     }
@@ -51,9 +49,9 @@ fn void Unit.set_species(&self, Species species) {
   
 }
 
-/** Move unit in space
+<* Move unit in space
   @param movement "Amount to move"
- **/
+ *>
 fn void Unit.move(&self, Vector3 movement) {
   self.position.x += movement.x;
   self.position.y += movement.y;

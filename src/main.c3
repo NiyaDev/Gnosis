@@ -13,12 +13,6 @@ import gnosis::chunks;
 bool[100] tiles;
 Chunk chunk_01;
 
-//Texture* hp_bg;
-//Texture* hp_fl;
-//Texture* st_bg;
-//Texture* st_fl;
-//Texture* mn_bg;
-//Texture* mn_fl;
 Texture* bar_bg;
 Texture* bar_fl;
 
@@ -53,18 +47,15 @@ fn int main(String[] args) {
 	//* Load Textures
 	Bulk* unit_tex_bulk = bulk::load("resources/003.bulk")!!;
 	Texture* player = image::load_mem(".png", unit_tex_bulk.get("player")!!).texture();
-	//Texture* player = texture::load("resources/spr_test_player.png")!!;
 
 	//* Load UI textures
 	Bulk* ui_bulk = bulk::load("resources/001.bulk")!!;
-	bar_bg = image::load_mem(".png", ui_bulk.get("bar_bg")!!).texture();
+	//Image* img_bar_bg = image::load_mem(".png", ui_bulk.get("bar_bg")!!);
+	//bar_bg = img_bar_bg.texture();
+	//img_bar_bg.unload();
+	bar_bg = ui_bulk.get_texture("bar_bg");
+	//bar_bg = image::load_mem(".png", ui_bulk.get("bar_bg")!!).texture();
 	bar_fl = image::load_mem(".png", ui_bulk.get("bar_fl")!!).texture();
-	//hp_bg = image::load_mem(".png", ui_bulk.get("hp_bg")!!).texture();
-	//hp_fl = image::load_mem(".png", ui_bulk.get("hp_fl")!!).texture();
-	//st_bg = image::load_mem(".png", ui_bulk.get("st_bg")!!).texture();
-	//st_fl = image::load_mem(".png", ui_bulk.get("st_fl")!!).texture();
-	//mn_bg = image::load_mem(".png", ui_bulk.get("mn_bg")!!).texture();
-	//mn_fl = image::load_mem(".png", ui_bulk.get("mn_fl")!!).texture();
 
 	//* Player
 	Player* pl = player::init();
