@@ -3,6 +3,7 @@ module gnosis::unit::player;
 import std::io;
 import gnosis::system::camera;
 import gnosis::unit;
+import gnosis::chunks;
 import raylib;
 import keybind;
 
@@ -12,19 +13,29 @@ struct Player {
 }
 
 
-/** Creates and initializes a player
- **/
+<* Creates and initializes a player *>
 fn Player* init() {
   Player* output = mem::new(Player);
   output.skills = mem::new_array(SkillData, skills::NUMBER_OF_SKILLS);
 
   //* TEST
-  output.set_species(HUMAN); 
+  output.set_species(HUMAN);
+
+  output.hp_max = (float)output.skills[Skill.HEALTH.ordinal].value * 10;
+  output.hp_cur = output.hp_max / 2;
+  output.skills[Skill.HEALTH.ordinal].discovered = true;
+  output.st_max = (float)output.skills[Skill.STAMINA.ordinal].value * 10;
+  output.st_cur = output.st_max / 2;
+  output.skills[Skill.STAMINA.ordinal].discovered = true;
+  output.mn_max = (float)output.skills[Skill.MANA.ordinal].value * 10;
+  output.mn_cur = output.mn_max / 2;
+  output.hn_max = (float)output.skills[Skill.BELLY.ordinal].value * 5;
+  output.hn_cur = output.hn_max / 10;
+  output.skills[Skill.BELLY.ordinal].discovered = true;
 
   return output;
 }
-/** Updates player based on input
- **/
+<* Updates player *>
 fn void Player.update(&self) {
   Vector3 movement;
   float dt = raylib::get_frame_time();
@@ -38,5 +49,69 @@ fn void Player.update(&self) {
   movement.mul_f(dt);
 
   self.move(camera::ZERO.rotate(movement, camera::main.rotation));
+
+  if (self.hn_cur > 0) { 
+    //* Health regeneration
+    if ((self.hp_cur < self.hp_max) && self.hp_tick <= 0) {
+      self.hp_tick = (float)self.skills[Skill.REGENERATION.ordinal].value / 0.01;
+      self.hp_cur++;
+      self.hn_cur -= 0.2;
+      if (self.hp_cur > self.hp_max) self.hp_cur = self.hp_max;
+    } else if (self.hp_tick > 0) { self.hp_tick--; }
+    //* Stamina regeneration
+    if ((self.st_cur < self.st_max) && self.st_tick <= 0) {
+      self.st_tick = (float)self.skills[Skill.ENDURANCE.ordinal].value / 0.1;
+      self.st_cur++;
+      if (self.st_cur > self.st_max) self.st_cur = self.st_max;
+    } else if (self.st_tick > 0) { self.st_tick--; }
+    //* Natural hunger tick
+    if (self.hn_tick <= 0) {
+      self.hn_tick = (float)self.skills[Skill.METABOLISM.ordinal].value * 100;
+      self.hn_cur -= 0.1;
+    } else { self.hn_tick--; }
+  } else {
+    //* Tick Health down from hunger 
+    if (self.hn_tick <= 0) {
+      self.hn_tick = (float)self.skills[Skill.METABOLISM.ordinal].value * 100;
+      self.hp_cur--;
+    } else if (self.hn_tick > 0) { self.hn_tick--; }
+  }
+}
+
+<* Draws player UI elements *>
+fn void Player.draw_ui(&self) {
+  if (self.skills[Skill.HEALTH.ordinal].discovered) {
+    float hp_per = self.hp_cur / self.hp_max;
+    gnosis::bar_bg.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
+	  gnosis::bar_fl.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64 * hp_per,8}, {0,0}, 0, raylib::RED);
+	}
+  if (self.skills[Skill.STAMINA.ordinal].discovered) {
+    float st_per = self.st_cur / self.st_max;
+	  gnosis::bar_bg.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,20,64,8}, {0,0}, 0, raylib::GREEN);
+	  gnosis::bar_fl.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,20,64 * st_per,8}, {0,0}, 0, raylib::GREEN);
+	}
+  if (self.skills[Skill.MANA.ordinal].discovered) {
+    float mn_per = self.mn_cur / self.mn_max;
+  	gnosis::bar_bg.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,30,64,8}, {0,0}, 0, raylib::BLUE);
+  	gnosis::bar_fl.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,30,64 * mn_per,8}, {0,0}, 0, raylib::BLUE);
+  }
+  if (self.skills[Skill.BELLY.ordinal].discovered) {
+    float hn_per = self.hn_cur / self.hn_max;
+  	gnosis::bar_bg.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,40,64,8}, {0,0}, 0, raylib::PURPLE);
+  	gnosis::bar_fl.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,40,64 * hn_per,8}, {0,0}, 0, raylib::PURPLE);
+  }
+
+	//String text = string::tformat("FPS: %d\nTiles Rendered: %d", raylib::get_fps(), chunks::tiles_rendered);
+	//raylib::draw_text((ZString)text, 0, 100, 8, raylib::BLACK);
+	String text = string::tformat(
+	  "FPS: %d\nTiles Rendered: %d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d",
+	    raylib::get_fps(), chunks::tiles_rendered,
+	    self.hp_cur, self.hp_max, self.hp_tick,
+	    self.st_cur, self.st_max, self.st_tick,
+	    self.mn_cur, self.mn_max, self.mn_tick,
+	    self.hn_cur, self.hn_max, self.hn_tick,
+	);
+	raylib::draw_text((ZString)text, 0, 100, 8, raylib::BLACK);
+ 
 }
 

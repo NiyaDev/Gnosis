@@ -11,25 +11,31 @@ fn void bulks_001_uitextures() @test {
   Bulk* ui_texture_bulk = bulk::new("001")!!;
 
   //* Grab images of all files needed
-  Image* img_health_bg = image::load("resources/raw_files/spr_health_bg.png")!!;
-  defer img_health_bg.unload();
-  Image* img_health_fl = image::load("resources/raw_files/spr_health_fill.png")!!;
-  defer img_health_fl.unload();
-  Image* img_stamin_bg = image::load("resources/raw_files/spr_stamina_bg.png")!!;
-  defer img_stamin_bg.unload(); 
-  Image* img_stamin_fl = image::load("resources/raw_files/spr_stamina_fill.png")!!;
-  defer img_stamin_fl.unload(); 
-  Image* img_mana_bg   = image::load("resources/raw_files/spr_mana_bg.png")!!;
-  defer img_mana_bg.unload(); 
-  Image* img_mana_fl   = image::load("resources/raw_files/spr_mana_fill.png")!!;
-  defer img_mana_fl.unload(); 
+  //Image* img_health_bg = image::load("resources/raw_files/spr_health_bg.png")!!;
+  //defer img_health_bg.unload();
+  //Image* img_health_fl = image::load("resources/raw_files/spr_health_fill.png")!!;
+  //defer img_health_fl.unload();
+  //Image* img_stamin_bg = image::load("resources/raw_files/spr_stamina_bg.png")!!;
+  //defer img_stamin_bg.unload(); 
+  //Image* img_stamin_fl = image::load("resources/raw_files/spr_stamina_fill.png")!!;
+  //defer img_stamin_fl.unload(); 
+  //Image* img_mana_bg   = image::load("resources/raw_files/spr_mana_bg.png")!!;
+  //defer img_mana_bg.unload(); 
+  //Image* img_mana_fl   = image::load("resources/raw_files/spr_mana_fill.png")!!;
+  //defer img_mana_fl.unload();
+  Image* img_bar_bg   = image::load("resources/raw_files/spr_bar_bg.png")!!;
+  defer img_bar_bg.unload();
+  Image* img_bar_fl   = image::load("resources/raw_files/spr_bar_fill.png")!!;
+  defer img_bar_fl.unload();
 
-  ui_texture_bulk.add("hp_bg", img_health_bg.to_mem(".png"))!!;
-  ui_texture_bulk.add("hp_fl", img_health_fl.to_mem(".png"))!!;
-  ui_texture_bulk.add("st_bg", img_stamin_bg.to_mem(".png"))!!;
-  ui_texture_bulk.add("st_fl", img_stamin_fl.to_mem(".png"))!!;
-  ui_texture_bulk.add("mn_bg", img_mana_bg.to_mem(".png"))!!;
-  ui_texture_bulk.add("mn_fl", img_mana_fl.to_mem(".png"))!!;
+  //ui_texture_bulk.add("hp_bg", img_health_bg.to_mem(".png"))!!;
+  //ui_texture_bulk.add("hp_fl", img_health_fl.to_mem(".png"))!!;
+  //ui_texture_bulk.add("st_bg", img_stamin_bg.to_mem(".png"))!!;
+  //ui_texture_bulk.add("st_fl", img_stamin_fl.to_mem(".png"))!!;
+  //ui_texture_bulk.add("mn_bg", img_mana_bg.to_mem(".png"))!!;
+  //ui_texture_bulk.add("mn_fl", img_mana_fl.to_mem(".png"))!!;
+  ui_texture_bulk.add("bar_bg", img_bar_bg.to_mem(".png"))!!;
+  ui_texture_bulk.add("bar_fl", img_bar_fl.to_mem(".png"))!!;
 
   ui_texture_bulk.save()!!;
 

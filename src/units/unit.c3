@@ -13,9 +13,10 @@ struct Unit {
   Species species;
   //Body body;
   SkillData[] skills;
-  float hp_max, hp_cur;
-  float st_max, st_cur;
-  float mn_max, mn_cur;
+  float hp_max, hp_cur, hp_tick;
+  float st_max, st_cur, st_tick;
+  float mn_max, mn_cur, mn_tick;
+  float hn_max, hn_cur, hn_tick;
 }
 
 /** Create new initialized unit
@@ -43,7 +44,7 @@ fn void Unit.set_species(&self, Species species) {
     switch (species) {
       case HUMAN:
         //io::printfn("%s: %d", Skill.from_ordinal(i), species::HUMAN_BASE[i]);
-        self.skills[i] = {};
+        self.skills[i] = {.value = species::HUMAN_BASE[i], .discovered = false};
       default:
     }
   }
