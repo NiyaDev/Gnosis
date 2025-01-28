@@ -25,7 +25,6 @@ fn void! init() {
 	//* Set up shader
 	Bulk* shader_bulk = bulk::load("resources/001")!!;
 	shader = shader::from_mem(null, shader_bulk.get("screen_shader")!!);
-	//shader = raylib::load_shader(null, "resources/shader.fs");
 }
 <* Close render system *>
 fn void! close() {
@@ -35,17 +34,17 @@ fn void! close() {
 	raylib::close_window();
 }
 
-<*  *>
+<* Starts drawing *>
 fn void content() {
 	raylib::begin_texture_mode(render_texture);
 	raylib::clear_background(raylib::DARKGRAY);
 	raylib::begin_3d_mode(camera::main);
 }
-<*  *>
+<* Stops 3d mode and starts UI *>
 fn void ui() {
 	raylib::end_3d_mode();
 }
-<*  *>
+<* Finishes rendering to RT and displays to screen *>
 fn void end() {
 	//* End rendering to texture
 	raylib::end_texture_mode();

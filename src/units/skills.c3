@@ -28,6 +28,8 @@ enum Skill : int () {
 
   LEARNING,
 
+  PERCEPTION,
+
   WEAPONS,
   LIGHT_WEAPONS,
   ONE_HANDED_WEAPONS,
