@@ -23,7 +23,7 @@ fn void! init() {
 	render_texture = raylib::load_render_texture(render[0], render[1]);
 
 	//* Set up shader
-	Bulk* shader_bulk = bulk::load("resources/004.bulk")!!;
+	Bulk* shader_bulk = bulk::load("resources/001")!!;
 	shader = shader::from_mem(null, shader_bulk.get("screen_shader")!!);
 	//shader = raylib::load_shader(null, "resources/shader.fs");
 }

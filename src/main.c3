@@ -23,10 +23,8 @@ fn int main(String[] args) {
 	camera::init()!!;
 
 	//* Generate default keybinds
-	keybind::data.set("move_up", 		{.type=KEYBOARD,.kb=raylib::KEY_W});
-	keybind::data.set("move_down", 	{.type=KEYBOARD,.kb=raylib::KEY_S});
-	keybind::data.set("move_left", 	{.type=KEYBOARD,.kb=raylib::KEY_A});
-	keybind::data.set("move_right", {.type=KEYBOARD,.kb=raylib::KEY_D});
+	Bulk* keybinds = bulk::load("resources/002")!!;
+	keybind::load(keybinds.get("default_kb"))!!;
 
 	//* Generate Test chunk
 	chunk_01.init();
@@ -36,7 +34,7 @@ fn int main(String[] args) {
 	defer model.unload();
 
 	//* Generate default material
-	Bulk* tile_tex_bulk = bulk::load("resources/002.bulk")!!;
+	Bulk* tile_tex_bulk = bulk::load("resources/020")!!;
 	Texture* grass = image::load_mem(".png", tile_tex_bulk.get("grass_0")!!).texture();
 	defer grass.unload();
 
@@ -45,16 +43,12 @@ fn int main(String[] args) {
 	model.set_material(mat);
 
 	//* Load Textures
-	Bulk* unit_tex_bulk = bulk::load("resources/003.bulk")!!;
+	Bulk* unit_tex_bulk = bulk::load("resources/010")!!;
 	Texture* player = image::load_mem(".png", unit_tex_bulk.get("player")!!).texture();
 
 	//* Load UI textures
-	Bulk* ui_bulk = bulk::load("resources/001.bulk")!!;
-	//Image* img_bar_bg = image::load_mem(".png", ui_bulk.get("bar_bg")!!);
-	//bar_bg = img_bar_bg.texture();
-	//img_bar_bg.unload();
+	Bulk* ui_bulk = bulk::load("resources/030")!!;
 	bar_bg = ui_bulk.get_texture("bar_bg");
-	//bar_bg = image::load_mem(".png", ui_bulk.get("bar_bg")!!).texture();
 	bar_fl = image::load_mem(".png", ui_bulk.get("bar_fl")!!).texture();
 
 	//* Player
