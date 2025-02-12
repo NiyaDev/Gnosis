@@ -103,15 +103,16 @@ fn void Player.draw_ui(&self) {
 
 	//String text = string::tformat("FPS: %d\nTiles Rendered: %d", raylib::get_fps(), chunks::tiles_rendered);
 	//raylib::draw_text((ZString)text, 0, 100, 8, raylib::BLACK);
-	String text = string::tformat(
-	  "FPS: %d\nTiles Rendered: %d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d",
+	String text = string::format(
+	  "FPS: %d\nTiles Rendered: %d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
 	    raylib::get_fps(), chunks::tiles_rendered,
 	    self.hp_cur, self.hp_max, self.hp_tick,
 	    self.st_cur, self.st_max, self.st_tick,
 	    self.mn_cur, self.mn_max, self.mn_tick,
 	    self.hn_cur, self.hn_max, self.hn_tick,
+	    allocator: allocator::heap(),
 	);
 	raylib::draw_text((ZString)text, 0, 100, 8, raylib::BLACK);
- 
+  text.free(); 
 }
 

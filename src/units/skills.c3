@@ -2,62 +2,18 @@
 module gnosis::unit::skills;
 
 
-const usz NUMBER_OF_SKILLS = 43;
-enum Skill : int () {
-  HEALTH,   REGENERATION,
-  STAMINA,  ENDURANCE,
-  MANA,     CURRENT,
-  BELLY,    METABOLISM,
-  SOMNOLENCE,
-
-  PHYSICAL_RESISTANCE,
-  BLUNT_RESISTANCE,
-  PIERCING_RESISTANCE,
-  SLASH_RESISTANCE,
-
-  ELEMENTAL_RESISTANCE,
-  ELECTRIC_RESISTANCE,
-  FIRE_RESISTANCE,
-  ICE_RESISTANCE,
-  RADIANT_RESISTANCE,
-  NECROTIC_RESISTANCE,
-
-  HABITABILITY,
-  HEAT_ACCLIMATION,
-  COLD_ACCLIMATION,
-
-  LEARNING,
-
-  PERCEPTION,
-
-  WEAPONS,
-  LIGHT_WEAPONS,
-  ONE_HANDED_WEAPONS,
-  TWO_HANDED_WEAPONS,
-  SHIELD_WEAPONS,
-  BOW_WEAPONS,
-  SMALL_ARM_WEAPONS,
-  LONG_ARM_WEAPONS,
-
-  CLASS_FIGHTER,
-  MANEUVER_DISARM,
-  MANEUVER_PUSH,
-  MANEUVER_TRIP,
-  MANEUVER_STEP_UP,
-  MANEUVER_CLEAVE,
-  MANEUVER_WHIRLWIND,
-
-  CLASS_ROGUE,
-  STEALTH,
-  SNEAK_ATTACK,
-
-  CLASS_BARBARIAN,
-  RAGE,
+Skill[] data;
+struct Skill {
+  // TODO: Localization
+  int id;
+  String name;
+  String description;
+  String indepth;
 }
 
-struct SkillData {
+struct SkillNode {
+  Skill* skill;
   int value;
-  int max_value;
   bool discovered;
 }
 
