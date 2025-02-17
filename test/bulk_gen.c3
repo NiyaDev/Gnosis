@@ -12,15 +12,18 @@ import raylib;
   * 004->009 - Reserved
   * 010->029 - Textures
   * 030->049 - UI Textures
-  * 050->069 - 
+  * 050      - Skills yaml
+  * 051      - Species yaml
+  * 052->069 - 
 */
 
+<* 001 *>
 fn void gen_shaders() @test {
   Bulk* shader_bulk = bulk::new("001")!!;
 
   //* Grab files
   usz size = file::get_size("resources/raw_files/shader.fs")!!;
-  File file = file::open("resources/raw_files/shader.fs", "r")!!;
+  File file = file::open("resources/raw_files/shader.fs", "rb")!!;
   defer file.close()!!;
 
   char[] shader = mem::new_array(char, size);
@@ -29,6 +32,7 @@ fn void gen_shaders() @test {
   shader_bulk.add("screen_shader", shader)!!;
   shader_bulk.save()!!;
 }
+<* 002 *>
 fn void gen_keybinds() @test {
   Bulk* keybindings_bulk = bulk::new("002")!!;
 
@@ -44,6 +48,7 @@ fn void gen_keybinds() @test {
   keybindings_bulk.save()!!;
 }
 
+<* 010 *>
 fn void gen_textures_units() @test {
   raylib::set_trace_log_level(NONE);
 
@@ -56,6 +61,8 @@ fn void gen_textures_units() @test {
   unit_tex_bulk.add("player", img_player.to_mem(".png"))!!;
   unit_tex_bulk.save()!!;
 }
+
+<* 020 *>
 fn void gen_textures_tiles() @test {
   raylib::set_trace_log_level(NONE);
 
@@ -70,6 +77,7 @@ fn void gen_textures_tiles() @test {
   tile_tex_bulk.save()!!;
 }
 
+<* 030 *>
 fn void gen_uitextures() @test {
   raylib::set_trace_log_level(NONE);
 
@@ -85,4 +93,35 @@ fn void gen_uitextures() @test {
   ui_texture_bulk.add("bar_fl", img_bar_fl.to_mem(".png"))!!;
 
   ui_texture_bulk.save()!!;
+}
+
+<* 050 *>
+fn void gen_skills_yaml() @test {
+  Bulk* skills_yaml_bulk = bulk::new("050")!!;
+
+  //* Load yaml as raw data
+  usz size = file::get_size("resources/raw_files/skills.yaml")!!;
+  File file = file::open("resources/raw_files/skills.yaml", "rb")!!;
+  defer file.close()!!;
+
+  char[] data = mem::new_array(char, size);
+  file.read(data)!!;
+
+  skills_yaml_bulk.add("yaml", data)!!;
+  skills_yaml_bulk.save()!!;
+}
+<* 051 *>
+fn void gen_species_yaml() @test {
+  Bulk* species_yaml_bulk = bulk::new("051")!!;
+
+  //* Load yaml as raw data
+  usz size = file::get_size("resources/raw_files/species.yaml")!!;
+  File file = file::open("resources/raw_files/species.yaml", "rb")!!;
+  defer file.close()!!;
+
+  char[] data = mem::new_array(char, size);
+  file.read(data)!!;
+
+  species_yaml_bulk.add("yaml", data)!!;
+  species_yaml_bulk.save()!!;
 }

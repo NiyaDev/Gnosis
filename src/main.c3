@@ -26,6 +26,9 @@ fn int main(String[] args) {
 	Bulk* keybinds = bulk::load("resources/002")!!;
 	keybind::load(keybinds.get("default_kb"))!!;
 
+	//* Initialize Species data
+	species::init();
+
 	//* Generate Test chunk
 	chunk_01.init();
 
