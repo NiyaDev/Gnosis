@@ -14,8 +14,9 @@ struct Player {
 
 
 <* Creates and initializes a player *>
-fn Player* init() {
+fn Player* new() {
   Player* output = mem::new(Player);
+  output.init();
   //output.skills = mem::new_array(SkillData, skills::NUMBER_OF_SKILLS);
 
   //* TEST

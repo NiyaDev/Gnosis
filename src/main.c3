@@ -55,7 +55,8 @@ fn int main(String[] args) {
 	bar_fl = image::load_mem(".png", ui_bulk.get("bar_fl")!!).texture();
 
 	//* Player
-	Player* pl = player::init();
+	Player* pl = player::new();
+	io::printfn("%s",pl.species.name["English"]!!);
 	pl.position = {8,9,8};
 	pl.sprite = player;
 	camera::main.unit = pl;

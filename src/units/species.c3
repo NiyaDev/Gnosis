@@ -21,6 +21,11 @@ struct Species {
   float base_max_temp;
 }
 
+<* Loads a pointer to a specific species *>
+fn Species*! get(String name) {
+  return data.get_ref(name)!!;
+}
+
 <* Loads species data from file *>
 fn void init() {
   Bulk* bulk = bulk::load("resources/051")!!;

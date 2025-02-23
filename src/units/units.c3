@@ -13,6 +13,18 @@ struct Unit {
   SkillNode[] skills;
 }
 
+<**>
+fn Unit* new(String spec = "") {
+  Unit* output = mem::new(Unit);
+  
+  if (spec != "") output.species = species::get(spec)!!;
+
+  return output;
+}
+<**>
+fn void Unit.init(&self, String spec = "") {
+  if (spec != "") self.species = species::get(spec)!!;
+}
 <* Move unit in space 
   @param movement "Amount to move"
  *>
