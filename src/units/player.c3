@@ -18,23 +18,6 @@ struct Player {
 fn Player* new() {
   Player* output = mem::new(Player);
   output.init("human");
-  //output.skills = mem::new_array(SkillData, skills::NUMBER_OF_SKILLS);
-
-  //* TEST
-  /*
-  output.set_species(HUMAN);
-  output.hp_max = (float)output.skills[Skill.HEALTH.ordinal].value * 10;
-  output.hp_cur = output.hp_max;
-  output.skills[Skill.HEALTH.ordinal].discovered = true;
-  output.st_max = (float)output.skills[Skill.STAMINA.ordinal].value * 10;
-  output.st_cur = output.st_max;
-  output.skills[Skill.STAMINA.ordinal].discovered = true;
-  output.mn_max = (float)output.skills[Skill.MANA.ordinal].value * 10;
-  output.mn_cur = output.mn_max;
-  output.hn_max = (float)output.skills[Skill.BELLY.ordinal].value * 5;
-  output.hn_cur = output.hn_max;
-  output.skills[Skill.BELLY.ordinal].discovered = true;
-  */
   return output;
 }
 <* Updates player *>
@@ -52,7 +35,7 @@ fn void Player.update(&self) {
 
   self.move(camera::ZERO.rotate(movement, camera::main.rotation));
   
-  //if (self.hn_cur > 0) {
+  if (self.hn_cur > 0) {
   //  //* Health regeneration
   //  if ((self.hp_cur < self.hp_max) && self.hp_tick <= 0) {
   //    self.hp_tick = (float)self.skills[Skill.REGENERATION.ordinal].value / 0.01;
@@ -77,7 +60,7 @@ fn void Player.update(&self) {
   //    self.hn_tick = (float)self.skills[Skill.METABOLISM.ordinal].value * 100;
   //    self.hp_cur--;
   //  } else if (self.hn_tick > 0) { self.hn_tick--; }
-  //}
+  }
 }
 
 <* Draws player UI elements *>
