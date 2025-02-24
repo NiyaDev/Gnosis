@@ -19,7 +19,7 @@ import raylib;
 
 <* 001 *>
 fn void gen_shaders() @test {
-  Bulk* shader_bulk = bulk::new("001")!!;
+  Bulk* shader_bulk = bulk::new("001");
 
   //* Grab files
   usz size = file::get_size("resources/raw_files/shader.fs")!!;
@@ -34,7 +34,7 @@ fn void gen_shaders() @test {
 }
 <* 002 *>
 fn void gen_keybinds() @test {
-  Bulk* keybindings_bulk = bulk::new("002")!!;
+  Bulk* keybindings_bulk = bulk::new("002");
 
   //* Create bindings
   keybind::set("move_up", 	 {.type=KEYBOARD,.kb=raylib::KEY_W});
@@ -44,7 +44,7 @@ fn void gen_keybinds() @test {
 
 	char[] kb = keybind::save()!!;
 
-  keybindings_bulk.add("default_kb", kb)!!;
+  keybindings_bulk.add("default_kb", kb)!;
   keybindings_bulk.save()!!;
 }
 
@@ -52,7 +52,7 @@ fn void gen_keybinds() @test {
 fn void gen_textures_units() @test {
   raylib::set_trace_log_level(NONE);
 
-  Bulk* unit_tex_bulk = bulk::new("010")!!;
+  Bulk* unit_tex_bulk = bulk::new("010");
 
   //* Grab images
   Image* img_player = image::load("resources/raw_files/spr_test_player.png")!!;
@@ -66,7 +66,7 @@ fn void gen_textures_units() @test {
 fn void gen_textures_tiles() @test {
   raylib::set_trace_log_level(NONE);
 
-  Bulk* tile_tex_bulk = bulk::new("020")!!;
+  Bulk* tile_tex_bulk = bulk::new("020");
 
   //* Grab images
   Image* img_grass = image::load("resources/raw_files/tex_grass.png")!!;
@@ -81,7 +81,7 @@ fn void gen_textures_tiles() @test {
 fn void gen_uitextures() @test {
   raylib::set_trace_log_level(NONE);
 
-  Bulk* ui_texture_bulk = bulk::new("030")!!;
+  Bulk* ui_texture_bulk = bulk::new("030");
 
   //* Grab images of all files needed
   Image* img_bar_bg = image::load("resources/raw_files/spr_bar_bg.png")!!;
@@ -97,7 +97,7 @@ fn void gen_uitextures() @test {
 
 <* 050 *>
 fn void gen_skills_yaml() @test {
-  Bulk* skills_yaml_bulk = bulk::new("050")!!;
+  Bulk* skills_yaml_bulk = bulk::new("050");
 
   //* Load yaml as raw data
   usz size = file::get_size("resources/raw_files/skills.yaml")!!;
@@ -112,7 +112,7 @@ fn void gen_skills_yaml() @test {
 }
 <* 051 *>
 fn void gen_species_yaml() @test {
-  Bulk* species_yaml_bulk = bulk::new("051")!!;
+  Bulk* species_yaml_bulk = bulk::new("051");
 
   //* Load yaml as raw data
   usz size = file::get_size("resources/raw_files/species.yaml")!!;
@@ -125,3 +125,4 @@ fn void gen_species_yaml() @test {
   species_yaml_bulk.add("yaml", data)!!;
   species_yaml_bulk.save()!!;
 }
+

@@ -4,6 +4,7 @@ import std::io;
 import gnosis::system::camera;
 import gnosis::unit;
 import gnosis::chunks;
+import gnosis::resources;
 import raylib;
 import keybind;
 
@@ -16,7 +17,7 @@ struct Player {
 <* Creates and initializes a player *>
 fn Player* new() {
   Player* output = mem::new(Player);
-  output.init();
+  output.init("human");
   //output.skills = mem::new_array(SkillData, skills::NUMBER_OF_SKILLS);
 
   //* TEST
@@ -81,6 +82,11 @@ fn void Player.update(&self) {
 
 <* Draws player UI elements *>
 fn void Player.draw_ui(&self) {
+  //gnosis::bar_bg.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
+  //gnosis::bar_fl.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
+  resources::textures["bar_bg"]!!.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
+  resources::textures["bar_fl"]!!.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
+ 
   /*
   if (self.skills[Skill.HEALTH.ordinal].discovered) {
     float hp_per = self.hp_cur / self.hp_max;

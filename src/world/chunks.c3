@@ -27,7 +27,7 @@ fn void Chunk.init(&self) {
 fn void Chunk.update(&self) {}
 
 <* Draw chunk *>
-fn void Chunk.draw(&self, Model model) {
+fn void Chunk.draw(&self, Model* model) {
   tiles_rendered = 0;
   for (int x = 0; x < 16; x++) {
     for (int z = 0; z < 16; z++) {

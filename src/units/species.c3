@@ -23,7 +23,7 @@ struct Species {
 
 <* Loads a pointer to a specific species *>
 fn Species*! get(String name) {
-  return data.get_ref(name)!!;
+  return data.get_ref(name)!;
 }
 
 <* Loads species data from file *>
@@ -70,17 +70,19 @@ fn void init() {
 }
 
 <* Prints all species data *>
-fn void Species.print(&self) {
-  io::printfn("Species:");
-  io::printfn("  Name:");
-  self.name.@each(; String key, String val) {
-    io::printfn("    %s: %s",key,val);
-  };
-  self.description.@each(; String key, String val) {
-    io::printfn("    %s: %s",key,val);
-  };
-  self.skill_start.@each(; String key, int val) {
-    io::printfn("      %s: %d-%d",key,val,self.skill_max.get(key)!!);
+fn void print() {
+  data.@each(; String key, Species val) {
+    io::printfn("%s:",key);
+    io::printfn("  Name:"); 
+    val.name.@each(; String key1, String val1) {
+      io::printfn("    %s: %s",key1,val1);
+    };
+    val.description.@each(; String key1, String val1) {
+      io::printfn("    %s: %s",key1,val1);
+    };
+    val.skill_start.@each(; String key1, int val1) {
+      io::printfn("      %s: %d-%d",key1,val1,val.skill_max.get(key1)!!);
+    };
   };
 }
 
