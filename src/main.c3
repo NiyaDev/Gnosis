@@ -11,7 +11,6 @@ import gnosis::chunks;
 import gnosis::resources;
 
 
-bool[100] tiles;
 Chunk chunk_01;
 
 Texture* bar_bg;
@@ -35,8 +34,8 @@ fn int main(String[] args) {
 	pl.sprite = resources::textures["player"]!!;
 	camera::main.unit = pl;
 
-
-	for (int i = 0; i < 100; i++) { tiles[i] = true; }
+	ui::new_bar("healthbar",raylib::RED,{10,10,64,8},"bar_bg","bar_fl",&pl.hp_cur,&pl.hp_max);
+	ui::new_text("test_1",raylib::BLACK,{20,20},"anakron","THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG\nthe quick brown fox jumped over the lazy dog\n!@#$%^&*()-_=+",12,1);
 
 	while (!raylib::window_should_close()) {
 		float dt = raylib::get_frame_time();
@@ -57,6 +56,7 @@ fn int main(String[] args) {
 
 		render::ui();
 			pl.draw_ui();
+			ui::draw();
 			
 		render::end();
 	}

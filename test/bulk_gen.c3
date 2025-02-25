@@ -9,7 +9,8 @@ import raylib;
   * 001      - Shaders
   * 002      - Default Keybindings
   * 003      - Default Settings
-  * 004->009 - Reserved
+  * 004->008 - Reserved
+  * 009      - Fonts
   * 010->029 - Textures
   * 030->049 - UI Textures
   * 050      - Skills yaml
@@ -48,6 +49,23 @@ fn void gen_keybinds() @test {
   keybindings_bulk.save()!!;
 }
 
+<* 009 *>
+fn void gen_font() @test {
+  raylib::set_trace_log_level(NONE);
+
+  Bulk* font_bulk = bulk::new("009");
+
+  //* Grab fonts
+  usz size = file::get_size("resources/raw_files/ANAKRON.ttf")!!;
+  File file = file::open("resources/raw_files/ANAKRON.ttf", "rb")!!;
+  defer file.close()!!;
+
+  char[] data = mem::new_array(char, size);
+  file.read(data)!!;
+
+  font_bulk.add("anakron", data)!!;
+  font_bulk.save()!!;
+}
 <* 010 *>
 fn void gen_textures_units() @test {
   raylib::set_trace_log_level(NONE);

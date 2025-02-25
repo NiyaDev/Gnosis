@@ -7,6 +7,7 @@ import raylib;
 import gnosis::unit;
 
 
+HashMap(<String, Font*>)     fonts;
 HashMap(<String, Texture*>)  textures;
 HashMap(<String, Model*>)    models;
 HashMap(<String, Material*>) materials;
@@ -22,6 +23,15 @@ fn void! load() {
 
   //* Settings
 
+
+  //* Fonts
+  Bulk*! fonts_bulk = bulk::load("resources/009");
+  assert(@ok(fonts_bulk), "Failed to load fonts from resource. (resource_loading.c3)");
+  fonts_bulk.entries.@each(; String key, BulkEntry val) {
+    Font* font = font::load_mem(".ttf", val.value, 200, 200, {})!;
+    fonts.set(key, font);
+  }!;
+  fonts_bulk.free()!;
 
   //* UI Textures
   Bulk*! ui_textures = bulk::load("resources/030");

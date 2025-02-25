@@ -67,9 +67,9 @@ fn void Player.update(&self) {
 fn void Player.draw_ui(&self) {
   //gnosis::bar_bg.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
   //gnosis::bar_fl.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
-  resources::textures["bar_bg"]!!.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
-  resources::textures["bar_fl"]!!.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
- 
+  //resources::textures["bar_bg"]!!.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
+  //resources::textures["bar_fl"]!!.draw_npatch({{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL}, {10,10,64,8}, {0,0}, 0, raylib::RED);
+
   /*
   if (self.skills[Skill.HEALTH.ordinal].discovered) {
     float hp_per = self.hp_cur / self.hp_max;
@@ -98,10 +98,10 @@ fn void Player.draw_ui(&self) {
 	String text = string::format(
 	  "FPS: %d\nTiles Rendered: %d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
 	    raylib::get_fps(), chunks::tiles_rendered,
-	    //self.hp_cur, self.hp_max, self.hp_tick,
-	    //self.st_cur, self.st_max, self.st_tick,
-	    //self.mn_cur, self.mn_max, self.mn_tick,
-	    //self.hn_cur, self.hn_max, self.hn_tick,
+	    self.hp_cur, self.hp_max, self.hp_tick,
+	    self.st_cur, self.st_max, self.st_tick,
+	    self.mn_cur, self.mn_max, self.mn_tick,
+	    self.hn_cur, self.hn_max, self.hn_tick,
 	    allocator: allocator::heap(),
 	);
 	raylib::draw_text((ZString)text, 0, 100, 8, raylib::BLACK);

@@ -1,14 +1,14 @@
 
 module gnosis::unit::skills;
 import std::io;
+import std::collections;
 import bulk;
 import localization;
 import yaml;
 
 
-Skill[] data;
+HashMap(<String, Skill>) data;
 struct Skill {
-  int id;
   String id_name;
   Localization name;
   Localization description;
@@ -20,6 +20,17 @@ struct SkillNode {
   int value;
   bool discovered;
 }
+
+
+const float HEALTH_MOD = 10;
+const float REGENERATION_MOD = -0.01;
+const float STAMINA_MOD = 10;
+const float ENDURANCE_MOD = -0.1;
+const float MANA_MOD = 10;
+const float CURRENT_MOD = -0.01;
+const float BELLY_MOD = 5;
+const float METABOLISM_MOD = 1;
+
 
 <*  *>
 fn void init() {
@@ -34,12 +45,12 @@ fn void init() {
   assert(@ok(yaml), "Yaml failed to parse. (skills.c3)");
   defer yaml.free()!!;
 
-  //* Create array
-  data = mem::new_array(Skill, yaml.len() + 1)!!;
+  //* Init data
+  data.new_init();
+  //data = mem::new_array(Skill, yaml.len() + 1)!!;
 
   yaml.@each(; String key, TypedValue val) {
     Skill sk;
-    sk.id = val.get_object("id")!!.v_int;
     sk.id_name = key.copy();
 
     //* Name localization
@@ -64,7 +75,8 @@ fn void init() {
       };
     }
 
-    data[sk.id] = sk; 
+    //data[sk.id] = sk;
+    data.set(key.copy(), sk);
   }!!;
 
   //* Iterate through each skill and copy data into array
