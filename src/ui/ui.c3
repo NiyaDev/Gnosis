@@ -19,6 +19,7 @@ enum UIType {
   BAR,
   TEXT,
   VERT_BOX,
+  HORI_BOX,
   // TODO: Status screen
 }
 
@@ -35,7 +36,8 @@ struct UIBarData {
 struct UITextData {
   Color tint;
   Vector2 position;
-  String font, text;
+  String font;
+  String* text;
   float text_size, text_spacing;
 }
 
@@ -47,9 +49,15 @@ struct UITextureNPatch {
 }
 
 struct UIVerticalBox {
+  List(<UIElement>) elements; 
   UITextureNPatch* background;
   Rectangle padding;
-  List(<UIElement>) elements;
+}
+
+struct UIHorizontalBox {
+  List(<UIElement>) elements; 
+  UITextureNPatch* background;
+  Rectangle padding;
 }
 
 <* Draw all elements *>
@@ -59,6 +67,12 @@ fn void draw() {
 <* Remove element *>
 fn void remove(String name) {
   data.remove(name)!!;
+}
+<* Frees all ui data *>
+fn void free() {
+  data.@each(; String key, UIElement val) {
+    val.free();
+  };
 }
 
 <* Draw element *>
@@ -83,8 +97,6 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
 
       //* Bar
       float percent = *uidata.value / *uidata.max;
-      //Rectangle modified_rect = uidata.rect;
-      //modified_rect.width *= percent;
       rectoff.width *= percent;
       resources::textures[uidata.bar]!!.draw_npatch(
         {{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL},
@@ -96,7 +108,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
       UITextData* uidata = (UITextData*)self.data;
 
       resources::fonts[uidata.font]!!.draw_pro(
-        uidata.text,
+        *uidata.text,
         uidata.position,
         {0,0}, 0,
         uidata.text_size,
@@ -123,6 +135,22 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
     default:
   }
 }
+<* Free element *>
+fn void UIElement.free(&self) {
+  switch (self.type) {
+    case VERT_BOX: nextcase;
+    case HORI_BOX:
+      List(<UIElement>)* list = ((List(<UIElement>)*)self.data);
+      for (int i; i < list.len(); i++) {
+        list[i].free();
+      }
+    case BAR: nextcase;
+    case TEXT:
+      mem::free(self.data);
+    default:
+  }
+  data.clear();
+}
 
 <* Pushes already created element to ui *>
 fn void push(String name, UIElement element) {
@@ -134,10 +162,31 @@ fn void new_bar(String name, Color tint, Rectangle rect, String bg, String bar, 
   data.set(name,dat);
 }
 <* Pushes new text to ui *>
-fn void new_text(String name, Color tint, Vector2 position, String font, String text, float size, float spacing) {
+fn void new_text(String name, Color tint, Vector2 position, String font, String* text, float size, float spacing) {
   UIElement dat = text::new(tint, position, font, text, size, spacing);
   data.set(name,dat);
 }
+
+<* Add new element to Vertical box
+  @require self.type == VERT_BOX || self.type == HORI_BOX
+ *>
+fn void UIElement.add_element(&self, UIElement element) {
+  List(<UIElement>)* uidata = (List(<UIElement>)*)self.data;
+  uidata.push(element);
+}
+<* Remove element from Vertical box
+  @require self.type == VERT_BOX || self.type == HORI_BOX
+ *>
+fn void UIElement.remove_element(&self, usz index) {
+  List(<UIElement>)* uidata = (List(<UIElement>)*)self.data;
+  uidata.remove_at(index);
+}
+<* Get the length of the elements *>
+fn usz UIElement.len(&self) {
+  List(<UIElement>)* uidata = (List(<UIElement>)*)self.data;
+  return uidata.len(); 
+}
+
 
 
 //* Bar
@@ -165,9 +214,9 @@ import raylib;
 
 <* Create a new Text element without pushging to ui
   @require font != ""
-  @require text != ""
+  @require text != null
  *>
-fn UIElement new(Color tint, Vector2 position, String font, String text, float size, float spacing) {
+fn UIElement new(Color tint, Vector2 position, String font, String* text, float size, float spacing) {
   UITextData* textdata = mem::new(UITextData);
   *textdata = { tint, position, font, text, size, spacing };
   return { TEXT, (void*)textdata }; 
@@ -188,23 +237,18 @@ fn UIElement new(UITextureNPatch* background = null, Rectangle padding = {0,0,0,
   return { VERT_BOX, (void*)vertdata };
 }
 
-<* Add new element to Vertical box
-  @require self.type == VERT_BOX
- *>
-fn void UIElement.add_element(&self, UIElement element) {
-  UIVerticalBox* vertdata = (UIVerticalBox*)self.data;
-  vertdata.elements.push(element);
-}
-<* Remove element from Vertical box
-  @require self.type == VERT_BOX
- *>
-fn void UIElement.remove_element(&self, usz index) {
-  UIVerticalBox* vertdata = (UIVerticalBox*)self.data;
-  vertdata.elements.remove_at(index);
-}
-<* Get the length of the elements *>
-fn usz UIElement.len(&self) {
-  UIVerticalBox* vertdata = (UIVerticalBox*)self.data;
-  return vertdata.elements.len(); 
+
+//* Horizontal box
+module gnosis::ui::horizontalbox;
+import raylib;
+
+
+<* Create new Vertical box without pushing to ui *>
+fn UIElement new(UITextureNPatch* background = null, Rectangle padding = {0,0,0,0}) {
+  UIHorizontalBox* hordata = mem::new(UIHorizontalBox);
+  hordata.background = background;
+  hordata.padding = padding;
+  hordata.elements.new_init();
+  return { VERT_BOX, (void*)hordata };
 }
 

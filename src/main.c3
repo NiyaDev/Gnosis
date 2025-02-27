@@ -34,8 +34,6 @@ fn int main(String[] args) {
 	pl.sprite = resources::textures["player"]!!;
 	camera::main.unit = pl;
 
-	//ui::new_bar("healthbar",raylib::RED,{10,10,64,8},"bar_bg","bar_fl",&pl.hp_cur,&pl.hp_max);
-	//ui::new_text("test_1",raylib::BLACK,{20,20},"anakron","THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG\nthe quick brown fox jumped over the lazy dog\n!@#$%^&*()-_=+",12,1);
 	UIElement player_status = verticalbox::new(padding:{10,10,0,0});
 	player_status.add_element(bar::new(raylib::RED,{0,0,64,8},"bar_bg","bar_fl",&pl.hp_cur,&pl.hp_max));
 	player_status.add_element(bar::new(raylib::GREEN,{0,0,64,8},"bar_bg","bar_fl",&pl.st_cur,&pl.st_max));
@@ -43,9 +41,22 @@ fn int main(String[] args) {
 	player_status.add_element(bar::new(raylib::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&pl.hn_cur,&pl.hn_max));
 	ui::push("status", player_status);
 
+	String uitext;
+	ui::new_text("debug_text",raylib::BLACK,{10,80},"anakron",&uitext,12,1);
+
 	while (!raylib::window_should_close()) {
 		float dt = raylib::get_frame_time();
 		camera::update(dt)!!;
+
+		uitext = string::format(
+		  "FPS: %d\nTiles Rendered: %d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
+		  raylib::get_fps(), chunks::tiles_rendered,
+		  pl.hp_cur, pl.hp_max, pl.hp_tick,
+		  pl.st_cur, pl.st_max, pl.st_tick,
+		  pl.mn_cur, pl.mn_max, pl.mn_tick,
+		  pl.hn_cur, pl.hn_max, pl.hn_tick,
+		  allocator: allocator::heap(),
+		); 
 
 		// TODO: Move into player.c3
 		pl.update();
@@ -65,6 +76,9 @@ fn int main(String[] args) {
 			
 		render::end();
 	}
+
+	ui::free();
+
 	return 0;
 }
 
