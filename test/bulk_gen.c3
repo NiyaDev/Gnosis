@@ -106,9 +106,12 @@ fn void gen_uitextures() @test {
   defer img_bar_bg.unload();
   Image* img_bar_fl = image::load("resources/raw_files/spr_bar_fill.png")!!;
   defer img_bar_fl.unload();
+  Image* img_textbox = image::load("resources/raw_files/spr_textbox.png")!!;
+  defer img_textbox.unload();
 
   ui_texture_bulk.add("bar_bg", img_bar_bg.to_mem(".png"))!!;
   ui_texture_bulk.add("bar_fl", img_bar_fl.to_mem(".png"))!!;
+  ui_texture_bulk.add("textbox", img_textbox.to_mem(".png"))!!;
 
   ui_texture_bulk.save()!!;
 }

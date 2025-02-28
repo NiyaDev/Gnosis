@@ -20,6 +20,7 @@ enum UIType {
   TEXT,
   VERT_BOX,
   HORI_BOX,
+  TEXTBOX,
   // TODO: Status screen
 }
 
@@ -58,6 +59,23 @@ struct UIHorizontalBox {
   List(<UIElement>) elements; 
   UITextureNPatch* background;
   Rectangle padding;
+}
+
+struct UITextbox {
+  bool visible;
+  Rectangle rect;
+  UITextureNPatch* background;
+  String font;
+  int timer;
+
+  float text_size;
+  float text_spacing;
+  int text_speed;
+
+  Rectangle textspace;
+  String text;
+  char[] display;
+  usz index;
 }
 
 <* Draw all elements *>
@@ -131,6 +149,62 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
         rect.y *= (float)i;
         rect.y += uidata.padding.y;
         uidata.elements[i].draw(rect);
+      }
+    case HORI_BOX:
+      UIHorizontalBox* uidata = (UIHorizontalBox*)self.data;
+
+      if (uidata.background != null) {
+        resources::textures[uidata.background.texture]!!.draw_npatch(
+          uidata.background.npatch,
+          uidata.background.rect,
+          {0,0}, 0,
+          uidata.background.tint,
+        );
+      }
+      for (int i; i < uidata.elements.len(); i++) {
+        Rectangle rect = uidata.padding;
+        rect.x *= (float)i;
+        rect.x += uidata.padding.y;
+        uidata.elements[i].draw(rect);
+      }
+    case TEXTBOX:
+      UITextbox* tbdata = (UITextbox*)self.data;
+      if (tbdata.visible) {
+        //* Background 
+        resources::textures[tbdata.background.texture]!!.draw_npatch(
+          tbdata.background.npatch,
+          tbdata.rect,
+          {0,0}, 0,
+          tbdata.background.tint,
+        );
+
+        //* Draw text one character at a time
+        Font* font = resources::fonts[tbdata.font]!!;
+        for (int i; i < tbdata.display.len - 1; i++) {
+          if (tbdata.display[i] != 0) {
+            // TODO: Allow for rich text formatting
+            String str = string::format("%c\0",((String)tbdata.display)[i],allocator: allocator::heap());
+            font.draw_pro(
+              str,
+              {
+                tbdata.textspace.x + (float)((float)i * ((tbdata.text_size * 0.6) + tbdata.text_spacing)),
+                tbdata.textspace.y,
+              },
+              {0,0}, 0,
+              tbdata.text_size,
+              tbdata.text_spacing,
+              raylib::WHITE,
+            );
+            str.free();
+          }
+        }
+
+        tbdata.timer++;
+        if (tbdata.timer >= tbdata.text_speed && tbdata.index < tbdata.display.len-1) {
+          tbdata.timer = 0;
+          tbdata.display[tbdata.index] = tbdata.text[tbdata.index];
+          tbdata.index++;
+        }
       }
     default:
   }
@@ -223,6 +297,24 @@ fn UIElement new(Color tint, Vector2 position, String font, String* text, float 
 }
 
 
+//* NPatch Texture
+module gnosis::ui::npatch_texture;
+import raylib;
+import gnosis::resources;
+
+
+<* Create new NPatch texture without pushing it *>
+fn UITextureNPatch* new(Color tint = raylib::WHITE, Rectangle rect = {0,0,0,0}, String texture) {
+  UITextureNPatch* npdata = mem::new(UITextureNPatch);
+  npdata.tint = tint;
+  npdata.rect = rect;
+  npdata.npatch = resources::textures[texture].npatch()!!;
+  npdata.texture = texture;
+
+  return npdata;
+}
+
+
 //* Vertical box
 module gnosis::ui::verticalbox;
 import raylib;
@@ -252,3 +344,52 @@ fn UIElement new(UITextureNPatch* background = null, Rectangle padding = {0,0,0,
   return { VERT_BOX, (void*)hordata };
 }
 
+
+//* Textbox
+module gnosis::ui::textbox;
+import raylib;
+
+
+<* Create new textbox without pushing *>
+fn UIElement new(UITextureNPatch* bg = null, bool visible = false, Rectangle rect = {0,0,0,0}, Rectangle textspace = {0,0,0,0}, String font = "", float text_size = 12, float text_spacing = 0, int text_speed = 1) {
+  UITextbox* tbdata = mem::new(UITextbox);
+  tbdata.visible = visible;
+  tbdata.background = bg;
+  tbdata.rect = rect;
+  tbdata.font = font;
+  Rectangle offset_textspace = {
+    rect.x + textspace.x,
+    rect.y + textspace.y,
+    rect.width + textspace.width,
+    rect.height + textspace.height,
+  };
+  tbdata.textspace = offset_textspace;
+  tbdata.text_size = text_size;
+  tbdata.text_spacing = text_spacing;
+  tbdata.text_speed = text_speed;
+  return { TEXTBOX, (void*)tbdata };
+}
+
+<* Sets the current target text
+  @require self.type == TEXTBOX
+ *>
+fn void UIElement.set_text(&self, String text) {
+  UITextbox* tbdata = self.data;
+  tbdata.text = text;
+  tbdata.display = mem::new_array(char,text.len+1);
+  tbdata.timer = 0;
+  tbdata.index = 0;
+}
+<* Returns whether the textbox is done drawing text
+  @require self.type == TEXTBOX
+ *>
+fn bool UIElement.finished(&self) {
+  UITextbox* tbdata = self.data;
+  if (tbdata.index == tbdata.display.len-1) return true;
+  return false;
+}
+
+<**>
+fn usz String.text_length(&self) {
+  return 0;
+}

@@ -40,6 +40,17 @@ fn int main(String[] args) {
 	player_status.add_element(bar::new(raylib::BLUE,{0,0,64,8},"bar_bg","bar_fl",&pl.mn_cur,&pl.mn_max));
 	player_status.add_element(bar::new(raylib::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&pl.hn_cur,&pl.hn_max));
 	ui::push("status", player_status);
+	UITextureNPatch* textbox_tex = npatch_texture::new(texture:"textbox");
+	//String textbox_text = "Testing";
+	UIElement textbox = textbox::new(
+		bg:textbox_tex,
+		visible:true,
+		rect:{0,(float)render::render[1] / 1.5,(float)render::render[0],(float)render::render[1] / 3},
+		textspace:{16,16,0,0},
+		font:"anakron",
+	);
+	textbox.set_text("testing this textbox shit.");
+	ui::push("textbox", textbox);
 
 	String uitext;
 	ui::new_text("debug_text",raylib::BLACK,{10,80},"anakron",&uitext,12,1);
