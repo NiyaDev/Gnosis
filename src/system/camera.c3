@@ -3,6 +3,7 @@ module gnosis::system::camera;
 import std::io;
 import std::math;
 import raylib;
+import keybind;
 import gnosis;
 import gnosis::unit;
 
@@ -21,28 +22,42 @@ struct Camera {
 }
 
 <* Initialize Camera structure *>
-fn void! init() {
-	main.position = {0, 12, 10};
-	main.target = {0,0,0};
-	main.up = {0,1,0};
-	main.fovy = 70;
-	main.projection = PERSPECTIVE;
-	
-	main.zoom = 1;
+fn void init() {
+	main = {
+		.position 		= {0, 12, 10},
+		.target   		= {0,  0,  0},
+		.up       		= {0,  1,  0},
+		.fovy      		= 70,
+		.projection 	= PERSPECTIVE,
 
-	main.rotation = 0;
-	main.rot_target = 0;
+		.zoom 				= 1,
+
+		.rotation    	= 0,
+		.rot_target  	= 0,
+	};
+}
+<* Set unit to follow *>
+fn void set_target(Unit* target) {
+	main.unit = target;
 }
 <* Update camera data *>
 fn void! update(float delta_time) {
-	//* Position
 	if (main.unit != null) {
+		//* Follow unit if it has one
 		Vector3 position = {
-			.x = main.unit.position.x - main.unit.position.z,
-			.y = main.unit.position.y,
-			.z = main.unit.position.x + main.unit.position.z,
+			main.unit.position.x - main.unit.position.z,
+			main.unit.position.y,
+			main.unit.position.x + main.unit.position.z,
 		};
 		
+		main.target = position;
+	} else {
+		//* Control directly otherwise
+		Vector3 position = main.target;
+		if (keybind::is_down("move_up")!!)    position.z -= 0.1;
+  	if (keybind::is_down("move_down")!!)  position.z += 0.1;
+  	if (keybind::is_down("move_left")!!)  position.x -= 0.1;
+  	if (keybind::is_down("move_right")!!) position.x += 0.1;
 		main.target = position;
 	}
 

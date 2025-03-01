@@ -20,7 +20,7 @@ fn int main(String[] args) {
 	//* Initialize systems
 	render::init()!!;
 	defer render::close()!!;
-	camera::init()!!;
+	camera::init();
 
 	//* Load resources
 	resources::load()!!;
@@ -32,7 +32,7 @@ fn int main(String[] args) {
 	Player* pl = player::new();
 	pl.position = {8,9,8};
 	pl.sprite = resources::textures["player"]!!;
-	camera::main.unit = pl;
+	//camera::set_target(pl);
 
 	UIElement player_status = verticalbox::new(padding:{10,10,0,0});
 	player_status.add_element(bar::new(raylib::RED,{0,0,64,8},"bar_bg","bar_fl",&pl.hp_cur,&pl.hp_max));
@@ -40,20 +40,22 @@ fn int main(String[] args) {
 	player_status.add_element(bar::new(raylib::BLUE,{0,0,64,8},"bar_bg","bar_fl",&pl.mn_cur,&pl.mn_max));
 	player_status.add_element(bar::new(raylib::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&pl.hn_cur,&pl.hn_max));
 	ui::push("status", player_status);
+	/*
 	UITextureNPatch* textbox_tex = npatch_texture::new(texture:"textbox");
-	//String textbox_text = "Testing";
+	String textbox_text = "Testing";
 	UIElement textbox = textbox::new(
 		bg:textbox_tex,
 		visible:true,
-		rect:{0,(float)render::render[1] / 1.5,(float)render::render[0],(float)render::render[1] / 3},
+		rect:{20,(float)render::render[1] / 1.5,(float)render::render[0] - 40,((float)render::render[1] / 3) - 10},
 		textspace:{16,16,0,0},
 		font:"anakron",
 	);
 	textbox.set_text("testing this textbox shit.");
 	ui::push("textbox", textbox);
+	*/
 
 	String uitext;
-	ui::new_text("debug_text",raylib::BLACK,{10,80},"anakron",&uitext,12,1);
+	ui::new_text("debug_text",raylib::WHITE,{10,80},"anakron",&uitext,12,-1);
 
 	while (!raylib::window_should_close()) {
 		float dt = raylib::get_frame_time();
