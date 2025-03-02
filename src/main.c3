@@ -32,7 +32,7 @@ fn int main(String[] args) {
 	Player* pl = player::new();
 	pl.position = {8,9,8};
 	pl.sprite = resources::textures["player"]!!;
-	//camera::set_target(pl);
+	camera::set_target(pl);
 
 	UIElement player_status = verticalbox::new(padding:{10,10,0,0});
 	player_status.add_element(bar::new(raylib::RED,{0,0,64,8},"bar_bg","bar_fl",&pl.hp_cur,&pl.hp_max));
