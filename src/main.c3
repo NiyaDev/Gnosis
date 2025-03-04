@@ -7,11 +7,11 @@ import raylib;
 import keybind;
 import gnosis::system::render;
 import gnosis::system::camera;
-import gnosis::chunks;
+import gnosis::world;
 import gnosis::resources;
 
 
-Chunk chunk_01;
+//Chunk chunk_01;
 
 Texture* bar_bg;
 Texture* bar_fl;
@@ -26,7 +26,16 @@ fn int main(String[] args) {
 	resources::load()!!;
 
 	//* Generate Test chunk
-	chunk_01.init();
+	world::new_chunk({0,0,0});
+	world::new_chunk({1,0,0});
+	world::new_chunk({2,0,0});
+	world::new_chunk({0,0,1});
+	world::new_chunk({1,0,1});
+	world::new_chunk({2,0,1});
+	world::new_chunk({0,0,2});
+	world::new_chunk({1,0,2});
+	world::new_chunk({2,0,2});
+	//chunk_01.init();
 
 	//* Player
 	Player* pl = player::new();
@@ -63,13 +72,14 @@ fn int main(String[] args) {
 
 		uitext = string::format(
 		  "FPS: %d\nTiles Rendered: %d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
-		  raylib::get_fps(), chunks::tiles_rendered,
+		  raylib::get_fps(), world::tiles_rendered,
 		  pl.hp_cur, pl.hp_max, pl.hp_tick,
 		  pl.st_cur, pl.st_max, pl.st_tick,
 		  pl.mn_cur, pl.mn_max, pl.mn_tick,
 		  pl.hn_cur, pl.hn_max, pl.hn_tick,
 		  allocator: allocator::heap(),
-		); 
+		);
+		defer uitext.free();
 
 		// TODO: Move into player.c3
 		pl.update();
@@ -81,7 +91,9 @@ fn int main(String[] args) {
 		if (zoom != 0) camera::zoom(-zoom / 10);
 
 		render::content();
-			chunk_01.draw(resources::models.get("simple_tile")!!);
+			//chunk_01.draw(resources::models.get("simple_tile")!!);
+			//chunk_01.draw();
+			world::draw();
 			raylib::draw_billboard_pro(camera::main, *pl.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
 
 		render::ui();

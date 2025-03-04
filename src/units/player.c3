@@ -3,7 +3,7 @@ module gnosis::unit::player;
 import std::io;
 import gnosis::system::camera;
 import gnosis::unit;
-import gnosis::chunks;
+import gnosis::world;
 import gnosis::resources;
 import raylib;
 import keybind;

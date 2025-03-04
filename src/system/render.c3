@@ -6,7 +6,6 @@ import gnosis::system::camera;
 
 
 int[2] screen = {1280, 720};
-//int[2] screen = {1920, 1080};
 int[2] render = {640, 360};
 RenderTexture render_texture;
 Shader* shader;
