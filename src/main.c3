@@ -38,7 +38,8 @@ fn int main(String[] args) {
 	//chunk_01.init();
 
 	//* Player
-	Player* pl = player::new();
+	world::data.player = player::new();
+	Player* pl = world::data.player;
 	pl.position = {8,9,8};
 	pl.sprite = resources::textures["player"]!!;
 	camera::set_target(pl);
@@ -69,10 +70,16 @@ fn int main(String[] args) {
 	while (!raylib::window_should_close()) {
 		float dt = raylib::get_frame_time();
 		camera::update(dt)!!;
+		if (raylib::is_key_pressed(raylib::KEY_LEFT_SHIFT)) pl.skills.get_ref("perception")!!.value++;
+
+		float perc = pl.skills["perception"]!!.value;
 
 		uitext = string::format(
-		  "FPS: %d\nTiles Rendered: %d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
-		  raylib::get_fps(), world::tiles_rendered,
+		  "FPS: %d\nPos: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
+		  raylib::get_fps(),
+		  camera::main.target.x, camera::main.target.y, camera::main.target.z, 
+		  world::tiles_rendered,
+		  perc, 5 + (perc * 0.2),
 		  pl.hp_cur, pl.hp_max, pl.hp_tick,
 		  pl.st_cur, pl.st_max, pl.st_tick,
 		  pl.mn_cur, pl.mn_max, pl.mn_tick,
@@ -91,8 +98,6 @@ fn int main(String[] args) {
 		if (zoom != 0) camera::zoom(-zoom / 10);
 
 		render::content();
-			//chunk_01.draw(resources::models.get("simple_tile")!!);
-			//chunk_01.draw();
 			world::draw();
 			raylib::draw_billboard_pro(camera::main, *pl.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
 

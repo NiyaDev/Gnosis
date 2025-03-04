@@ -36,7 +36,7 @@ fn void! close() {
 <* Starts drawing *>
 fn void content() {
 	raylib::begin_texture_mode(render_texture);
-	raylib::clear_background(raylib::DARKGRAY);
+	raylib::clear_background(raylib::BLACK);
 	raylib::begin_3d_mode(camera::main);
 }
 <* Stops 3d mode and starts UI *>
