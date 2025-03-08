@@ -16,7 +16,7 @@ fn void! init() {
 	//* Setup raylib
 	raylib::set_trace_log_level(raylib::TraceLogLevel.WARNING);
 	raylib::init_window(screen[0], screen[1], "Gnosis");
-	raylib::set_target_fps(60);
+	//raylib::set_target_fps(60);
 
 	//* Set up render texture
 	render_texture = raylib::load_render_texture(render[0], render[1]);

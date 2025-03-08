@@ -75,11 +75,13 @@ fn int main(String[] args) {
 		float perc = pl.skills["perception"]!!.value;
 
 		uitext = string::format(
-		  "FPS: %d\nPos: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
+		  "FPS: %d\nPos: %d,%d,%d\nTil: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nZoom: %f\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
 		  raylib::get_fps(),
-		  camera::main.target.x, camera::main.target.y, camera::main.target.z, 
+		  camera::main.target.x, camera::main.target.y, camera::main.target.z,
+		  world::data.player.position.x, world::data.player.position.y, world::data.player.position.z,
 		  world::tiles_rendered,
 		  perc, 5 + (perc * 0.2),
+		  camera::main.zoom,
 		  pl.hp_cur, pl.hp_max, pl.hp_tick,
 		  pl.st_cur, pl.st_max, pl.st_tick,
 		  pl.mn_cur, pl.mn_max, pl.mn_tick,
@@ -95,7 +97,7 @@ fn int main(String[] args) {
 		if (raylib::is_key_pressed(raylib::KEY_Q)) camera::rotate(90);
 		if (raylib::is_key_pressed(raylib::KEY_E)) camera::rotate(-90);
 		float zoom = raylib::get_mouse_wheel_move();
-		if (zoom != 0) camera::zoom(-zoom / 10);
+		if (zoom != 0) camera::zoom(-zoom / 20);
 
 		render::content();
 			world::draw();

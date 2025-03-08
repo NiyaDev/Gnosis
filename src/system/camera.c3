@@ -30,7 +30,7 @@ fn void init() {
 		.fovy      		= 70,
 		.projection 	= PERSPECTIVE,
 
-		.zoom 				= 1,
+		.zoom 				= 0.5,
 
 		.rotation    	= 0,
 		.rot_target  	= 0,
@@ -81,7 +81,8 @@ fn void! update(float delta_time) {
 			main.rot_target -= 360;
 		}
 	}
-	main.position = main.target.rotate({0.0, 12.0 * main.zoom, 10.0 * main.zoom}, main.rotation);
+	//main.position = main.target.rotate({0.0, 12.0 * main.zoom, 10.0 * main.zoom}, main.rotation);
+	main.position = main.target.rotate({0.0, (float)((12.0).pow(main.zoom * 1.5)), 10.0 * main.zoom}, main.rotation);
 }
 
 const Vector3 ZERO = {0,0,0};
@@ -97,7 +98,7 @@ fn void move(Vector3 amount) {
 }
 <* Change zoom level *>
 fn void zoom(float change) {
-	main.zoom = (change + main.zoom).clamp(0.25,2);
+	main.zoom = (change + main.zoom).clamp(0.25,0.85);
 }
 <* Rotate camera by amount *>
 fn void rotate(float change) {

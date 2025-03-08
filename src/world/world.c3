@@ -46,15 +46,16 @@ fn void draw() {
             Material* mat = resources::materials[t.material]!!;
             mat.set_texture(*resources::textures[t.texture]!!);
             Matrix matr = matrix::translate(pos);
-            model.set_material(mat);
-            //model.meshes[0].draw(*mat,matr.add(matrix::rotate_y(1.6)));
+            //model.set_material(mat);
             Color col = {
               (char)(255 * visibility),
               (char)(255 * visibility),
               (char)(255 * visibility),
               255,
             };
-            model.draw_ex(pos, {0,1,0}, 45, {1.4,1.4,1.4}, col);
+            mat.maps[0].color = col;
+            model.meshes[0].draw(*mat,matr.add(matrix::rotate_y(1.6))); 
+            //model.draw_ex(pos, {0,1,0}, 45, {1.4,1.4,1.4}, col);
             tiles_rendered++;
           }
         }
@@ -63,7 +64,6 @@ fn void draw() {
   };
 }
 
-//<**>
 <**>
 fn float tile_visible(int[3] chunk_position, int[3] tile) {
   Chunk* chunk = data.chunks.get_ref(chunk_position)!!;
@@ -79,18 +79,91 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   };
   if (data.player.position.distance(position) > 5 + (data.player.skills["perception"]!!.value * 0.2)) return 0;
 
-  //* If there's any visible tiles around it
-  
+  //* If it's surrounded by visible
+  float visible_mod = 1;
+  //* Top
+  bool top;
+  if (tile[1] == 15) {
+    int[3] newchunk = chunk_position;
+    newchunk[1]++;
+    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    if (try chunkptr) {
+      top = (chunkptr.tiles[tile[0]][0][tile[2]].visible);
+    } else { visible_mod = 1; }
+  } else {
+    top = (chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible);
+  }
+  //* Bottom
+  bool bottom;
+  if (tile[1] == 0) {
+    int[3] newchunk = chunk_position;
+    newchunk[1]--;
+    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    if (try chunkptr) {
+      bottom = (chunkptr.tiles[tile[0]][15][tile[2]].visible);
+    } else { visible_mod = 1; }
+  } else {
+    bottom = (chunk.tiles[tile[0]][tile[1]-1][tile[2]].visible);
+  }
+  //* North
+  bool north;
+  if (tile[2] == 0) {
+    int[3] newchunk = chunk_position;
+    newchunk[2]--;
+    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    if (try chunkptr) {
+      north = (chunkptr.tiles[tile[0]][tile[1]][15].visible);
+    } else { visible_mod = 1; }
+  } else {
+    north = (chunk.tiles[tile[0]][tile[1]][tile[2]-1].visible);
+  }
+  //* South
+  bool south;
+  if (tile[2] == 15) {
+    int[3] newchunk = chunk_position;
+    newchunk[2]++;
+    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    if (try chunkptr) {
+      south = (chunkptr.tiles[tile[0]][tile[1]][0].visible);
+    } else { visible_mod = 1; }
+  } else {
+    south = (chunk.tiles[tile[0]][tile[1]][tile[2]+1].visible);
+  }
+  //* East
+  bool east;
+  if (tile[0] == 15) {
+    int[3] newchunk = chunk_position;
+    newchunk[0]++;
+    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    if (try chunkptr) {
+      east = (chunkptr.tiles[0][tile[1]][tile[2]].visible);
+    } else { visible_mod = 1; }
+  } else {
+    east = (chunk.tiles[tile[0]+1][tile[1]][tile[2]].visible);
+  }
+  //* West
+  bool west;
+  if (tile[0] == 0) {
+    int[3] newchunk = chunk_position;
+    newchunk[0]--;
+    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    if (try chunkptr) {
+      west = (chunkptr.tiles[15][tile[1]][tile[2]].visible);
+    } else { visible_mod = 1; }
+  } else {
+    west = (chunk.tiles[tile[0]-1][tile[1]][tile[2]].visible);
+  }
+
+  if (top && bottom && north && south && east && west) return 0;
 
   //* Multiplier for vision
-  float vision_multi = 0;
+  float vision_multi = 1;
+  if (data.player.position.distance(position) > 3 + (data.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.8;
   if (data.player.position.distance(position) > 4 + (data.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.4;
-  if (data.player.position.distance(position) > 3 + (data.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.6;
-  if (data.player.position.distance(position) > 2 + (data.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.8; 
   //bool above = !chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible;
-  if (chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible) return 0;
+  //if (chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible) return 0;
 
-  return 1;
+  return visible_mod * vision_multi;
 }
 
 fn uint int[3].hash(self) {
