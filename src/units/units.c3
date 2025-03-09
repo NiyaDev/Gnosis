@@ -76,4 +76,41 @@ fn void Unit.move(&self, Vector3 movement) {
   self.position.y += movement.y;
   self.position.z += movement.z;
 }
+<* General unit logic *>
+fn void Unit.update(&self) {
+
+  //* Regeneration logic
+  if (self.hn_cur > 0) {
+    //* Health regeneration
+    if ((self.hp_cur < self.hp_max) && self.hp_tick <= 0) {
+      self.hp_tick = (float)self.skills["regeneration"]!!.value / 0.01;
+      self.hp_cur++;
+      self.hn_cur -= 0.2;
+    } else if (self.hp_tick > 0) { self.hp_tick--; }
+    if (self.hp_cur > self.hp_max) self.hp_cur = self.hp_max;
+    //* Stamina regeneration
+    if ((self.st_cur < self.st_max) && self.st_tick <= 0) {
+      self.st_tick = (float)self.skills["endurance"]!!.value / 0.1;
+      self.st_cur++;
+    } else if (self.st_tick > 0) { self.st_tick--; }
+    if (self.st_cur > self.st_max) self.st_cur = self.st_max;
+    //* Mana regeneration
+    if ((self.mn_cur < self.mn_max) && self.mn_tick <= 0) {
+      self.mn_tick = (float)self.skills["current"]!!.value / 0.1;
+      self.mn_cur++;
+    } else if (self.st_tick > 0) { self.st_tick--; }
+    if (self.mn_cur > self.mn_max) self.mn_cur = self.mn_max;
+    //* Natural hunger tick
+    if (self.hn_tick <= 0) {
+      self.hn_tick = (float)self.skills["metabolism"]!!.value * 100;
+      self.hn_cur -= 0.1;
+    } else { self.hn_tick--; }
+  } else {
+    //* Tick Health down from hunger 
+    if (self.hn_tick <= 0) {
+      self.hn_tick = (float)self.skills["metabolism"]!!.value * 100;
+      self.hp_cur--;
+    } else if (self.hn_tick > 0) { self.hn_tick--; }
+  } 
+}
 
