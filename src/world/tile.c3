@@ -7,14 +7,17 @@ struct Tile {
   TileType type;
   Chunk* chunk;
 
+  //* Data tied to type
   bool visible;
   bool gravity;
   bool solid;
-  int growth_tick;
 
   String model;
   String material;
-  String texture;
+  String texture; 
+
+  //* Data that can change
+  int growthtick;
 }
 
 enum TileType {
@@ -28,7 +31,7 @@ enum TileType {
   OAK_SAPLING,
 }
 
-<**>
+<* Create new tile *>
 fn Tile new(Chunk* chunk, TileType type) {
   Tile output;
   output.type = type;

@@ -10,6 +10,7 @@ import gnosis::unit;
 HashMap(<String, Font*>)     fonts;
 HashMap(<String, Texture*>)  textures;
 HashMap(<String, Model*>)    models;
+HashMap(<String, Mesh*>)     meshes;
 HashMap(<String, Material*>) materials;
 
 
@@ -44,7 +45,9 @@ fn void! load() {
   ui_textures.free()!;
 
   //* Generate models
-  models.set("simple_tile", mesh::gen_cube(1,1,1).model());
+  Mesh* simple_mesh = mesh::gen_cube(1,1,1);
+  meshes.set("simple_tile", simple_mesh);
+  models.set("simple_tile", simple_mesh.model());
 
   //* Load models
 

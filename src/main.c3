@@ -26,16 +26,7 @@ fn int main(String[] args) {
 	resources::load()!!;
 
 	//* Generate Test chunk
-	world::new_chunk({0,0,0});
-	world::new_chunk({1,0,0});
-	world::new_chunk({2,0,0});
-	world::new_chunk({0,0,1});
-	world::new_chunk({1,0,1});
-	world::new_chunk({2,0,1});
-	world::new_chunk({0,0,2});
-	world::new_chunk({1,0,2});
-	world::new_chunk({2,0,2});
-	//chunk_01.init();
+	world::generate();
 
 	//* Player
 	world::data.player = player::new();
@@ -70,13 +61,14 @@ fn int main(String[] args) {
 	while (!raylib::window_should_close()) {
 		float dt = raylib::get_frame_time();
 		camera::update(dt)!!;
+		world::update();
 		if (raylib::is_key_pressed(raylib::KEY_LEFT_SHIFT)) pl.skills.get_ref("perception")!!.value++;
 
 		float perc = pl.skills["perception"]!!.value;
-
 		uitext = string::format(
-		  "FPS: %d\nPos: %d,%d,%d\nTil: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nZoom: %f\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
+		  "FPS: %d (%f)\nPos: %d,%d,%d\nTil: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nZoom: %f\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
 		  raylib::get_fps(),
+		  world::data.framespertick / 60,
 		  camera::main.target.x, camera::main.target.y, camera::main.target.z,
 		  world::data.player.position.x, world::data.player.position.y, world::data.player.position.z,
 		  world::tiles_rendered,

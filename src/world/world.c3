@@ -10,24 +10,51 @@ import raylib;
 struct World {
   Player* player;
 
-  HashMap(<int[3],Chunk>) chunks;
-}
+  //* Clock
+  float framespertick;
+  float ticks;
 
-struct MeshIntance {
-  String model;
-  String material;
-  String texture;
-  List(<Matrix>) matrices;
+  //* Map
+  HashMap(<int[3],Chunk>) chunks;
 }
 
 int tiles_rendered;
 World data;
 
+<* Create a new chunk in the world *>
 fn void new_chunk(int[3] position) {
   Chunk chunk;
   chunk.init();
   data.chunks.set(position,chunk);
 }
+<* Generate world *>
+fn void generate(float framespertick = 3) {
+  data.framespertick = framespertick;
+
+	//world::new_chunk({0,0,0});
+	data.chunks.set({0,0,0}, chunk::load("test",{0,0,0}));
+	world::new_chunk({1,0,0});
+	world::new_chunk({2,0,0});
+	world::new_chunk({0,0,1});
+	world::new_chunk({1,0,1});
+	world::new_chunk({2,0,1});
+	world::new_chunk({0,0,2});
+	world::new_chunk({1,0,2});
+	world::new_chunk({2,0,2});
+	data.chunks[{0,0,0}]!!.save("test");
+}
+
+<* Update world *>
+fn void update() {
+  //* Tick
+  if (data.ticks >= data.framespertick / 60) {
+    data.player.tick();
+    data.ticks -= (data.framespertick / 60);
+  } else {
+    data.ticks += raylib::get_frame_time();
+  }
+}
+<* Draw world to screen *>
 fn void draw() {
   tiles_rendered = 0;
   data.chunks.@each(; int[3] position_raw, Chunk chunk) {
@@ -42,20 +69,12 @@ fn void draw() {
               (float)(y + (position_raw[1] * 16)),
               (float)(x + (position_raw[0] * 16)) + (float)(z + (position_raw[2] * 16)),
             };
-            Model* model = resources::models[t.model]!!;
+            Mesh* mesh = resources::meshes[t.model]!!;
             Material* mat = resources::materials[t.material]!!;
             mat.set_texture(*resources::textures[t.texture]!!);
             Matrix matr = matrix::translate(pos);
-            //model.set_material(mat);
-            Color col = {
-              (char)(255 * visibility),
-              (char)(255 * visibility),
-              (char)(255 * visibility),
-              255,
-            };
-            mat.maps[0].color = col;
-            model.meshes[0].draw(*mat,matr.add(matrix::rotate_y(1.6))); 
-            //model.draw_ex(pos, {0,1,0}, 45, {1.4,1.4,1.4}, col);
+            mat.maps[0].color = raylib::WHITE.multiply(visibility);
+            mesh.draw(*mat,matr.add(matrix::rotate_y(1.6)));
             tiles_rendered++;
           }
         }

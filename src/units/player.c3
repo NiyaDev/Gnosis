@@ -35,7 +35,7 @@ fn void Player.update(&self) {
 
   self.move(camera::ZERO.rotate(movement, camera::main.rotation));
   
-  self.unit.update();
+  //self.unit.update();
 }
 
 
