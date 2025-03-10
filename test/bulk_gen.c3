@@ -43,6 +43,9 @@ fn void gen_keybinds() @test {
 	keybind::set("move_left",	 {.type=KEYBOARD,.kb=raylib::KEY_A});
 	keybind::set("move_right", {.type=KEYBOARD,.kb=raylib::KEY_D});
 
+	keybind::set("rotate_right", {.type=KEYBOARD,.kb=raylib::KEY_Q});
+	keybind::set("rotate_left",  {.type=KEYBOARD,.kb=raylib::KEY_E});
+
 	char[] kb = keybind::save()!!;
 
   keybindings_bulk.add("default_kb", kb)!;

@@ -30,16 +30,15 @@ fn int main(String[] args) {
 
 	//* Player
 	world::data.player = player::new();
-	Player* pl = world::data.player;
-	pl.position = {8,9,8};
-	pl.sprite = resources::textures["player"]!!;
-	camera::set_target(pl);
+	world::data.player.position = {8,9,8};
+	world::data.player.sprite = resources::textures["player"]!!;
+	camera::set_target(world::data.player);
 
 	UIElement player_status = verticalbox::new(padding:{10,10,0,0});
-	player_status.add_element(bar::new(raylib::RED,{0,0,64,8},"bar_bg","bar_fl",&pl.hp_cur,&pl.hp_max));
-	player_status.add_element(bar::new(raylib::GREEN,{0,0,64,8},"bar_bg","bar_fl",&pl.st_cur,&pl.st_max));
-	player_status.add_element(bar::new(raylib::BLUE,{0,0,64,8},"bar_bg","bar_fl",&pl.mn_cur,&pl.mn_max));
-	player_status.add_element(bar::new(raylib::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&pl.hn_cur,&pl.hn_max));
+	player_status.add_element(bar::new(raylib::RED,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.hp_cur,&world::data.player.hp_max));
+	player_status.add_element(bar::new(raylib::GREEN,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.st_cur,&world::data.player.st_max));
+	player_status.add_element(bar::new(raylib::BLUE,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.mn_cur,&world::data.player.mn_max));
+	player_status.add_element(bar::new(raylib::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.hn_cur,&world::data.player.hn_max));
 	ui::push("status", player_status);
 	/*
 	UITextureNPatch* textbox_tex = npatch_texture::new(texture:"textbox");
@@ -62,9 +61,10 @@ fn int main(String[] args) {
 		float dt = raylib::get_frame_time();
 		camera::update(dt)!!;
 		world::update();
-		if (raylib::is_key_pressed(raylib::KEY_LEFT_SHIFT)) pl.skills.get_ref("perception")!!.value++;
+		if (raylib::is_key_pressed(raylib::KEY_LEFT_SHIFT)) world::data.player.skills.get_ref("perception")!!.value++;
 
-		float perc = pl.skills["perception"]!!.value;
+		//* Update onscreen debug information string
+		float perc = world::data.player.skills["perception"]!!.value;
 		uitext = string::format(
 		  "FPS: %d (%f)\nPos: %d,%d,%d\nTil: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nZoom: %f\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
 		  raylib::get_fps(),
@@ -74,26 +74,20 @@ fn int main(String[] args) {
 		  world::tiles_rendered,
 		  perc, 5 + (perc * 0.2),
 		  camera::main.zoom,
-		  pl.hp_cur, pl.hp_max, pl.hp_tick,
-		  pl.st_cur, pl.st_max, pl.st_tick,
-		  pl.mn_cur, pl.mn_max, pl.mn_tick,
-		  pl.hn_cur, pl.hn_max, pl.hn_tick,
+		  world::data.player.hp_cur, world::data.player.hp_max, world::data.player.hp_tick,
+		  world::data.player.st_cur, world::data.player.st_max, world::data.player.st_tick,
+		  world::data.player.mn_cur, world::data.player.mn_max, world::data.player.mn_tick,
+		  world::data.player.hn_cur, world::data.player.hn_max, world::data.player.hn_tick,
 		  allocator: allocator::heap(),
 		);
 		defer uitext.free();
 
-		// TODO: Move into player.c3
-		pl.update();
-		if (raylib::is_key_down(raylib::KEY_LEFT_SHIFT)) camera::move({0,-10 * dt, 0});
-		if (raylib::is_key_down(raylib::KEY_SPACE)) camera::move({0,10 * dt, 0});
-		if (raylib::is_key_pressed(raylib::KEY_Q)) camera::rotate(90);
-		if (raylib::is_key_pressed(raylib::KEY_E)) camera::rotate(-90);
-		float zoom = raylib::get_mouse_wheel_move();
-		if (zoom != 0) camera::zoom(-zoom / 20);
+		// Player controls
+		world::data.player.update();
 
 		render::content();
 			world::draw();
-			raylib::draw_billboard_pro(camera::main, *pl.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
+			raylib::draw_billboard_pro(camera::main, *world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
 
 		render::ui();
 			ui::draw();
