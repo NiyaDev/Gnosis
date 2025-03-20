@@ -1,7 +1,7 @@
 {
 	"langrev": "1",
 	"warnings": [ "no-unused" ],
-	"dependency-search-paths": [ "lib", "../pleroma/" ],
+	"dependency-search-paths": [ "lib", "../pleroma_old/" ],
 	"dependencies": [ "raylib", "bulk", "localization", "keybind", "yaml" ],
 	"authors": [ "Josh <Niya> Zemenski" ],
 	"version": "0.1.0",

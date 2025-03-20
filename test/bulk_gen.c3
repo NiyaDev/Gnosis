@@ -23,14 +23,15 @@ fn void gen_shaders() @test {
   Bulk* shader_bulk = bulk::new("001");
 
   //* Grab files
-  usz size = file::get_size("resources/raw_files/shader.fs")!!;
-  File file = file::open("resources/raw_files/shader.fs", "rb")!!;
-  defer file.close()!!;
+  char[] shader = file::load_new("resources/raw_files/shader.fs")!!;
+  char[] fshader = file::load_new("resources/raw_files/shd_crt.fsh")!!;
+  char[] vshader = file::load_new("resources/raw_files/shd_crt.vsh")!!;
+  char[] testshader = file::load_new("resources/raw_files/shadertest.fsh")!!;
 
-  char[] shader = mem::new_array(char, size);
-  file.read(shader)!!;
-
-  shader_bulk.add("screen_shader", shader)!!;
+  shader_bulk.add("shader", shader)!!;
+  shader_bulk.add("frag_shader", fshader)!!;
+  shader_bulk.add("vert_shader", vshader)!!;
+  shader_bulk.add("shadertest", testshader)!!;
   shader_bulk.save()!!;
 }
 <* 002 *>

@@ -9,6 +9,8 @@ int[2] screen = {1280, 720};
 int[2] render = {640, 360};
 RenderTexture render_texture;
 Shader* shader;
+int texture_loc;
+Texture* mask;
 
 
 <* Initialize render system *>
@@ -23,7 +25,14 @@ fn void! init() {
 
 	//* Set up shader
 	Bulk* shader_bulk = bulk::load("resources/001")!!;
-	shader = shader::from_mem(null, shader_bulk.get("screen_shader")!!);
+	//shader = shader::from_mem(null, shader_bulk.get("shader")!!);
+	//shader = shader::from_mem(shader_bulk.get("vert_shader")!!, shader_bulk.get("frag_shader")!!);
+	//shader = shader::from_mem(null, shader_bulk.get("frag_shader")!!);
+	shader = shader::from_mem(null, shader_bulk.get("shadertest")!!);
+	mask = texture::load("resources/raw_files/mask.png")!!;
+	texture_loc = raylib::get_shader_location(*shader, "mask_sampler");
+	//raylib::set_shader_value_texture(*shader, texture_loc, *mask);
+	//shader.locs[] = raylib::get_shader_location(*shader, "gm_BaseTexture");
 }
 <* Close render system *>
 fn void! close() {
@@ -50,6 +59,8 @@ fn void end() {
 
 	//* Render texture to screen
 	raylib::begin_drawing();
+		//Image* img = render_texture.texture.to_image();
+		//raylib::set_shader_value_texture(*shader,texture_loc,render_texture.texture);
 		shader.begin();
 			raylib::draw_texture_pro(render_texture.texture, {0,0,render[0],(float)-render[1]}, {0,0,screen[0],screen[1]}, {0,0}, 0, raylib::WHITE);
 		shader.end();
