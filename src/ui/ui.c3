@@ -2,7 +2,8 @@
 module gnosis::ui;
 import std::io;
 import std::collections;
-import raylib;
+import pleroma;
+//import raylib;
 import gnosis::resources;
 
 
@@ -179,7 +180,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
         );
 
         //* Draw text one character at a time
-        Font* font = resources::fonts[tbdata.font]!!;
+        Font font = resources::fonts[tbdata.font]!!;
         for (int i; i < tbdata.display.len - 1; i++) {
           if (tbdata.display[i] != 0) {
             // TODO: Allow for rich text formatting
@@ -193,7 +194,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
               {0,0}, 0,
               tbdata.text_size,
               tbdata.text_spacing,
-              raylib::WHITE,
+              color::WHITE,
             );
             str.free();
           }
@@ -265,7 +266,8 @@ fn usz UIElement.len(&self) {
 
 //* Bar
 module gnosis::ui::bar;
-import raylib;
+import pleroma;
+//import raylib;
 
 
 <* Creates a new Bar element without pushing to UI
@@ -283,7 +285,8 @@ fn UIElement new(Color tint, Rectangle rect, String bg, String bar, float* value
 
 //* Text
 module gnosis::ui::text;
-import raylib;
+import pleroma;
+//import raylib;
 
 
 <* Create a new Text element without pushging to ui
@@ -299,7 +302,8 @@ fn UIElement new(Color tint, Vector2 position, String font, String* text, float 
 
 //* NPatch Texture
 module gnosis::ui::npatch_texture;
-import raylib;
+import pleroma;
+//import raylib;
 import gnosis::resources;
 
 
@@ -317,7 +321,8 @@ fn UITextureNPatch* new(Color tint = raylib::WHITE, Rectangle rect = {0,0,0,0}, 
 
 //* Vertical box
 module gnosis::ui::verticalbox;
-import raylib;
+import pleroma;
+//import raylib;
 
 
 <* Create new Vertical box without pushing to ui *>
@@ -332,7 +337,8 @@ fn UIElement new(UITextureNPatch* background = null, Rectangle padding = {0,0,0,
 
 //* Horizontal box
 module gnosis::ui::horizontalbox;
-import raylib;
+import pleroma;
+//import raylib;
 
 
 <* Create new Vertical box without pushing to ui *>
@@ -347,7 +353,8 @@ fn UIElement new(UITextureNPatch* background = null, Rectangle padding = {0,0,0,
 
 //* Textbox
 module gnosis::ui::textbox;
-import raylib;
+import pleroma;
+//import raylib;
 
 
 <* Create new textbox without pushing *>

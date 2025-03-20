@@ -2,9 +2,10 @@
 module gnosis;
 import std::io;
 import std::math::random;
-import bulk;
-import raylib;
-import keybind;
+import pleroma;
+//import bulk;
+//import raylib;
+//import keybind;
 import gnosis::system::render;
 import gnosis::system::camera;
 import gnosis::world;
@@ -18,28 +19,30 @@ Texture* bar_fl;
 
 fn int main(String[] args) {
 	//* Initialize systems
-	render::init()!!;
-	defer render::close()!!;
+	render::init();
+	defer render::close();
 	camera::init();
 
 	//* Load resources
-	resources::load()!!;
+	//resources::load();
 
 	//* Generate Test chunk
-	world::generate();
+	//world::generate();
 
 	//* Player
-	world::data.player = player::new();
-	world::data.player.position = {8,9,8};
-	world::data.player.sprite = resources::textures["player"]!!;
-	camera::set_target(world::data.player);
+	//world::data.player = player::new();
+	//world::data.player.position = {8,9,8};
+	//world::data.player.sprite = resources::textures.get_ref("player")!!;
+	//camera::set_target(world::data.player);
 
+	/*
 	UIElement player_status = verticalbox::new(padding:{10,10,0,0});
-	player_status.add_element(bar::new(raylib::RED,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.hp_cur,&world::data.player.hp_max));
-	player_status.add_element(bar::new(raylib::GREEN,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.st_cur,&world::data.player.st_max));
-	player_status.add_element(bar::new(raylib::BLUE,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.mn_cur,&world::data.player.mn_max));
-	player_status.add_element(bar::new(raylib::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.hn_cur,&world::data.player.hn_max));
+	player_status.add_element(bar::new(color::RED,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.hp_cur,&world::data.player.hp_max));
+	player_status.add_element(bar::new(color::GREEN,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.st_cur,&world::data.player.st_max));
+	player_status.add_element(bar::new(color::BLUE,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.mn_cur,&world::data.player.mn_max));
+	player_status.add_element(bar::new(color::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.hn_cur,&world::data.player.hn_max));
 	ui::push("status", player_status);
+	*/
 	/*
 	UITextureNPatch* textbox_tex = npatch_texture::new(texture:"textbox");
 	String textbox_text = "Testing";
@@ -54,16 +57,17 @@ fn int main(String[] args) {
 	ui::push("textbox", textbox);
 	*/
 
-	String uitext;
-	ui::new_text("debug_text",raylib::WHITE,{10,80},"anakron",&uitext,12,-1);
+	//String uitext;
+	//ui::new_text("debug_text",color::WHITE,{10,80},"anakron",&uitext,12,-1);
 
 	while (!raylib::window_should_close()) {
+		/*
 		float dt = raylib::get_frame_time();
 		camera::update(dt)!!;
 		world::update();
 		if (raylib::is_key_pressed(raylib::KEY_LEFT_SHIFT)) world::data.player.skills.get_ref("perception")!!.value++;
 
-		//* Update onscreen debug information string
+		// Update onscreen debug information string
 		float perc = world::data.player.skills["perception"]!!.value;
 		uitext = string::format(
 		  "FPS: %d (%f)\nPos: %d,%d,%d\nTil: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nZoom: %f\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
@@ -81,21 +85,23 @@ fn int main(String[] args) {
 		  allocator: allocator::heap(),
 		);
 		defer uitext.free();
+		*/
 
 		// Player controls
-		world::data.player.update();
+		//world::data.player.update();
 
 		render::content();
-			world::draw();
-			raylib::draw_billboard_pro(camera::main, *world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
+			//world::draw();
+			//camera::main.draw_billboard_pro(*world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
+			//raylib::draw_billboard_pro(camera::main, *world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
 
 		render::ui();
-			ui::draw();
+			//ui::draw();
 			
 		render::end();
 	}
 
-	ui::free();
+	//ui::free();
 
 	return 0;
 }

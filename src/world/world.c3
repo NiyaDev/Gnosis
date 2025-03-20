@@ -4,7 +4,8 @@ import std::collections;
 import std::io;
 import gnosis::unit;
 import gnosis::resources;
-import raylib;
+import pleroma;
+//import raylib;
 
 
 struct World {
@@ -69,12 +70,12 @@ fn void draw() {
               (float)(y + (position_raw[1] * 16)),
               (float)(x + (position_raw[0] * 16)) + (float)(z + (position_raw[2] * 16)),
             };
-            Mesh* mesh = resources::meshes[t.model]!!;
-            Material* mat = resources::materials[t.material]!!;
-            mat.set_texture(*resources::textures[t.texture]!!);
+            Mesh mesh = resources::meshes[t.model]!!;
+            Material mat = resources::materials[t.material]!!;
+            mat.set_texture(resources::textures[t.texture]!!);
             Matrix matr = matrix::translate(pos);
-            mat.maps[0].color = raylib::WHITE.multiply(visibility);
-            mesh.draw(*mat,matr.add(matrix::rotate_y(1.6)));
+            mat.maps[0].color = color::WHITE.multiply(visibility);
+            mesh.draw(mat,matr.add(matrix::rotate_y(1.6)));
             tiles_rendered++;
           }
         }

@@ -2,9 +2,10 @@
 module gnosis::unit::skills;
 import std::io;
 import std::collections;
-import bulk;
-import localization;
-import yaml;
+import pleroma;
+//import bulk;
+//import localization;
+//import yaml;
 
 
 HashMap(<String, Skill>) data;
@@ -34,16 +35,13 @@ const float METABOLISM_MOD = 1;
 
 <*  *>
 fn void init() {
-  Bulk*! bulk = bulk::load("resources/050");
-  assert(@ok(bulk), "Failed to load skills data from resource. (skills.c3)");
-  defer bulk.free()!!;
+  Bulk bulk = bulk::load("resources/050");
+  defer bulk.free();
 
-  String! raw_text = (String)bulk.get("yaml");
-  assert(@ok(raw_text), "Yaml text corrupted. (skills.c3)");
+  String raw_text = (String)bulk.get("yaml");
 
-  Yaml! yaml = yaml::parse(raw_text);
-  assert(@ok(yaml), "Yaml failed to parse. (skills.c3)");
-  defer yaml.free()!!;
+  Yaml yaml = yaml::parse(raw_text);
+  defer yaml.free();
 
   //* Init data
   data.new_init();
@@ -54,30 +52,26 @@ fn void init() {
     sk.id_name = key.copy();
 
     //* Name localization
-    TypedValue! name = val.get_object("name");
-    assert(@ok(name), "Skill didn't have name. (skills.c3)");
-    ((yaml::Object*)name.value)!!.@each(; String key_name, TypedValue val_name) {
+    TypedValue name = val.get_object("name");
+    ((yaml::Object*)name.value).@each(; String key_name, TypedValue val_name) {
       sk.name.add(key_name.to_language(), val_name.v_string);
     };
 
     //* Description localization
-    TypedValue! desc = val.get_object("description");
-    assert(@ok(name), "Skill didn't have name. (skills.c3)");
-    ((yaml::Object*)desc.value)!!.@each(; String key_name, TypedValue val_name) {
+    TypedValue desc = val.get_object("description");
+    ((yaml::Object*)desc.value).@each(; String key_name, TypedValue val_name) {
       sk.name.add(key_name.to_language(), val_name.v_string);
     };
 
     //* Indepth localization
-    TypedValue! indepth = val.get_object("indepth");
-    if (try indepth) {
-      ((yaml::Object*)indepth.value).@each(; String key_name, TypedValue val_name) {
-        sk.name.add(key_name.to_language(), val_name.v_string);
-      };
-    }
+    TypedValue indepth = val.get_object("indepth");
+    ((yaml::Object*)indepth.value).@each(; String key_name, TypedValue val_name) {
+      sk.name.add(key_name.to_language(), val_name.v_string);
+    };
 
     //data[sk.id] = sk;
     data.set(key.copy(), sk);
-  }!!;
+  };
 
   //* Iterate through each skill and copy data into array
 }
