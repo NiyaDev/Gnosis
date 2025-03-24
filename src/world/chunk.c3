@@ -51,18 +51,18 @@ fn void Chunk.save(&self, String savename) {
   }
 
   //* Open file
-  String path = string::format("saves/%s/data/%d_%d_%d.dat", savename, self.position[0], self.position[1], self.position[2], allocator: allocator::heap());
-  File! file = file::open(path, "wb");
+  String path = string::format(allocator::heap(), "saves/%s/data/%d_%d_%d.dat", savename, self.position[0], self.position[1], self.position[2]);
+  File? file = file::open(path, "wb");
   assert(@ok(file), "Failed to open file to write to.");
   file.write(chunkdata)!!;
   file.close()!!;
 }
 <* Load chunk from file *>
 fn Chunk load(String savename, int[3] position) {
-  char[]! chunkdata;
+  char[]? chunkdata;
   usz head;
-  String path = string::format("saves/%s/data/%d_%d_%d.dat", savename, position[0], position[1], position[2], allocator: allocator::heap()); 
-  chunkdata = file::load_new(path);
+  String path = string::format(allocator::heap(), "saves/%s/data/%d_%d_%d.dat", savename, position[0], position[1], position[2]); 
+  chunkdata = file::load_temp(path);
   assert(@ok(chunkdata), "Failed to open file to read.");
 
   Chunk new_chunk;

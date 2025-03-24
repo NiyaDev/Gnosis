@@ -26,9 +26,8 @@ fn void init() {
 	render_texture = rendertexture::load(render[0], render[1]);
 
 	//* Set up shader
-	io::printfn("");
 	Bulk shader_bulk = bulk::load("resources/001");
-	//shader = shader::load_mem(null, shader_bulk.get("shadertest"));
+	shader = shader::load_mem(null, shader_bulk.get("shadertest"));
 }
 <* Close render system *>
 fn void close() {
@@ -41,7 +40,7 @@ fn void close() {
 <* Starts drawing *>
 fn void content() {
 	render_texture.begin();
-	raylib::clear_background(color::BLACK);
+	raylib::clear_background(color::WHITE);
 	raylib::begin_3d_mode(camera::main);
 }
 <* Stops 3d mode and starts UI *>

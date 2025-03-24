@@ -18,7 +18,7 @@ struct Unit {
 
   //* Data
   Species* species;
-  HashMap(<String, SkillNode>) skills;
+  HashMap{String, SkillNode} skills;
 }
 
 <* Create a new Unit - Deprecated? *>
@@ -40,7 +40,7 @@ fn void Unit.init(&self, String spec = "") {
     skills::data.@each(; String key, Skill val) {
       SkillNode node;
       node.skill = &val;
-      int! skill_start = self.species.skill_start[node.skill.id_name];
+      int? skill_start = self.species.skill_start[node.skill.id_name];
       if (try skill_start) {
         node.value = skill_start;
         node.discovered = false;
@@ -48,7 +48,7 @@ fn void Unit.init(&self, String spec = "") {
       
       // TODO: Have yaml store whether the skill is discovered
 
-      self.skills.set(key.copy(), node);
+      self.skills.set(key.copy(allocator::heap()), node);
     };
 
     //* Calculate status skills

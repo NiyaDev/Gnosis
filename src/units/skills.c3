@@ -8,7 +8,7 @@ import pleroma;
 //import yaml;
 
 
-HashMap(<String, Skill>) data;
+HashMap{String, Skill} data;
 struct Skill {
   String id_name;
   Localization name;
@@ -44,12 +44,12 @@ fn void init() {
   defer yaml.free();
 
   //* Init data
-  data.new_init();
+  //data.new_init();
   //data = mem::new_array(Skill, yaml.len() + 1)!!;
 
   yaml.@each(; String key, TypedValue val) {
     Skill sk;
-    sk.id_name = key.copy();
+    sk.id_name = key.copy(allocator::heap());
 
     //* Name localization
     TypedValue name = val.get_object("name");
@@ -70,7 +70,7 @@ fn void init() {
     };
 
     //data[sk.id] = sk;
-    data.set(key.copy(), sk);
+    data.set(key.copy(allocator::heap()), sk);
   };
 
   //* Iterate through each skill and copy data into array

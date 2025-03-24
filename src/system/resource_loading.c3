@@ -1,5 +1,6 @@
 
 module gnosis::resources;
+import std::io;
 import std::collections;
 import pleroma;
 //import bulk;
@@ -8,11 +9,11 @@ import pleroma;
 import gnosis::unit;
 
 
-HashMap(<String, Font>)     fonts;
-HashMap(<String, Texture>)  textures;
-HashMap(<String, Model>)    models;
-HashMap(<String, Mesh>)     meshes;
-HashMap(<String, Material>) materials;
+HashMap{String, Font}     fonts;
+HashMap{String, Texture}  textures;
+HashMap{String, Model}    models;
+HashMap{String, Mesh}     meshes;
+HashMap{String, Material} materials;
 
 
 <* Load all resources from file *>
@@ -85,6 +86,6 @@ fn void load() {
 }
 
 <*  *>
-fn void! free() {
+fn void free() {
   
 }

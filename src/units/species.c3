@@ -9,13 +9,13 @@ import pleroma;
 //import yaml;
 
 
-HashMap(<String,Species>) data;
+HashMap{String,Species} data;
 struct Species {
   Localization name;
   Localization description;
 
-  HashMap(<String,int>) skill_start;
-  HashMap(<String,int>) skill_max;
+  HashMap{String,int} skill_start;
+  HashMap{String,int} skill_max;
 
   float core_temp;
   float base_min_temp;
@@ -23,7 +23,7 @@ struct Species {
 }
 
 <* Loads a pointer to a specific species *>
-fn Species*! get(String name) {
+fn Species*? get(String name) {
   return data.get_ref(name)!;
 }
 
@@ -31,6 +31,7 @@ fn Species*! get(String name) {
 fn void init() {
   Bulk bulk = bulk::load("resources/051");
   Yaml yaml = yaml::parse((String)bulk.get("yaml"));
+  yaml.print();
 
   //* Iterate through each species
   yaml.@each(; String key, TypedValue val) {

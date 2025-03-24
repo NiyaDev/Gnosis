@@ -8,7 +8,7 @@ import gnosis::resources;
 
 
 
-def UIHandler = HashMap(<String, UIElement>);
+alias UIHandler = HashMap{String, UIElement};
 UIHandler data;
 
 struct UIElement {
@@ -51,13 +51,13 @@ struct UITextureNPatch {
 }
 
 struct UIVerticalBox {
-  List(<UIElement>) elements; 
+  List{UIElement} elements; 
   UITextureNPatch* background;
   Rectangle padding;
 }
 
 struct UIHorizontalBox {
-  List(<UIElement>) elements; 
+  List{UIElement} elements; 
   UITextureNPatch* background;
   Rectangle padding;
 }
@@ -184,7 +184,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
         for (int i; i < tbdata.display.len - 1; i++) {
           if (tbdata.display[i] != 0) {
             // TODO: Allow for rich text formatting
-            String str = string::format("%c\0",((String)tbdata.display)[i],allocator: allocator::heap());
+            String str = string::format(allocator::heap(), "%c\0",((String)tbdata.display)[i],);
             font.draw_pro(
               str,
               {
@@ -196,7 +196,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
               tbdata.text_spacing,
               color::WHITE,
             );
-            str.free();
+            str.free(allocator::heap());
           }
         }
 
@@ -215,7 +215,7 @@ fn void UIElement.free(&self) {
   switch (self.type) {
     case VERT_BOX: nextcase;
     case HORI_BOX:
-      List(<UIElement>)* list = ((List(<UIElement>)*)self.data);
+      List{UIElement}* list = ((List{UIElement}*)self.data);
       for (int i; i < list.len(); i++) {
         list[i].free();
       }
@@ -246,19 +246,19 @@ fn void new_text(String name, Color tint, Vector2 position, String font, String*
   @require self.type == VERT_BOX || self.type == HORI_BOX
  *>
 fn void UIElement.add_element(&self, UIElement element) {
-  List(<UIElement>)* uidata = (List(<UIElement>)*)self.data;
+  List{UIElement}* uidata = (List{UIElement}*)self.data;
   uidata.push(element);
 }
 <* Remove element from Vertical box
   @require self.type == VERT_BOX || self.type == HORI_BOX
  *>
 fn void UIElement.remove_element(&self, usz index) {
-  List(<UIElement>)* uidata = (List(<UIElement>)*)self.data;
+  List{UIElement}* uidata = (List{UIElement}*)self.data;
   uidata.remove_at(index);
 }
 <* Get the length of the elements *>
 fn usz UIElement.len(&self) {
-  List(<UIElement>)* uidata = (List(<UIElement>)*)self.data;
+  List{UIElement}* uidata = (List{UIElement}*)self.data;
   return uidata.len(); 
 }
 
@@ -330,7 +330,7 @@ fn UIElement new(UITextureNPatch* background = null, Rectangle padding = {0,0,0,
   UIVerticalBox* vertdata = mem::new(UIVerticalBox);
   vertdata.background = background;
   vertdata.padding = padding;
-  vertdata.elements.new_init();
+  //vertdata.elements.new_init();
   return { VERT_BOX, (void*)vertdata };
 }
 
@@ -346,7 +346,7 @@ fn UIElement new(UITextureNPatch* background = null, Rectangle padding = {0,0,0,
   UIHorizontalBox* hordata = mem::new(UIHorizontalBox);
   hordata.background = background;
   hordata.padding = padding;
-  hordata.elements.new_init();
+  //hordata.elements.new_init();
   return { VERT_BOX, (void*)hordata };
 }
 

@@ -2,15 +2,14 @@
 	"langrev": "1",
 	"warnings": [ "no-unused" ],
 	"dependency-search-paths": [ "../pleroma/" ],
-	"dependencies": [ "pleroma" ], 
-	//"dependencies": [ "raylib", "bulk", "localization", "keybind", "yaml" ],
+	"dependencies": [ "pleroma" ],
 	"authors": [ "Josh <Niya> Zemenski" ],
 	"version": "0.1.0",
 	"sources": [ "src/**", "test" ],
 	"output": "build",
 	"targets": {
 		"gnosis": {
-			"type": "executable",
+			"type": "executable", 
 		},
 	},
 	"cpu": "generic",

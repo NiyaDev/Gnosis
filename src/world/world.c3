@@ -16,7 +16,7 @@ struct World {
   float ticks;
 
   //* Map
-  HashMap(<int[3],Chunk>) chunks;
+  HashMap{int[3],Chunk} chunks;
 }
 
 int tiles_rendered;
@@ -106,7 +106,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[1] == 15) {
     int[3] newchunk = chunk_position;
     newchunk[1]++;
-    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
     if (try chunkptr) {
       top = (chunkptr.tiles[tile[0]][0][tile[2]].visible);
     } else { visible_mod = 1; }
@@ -118,7 +118,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[1] == 0) {
     int[3] newchunk = chunk_position;
     newchunk[1]--;
-    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
     if (try chunkptr) {
       bottom = (chunkptr.tiles[tile[0]][15][tile[2]].visible);
     } else { visible_mod = 1; }
@@ -130,7 +130,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[2] == 0) {
     int[3] newchunk = chunk_position;
     newchunk[2]--;
-    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
     if (try chunkptr) {
       north = (chunkptr.tiles[tile[0]][tile[1]][15].visible);
     } else { visible_mod = 1; }
@@ -142,7 +142,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[2] == 15) {
     int[3] newchunk = chunk_position;
     newchunk[2]++;
-    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
     if (try chunkptr) {
       south = (chunkptr.tiles[tile[0]][tile[1]][0].visible);
     } else { visible_mod = 1; }
@@ -154,7 +154,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[0] == 15) {
     int[3] newchunk = chunk_position;
     newchunk[0]++;
-    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
     if (try chunkptr) {
       east = (chunkptr.tiles[0][tile[1]][tile[2]].visible);
     } else { visible_mod = 1; }
@@ -166,7 +166,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[0] == 0) {
     int[3] newchunk = chunk_position;
     newchunk[0]--;
-    Chunk*! chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
     if (try chunkptr) {
       west = (chunkptr.tiles[15][tile[1]][tile[2]].visible);
     } else { visible_mod = 1; }
