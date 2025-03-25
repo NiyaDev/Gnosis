@@ -43,9 +43,6 @@ fn void init() {
   Yaml yaml = yaml::parse(raw_text);
   defer yaml.free();
 
-  //* Init data
-  //data.new_init();
-  //data = mem::new_array(Skill, yaml.len() + 1)!!;
 
   yaml.@each(; String key, TypedValue val) {
     Skill sk;
@@ -64,10 +61,12 @@ fn void init() {
     };
 
     //* Indepth localization
-    TypedValue indepth = val.get_object("indepth");
-    ((yaml::Object*)indepth.value).@each(; String key_name, TypedValue val_name) {
-      sk.name.add(key_name.to_language(), val_name.v_string);
-    };
+    if (val.has_key("indepth")) {
+      TypedValue indepth = val.get_object("indepth");
+      ((yaml::Object*)indepth.value).@each(; String key_name, TypedValue val_name) {
+        sk.name.add(key_name.to_language(), val_name.v_string);
+      };
+    }
 
     //data[sk.id] = sk;
     data.set(key.copy(allocator::heap()), sk);

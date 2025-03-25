@@ -21,34 +21,38 @@ fn void gen_shaders() @test {
   Bulk shader_bulk = bulk::new("001");
 
   //* Grab files
-  char[] shader = file::load_new("resources/raw_files/shader.fs")!!;
-  char[] fshader = file::load_new("resources/raw_files/shd_crt.fsh")!!;
-  char[] vshader = file::load_new("resources/raw_files/shd_crt.vsh")!!;
-  char[] testshader = file::load_new("resources/raw_files/shadertest.fsh")!!;
+  char[] shader = file::load_temp("resources/raw_files/shader.fs")!!;
+  char[] fshader = file::load_temp("resources/raw_files/shd_crt.fsh")!!;
+  char[] vshader = file::load_temp("resources/raw_files/shd_crt.vsh")!!;
+  char[] testshader = file::load_temp("resources/raw_files/shadertest.fsh")!!;
 
   shader_bulk.add("shader", shader);
   shader_bulk.add("frag_shader", fshader);
   shader_bulk.add("vert_shader", vshader);
   shader_bulk.add("shadertest", testshader);
   shader_bulk.save();
+  shader_bulk.free();
 }
 <* 002 *>
 fn void gen_keybinds() @test {
   Bulk keybindings_bulk = bulk::new("002");
 
+  Keybindings keybinds;
   //* Create bindings
-  keybind::set("move_up", 	 {.type=KEYBOARD,.kb=raylib::KEY_W});
-	keybind::set("move_down",	 {.type=KEYBOARD,.kb=raylib::KEY_S});
-	keybind::set("move_left",	 {.type=KEYBOARD,.kb=raylib::KEY_A});
-	keybind::set("move_right", {.type=KEYBOARD,.kb=raylib::KEY_D});
+  keybinds.set("move_up", 	 {.type=KEYBOARD,.kb=raylib::KEY_W});
+	keybinds.set("move_down",	 {.type=KEYBOARD,.kb=raylib::KEY_S});
+	keybinds.set("move_left",	 {.type=KEYBOARD,.kb=raylib::KEY_A});
+	keybinds.set("move_right", {.type=KEYBOARD,.kb=raylib::KEY_D});
 
-	keybind::set("rotate_right", {.type=KEYBOARD,.kb=raylib::KEY_Q});
-	keybind::set("rotate_left",  {.type=KEYBOARD,.kb=raylib::KEY_E});
+	keybinds.set("rotate_right", {.type=KEYBOARD,.kb=raylib::KEY_Q});
+	keybinds.set("rotate_left",  {.type=KEYBOARD,.kb=raylib::KEY_E});
 
-	char[] kb = keybind::save();
+	char[] kb = keybinds.save();
 
   keybindings_bulk.add("default_kb", kb);
   keybindings_bulk.save();
+  free(kb);
+  keybindings_bulk.free();
 }
 
 <* 009 *>
@@ -58,16 +62,17 @@ fn void gen_font() @test {
   Bulk font_bulk = bulk::new("009");
 
   //* Grab fonts
-  //usz size = file::get_size("resources/raw_files/ANAKRON.ttf")!!;
-  //File file = file::open("resources/raw_files/ANAKRON.ttf", "rb")!!;
-  //defer file.close();
+  usz size = file::get_size("resources/raw_files/ANAKRON.ttf")!!;
+  File file = file::open("resources/raw_files/ANAKRON.ttf", "rb")!!;
+  defer file.close()!!;
 
-  //char[] data = mem::new_array(char, size);
-  //file.read(data);
-  char[] data = file::load_new("resources/raw_files/ANAKRON.ttf")!!;
+  char[] data = mem::new_array(char, size);
+  file.read(data)!!;
 
   font_bulk.add("anakron", data);
   font_bulk.save();
+  free(data);
+  font_bulk.free();
 }
 <* 010 *>
 fn void gen_textures_units() @test {
@@ -81,6 +86,7 @@ fn void gen_textures_units() @test {
 
   unit_tex_bulk.add("player", img_player.to_mem(".png"));
   unit_tex_bulk.save();
+  unit_tex_bulk.free();
 }
 
 <* 020 *>
@@ -96,6 +102,7 @@ fn void gen_textures_tiles() @test {
   tile_tex_bulk.add("grass_0", img_grass.to_mem(".png"));
 
   tile_tex_bulk.save();
+  tile_tex_bulk.free();
 }
 
 <* 030 *>
@@ -117,6 +124,7 @@ fn void gen_uitextures() @test {
   ui_texture_bulk.add("textbox", img_textbox.to_mem(".png"));
 
   ui_texture_bulk.save();
+  ui_texture_bulk.free();
 }
 
 <* 050 *>
@@ -133,6 +141,8 @@ fn void gen_skills_yaml() @test {
 
   skills_yaml_bulk.add("yaml", data);
   skills_yaml_bulk.save();
+  free(data);
+  skills_yaml_bulk.free();
 }
 <* 051 *>
 fn void gen_species_yaml() @test {
@@ -148,5 +158,7 @@ fn void gen_species_yaml() @test {
 
   species_yaml_bulk.add("yaml", data);
   species_yaml_bulk.save();
+  free(data);
+  species_yaml_bulk.free();
 }
 

@@ -20,7 +20,7 @@ fn void init() {
 	//* Setup raylib
 	raylib::set_trace_log_level(raylib::TraceLogLevel.WARNING);
 	raylib::init_window(screen[0], screen[1], "Gnosis");
-	//raylib::set_target_fps(60);
+	raylib::set_target_fps(60);
 
 	//* Set up render texture
 	render_texture = rendertexture::load(render[0], render[1]);
@@ -40,7 +40,7 @@ fn void close() {
 <* Starts drawing *>
 fn void content() {
 	render_texture.begin();
-	raylib::clear_background(color::WHITE);
+	raylib::clear_background(color::BLACK);
 	raylib::begin_3d_mode(camera::main);
 }
 <* Stops 3d mode and starts UI *>
@@ -56,14 +56,14 @@ fn void end() {
 	raylib::begin_drawing();
 		//Image* img = render_texture.texture.to_image();
 		//raylib::set_shader_value_texture(*shader,texture_loc,render_texture.texture);
-		//shader.begin();
+		shader.begin();
 			render_texture.texture.draw_pro(
 				{0,0,render[0],(float)-render[1]},
 				{0,0,screen[0],screen[1]},
 				{0,0}, 0,
 				color::WHITE,
 			);
-		//shader.end();
+		shader.end();
 	raylib::end_drawing();
 }
 

@@ -3,9 +3,6 @@ module gnosis::resources;
 import std::io;
 import std::collections;
 import pleroma;
-//import bulk;
-//import keybind;
-//import raylib;
 import gnosis::unit;
 
 
@@ -15,12 +12,16 @@ HashMap{String, Model}    models;
 HashMap{String, Mesh}     meshes;
 HashMap{String, Material} materials;
 
+//Keybindings keybinds @builtin;
+HashMap{String, Keybind}  keybinds @builtin;
+
 
 <* Load all resources from file *>
 fn void load() {
   //* Keybindings
-  Bulk keybinds = bulk::load("resources/002");
-  keybinds.free();
+  Bulk keybind_bulk = bulk::load("resources/002");
+  keybinds.load(keybind_bulk.entries["default_kb"]!!.value);
+  keybind_bulk.free();
 
   //* Settings
 

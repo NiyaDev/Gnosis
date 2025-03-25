@@ -31,7 +31,6 @@ fn Species*? get(String name) {
 fn void init() {
   Bulk bulk = bulk::load("resources/051");
   Yaml yaml = yaml::parse((String)bulk.get("yaml"));
-  yaml.print();
 
   //* Iterate through each species
   yaml.@each(; String key, TypedValue val) {

@@ -308,7 +308,7 @@ import gnosis::resources;
 
 
 <* Create new NPatch texture without pushing it *>
-fn UITextureNPatch* new(Color tint = raylib::WHITE, Rectangle rect = {0,0,0,0}, String texture) {
+fn UITextureNPatch* new(Color tint = color::WHITE, Rectangle rect = {0,0,0,0}, String texture) {
   UITextureNPatch* npdata = mem::new(UITextureNPatch);
   npdata.tint = tint;
   npdata.rect = rect;
