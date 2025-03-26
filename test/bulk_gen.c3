@@ -26,6 +26,13 @@ fn void gen_shaders() @test {
   char[] vshader = file::load_temp("resources/raw_files/shd_crt.vsh")!!;
   char[] testshader = file::load_temp("resources/raw_files/shadertest.fsh")!!;
 
+  raylib::set_trace_log_level(NONE);
+
+  char[] mask = file::load_temp("resources/raw_files/mask.png")!!;
+  char[] slot = file::load_temp("resources/raw_files/slot.png")!!;
+
+  shader_bulk.add("mask", mask);
+  shader_bulk.add("slot", slot);
   shader_bulk.add("shader", shader);
   shader_bulk.add("frag_shader", fshader);
   shader_bulk.add("vert_shader", vshader);
@@ -62,14 +69,9 @@ fn void gen_font() @test {
   Bulk font_bulk = bulk::new("009");
 
   //* Grab fonts
-  usz size = file::get_size("resources/raw_files/ANAKRON.ttf")!!;
-  File file = file::open("resources/raw_files/ANAKRON.ttf", "rb")!!;
-  defer file.close()!!;
+  char[] anakron = file::load_temp("resources/raw_files/ANAKRON.ttf");
 
-  char[] data = mem::new_array(char, size);
-  file.read(data)!!;
-
-  font_bulk.add("anakron", data);
+  font_bulk.add("anakron", anakron);
   font_bulk.save();
   free(data);
   font_bulk.free();
@@ -81,10 +83,9 @@ fn void gen_textures_units() @test {
   Bulk unit_tex_bulk = bulk::new("010");
 
   //* Grab images
-  Image img_player = image::load("resources/raw_files/spr_test_player.png");
-  defer img_player.unload();
+  char[] img_player = file::load_temp("resources/raw_files/spr_test_player.png")!!;
 
-  unit_tex_bulk.add("player", img_player.to_mem(".png"));
+  unit_tex_bulk.add("player", img_player);
   unit_tex_bulk.save();
   unit_tex_bulk.free();
 }
@@ -96,11 +97,9 @@ fn void gen_textures_tiles() @test {
   Bulk tile_tex_bulk = bulk::new("020");
 
   //* Grab images
-  Image img_grass = image::load("resources/raw_files/tex_grass.png");
-  defer img_grass.unload();
+  char[] img_grass = file::load_temp("resources/raw_files/tex_grass.png")!!;
 
-  tile_tex_bulk.add("grass_0", img_grass.to_mem(".png"));
-
+  tile_tex_bulk.add("grass_0", img_grass);
   tile_tex_bulk.save();
   tile_tex_bulk.free();
 }
@@ -111,17 +110,14 @@ fn void gen_uitextures() @test {
 
   Bulk ui_texture_bulk = bulk::new("030");
 
-  //* Grab images of all files needed
-  Image img_bar_bg = image::load("resources/raw_files/spr_bar_bg.png");
-  defer img_bar_bg.unload();
-  Image img_bar_fl = image::load("resources/raw_files/spr_bar_fill.png");
-  defer img_bar_fl.unload();
-  Image img_textbox = image::load("resources/raw_files/spr_textbox.png");
-  defer img_textbox.unload();
+  //* Grab images
+  char[] img_bar_bg  = file::load_temp("resources/raw_files/spr_bar_bg.png")!!;
+  char[] img_bar_fl  = file::load_temp("resources/raw_files/spr_bar_fill.png")!!;
+  char[] img_textbox = file::load_temp("resources/raw_files/spr_textbox.png")!!;
 
-  ui_texture_bulk.add("bar_bg", img_bar_bg.to_mem(".png"));
-  ui_texture_bulk.add("bar_fl", img_bar_fl.to_mem(".png"));
-  ui_texture_bulk.add("textbox", img_textbox.to_mem(".png"));
+  ui_texture_bulk.add("bar_bg", img_bar_bg);
+  ui_texture_bulk.add("bar_fl", img_bar_fl);
+  ui_texture_bulk.add("textbox", img_textbox);
 
   ui_texture_bulk.save();
   ui_texture_bulk.free();

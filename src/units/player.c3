@@ -38,7 +38,10 @@ fn void Player.update(&self) {
 
   //* Camera zoom
 	float zoom = raylib::get_mouse_wheel_move();
-	if (zoom != 0) camera::zoom(-zoom / 20);
+	if (zoom != 0) {
+	  camera::zoom(-zoom / 20);
+	  //g_shader.curvature.as_float += (-zoom/20);
+	}
 
   movement = movement.clamp({-7,0,-7}, {7,0,7});
   movement.mul_f(dt);

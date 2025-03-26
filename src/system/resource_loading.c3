@@ -6,7 +6,7 @@ import pleroma;
 import gnosis::unit;
 
 
-HashMap{String, Font}     fonts;
+HashMap{String, Font}     fonts @builtin;
 HashMap{String, Texture}  textures;
 HashMap{String, Model}    models;
 HashMap{String, Mesh}     meshes;

@@ -3,11 +3,7 @@ module gnosis;
 import std::io;
 import std::math::random;
 import pleroma;
-//import bulk;
-//import raylib;
-//import keybind;
-import gnosis::system::render;
-import gnosis::system::camera;
+import gnosis::system;
 import gnosis::world;
 import gnosis::resources;
 
@@ -19,8 +15,8 @@ Texture* bar_fl;
 
 fn int main(String[] args) {
 	//* Initialize systems
-	render::init();
-	defer render::close();
+	system::init_renderer();
+	defer system::close();
 	camera::init();
 
 	//* Load resources
@@ -47,7 +43,7 @@ fn int main(String[] args) {
 	UIElement textbox = textbox::new(
 		bg:textbox_tex,
 		visible:true,
-		rect:{20,(float)render::render[1] / 1.5,(float)render::render[0] - 40,((float)render::render[1] / 3) - 10},
+		rect:{20,(float)system::render[1] / 1.5,(float)system::render[0] - 40,((float)system::render[1] / 3) - 10},
 		textspace:{16,16,0,0},
 		font:"anakron",
 	);
@@ -85,17 +81,17 @@ fn int main(String[] args) {
 		// Player controls
 		world::data.player.update();
 
-		render::content();
+		system::content();
 			world::draw();
 			camera::main.draw_billboard_pro(*world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
 			//resources::fonts.get("anakron")!!.draw(uitext,{0,200}, 20, 0, color::BLACK);
 			//raylib::draw_billboard_pro(camera::main, *world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
 
-		render::ui();
+		system::ui();
 			ui::draw();
-			raylib::draw_font(resources::fonts.get("anakron")!!,uitext,{0,200}, 20, 0, color::BLACK); 
+			raylib::draw_font(fonts.get("anakron")!!,uitext,{0,200}, 20, 0, color::BLACK); 
 			
-		render::end();
+		system::end();
 	}
 
 	ui::free();
