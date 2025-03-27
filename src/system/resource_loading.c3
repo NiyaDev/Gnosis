@@ -29,7 +29,7 @@ fn void load() {
   //* Fonts
   Bulk fonts_bulk = bulk::load("resources/009");
   fonts_bulk.entries.@each(; String key, BulkEntry val) {
-    Font font = font::load_mem(".ttf", val.value, 200, {});
+    Font font = font::load_mem(".ttf", val.value, 320, {});
     fonts.set(key, font);
   };
   fonts_bulk.free();

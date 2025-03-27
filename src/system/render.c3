@@ -47,12 +47,8 @@ fn void end() {
 	//* End rendering to texture
 	render_texture.end();
 
-	//shader_update();
-
 	//* Render texture to screen
 	raylib::begin_drawing();
-		//Image* img = render_texture.texture.to_image();
-		//raylib::set_shader_value_texture(*shader,texture_loc,render_texture.texture);
 		g_shader.begin();
 			render_texture.texture.draw_pro(
 				{0,0,render[0],(float)-render[1]},

@@ -37,7 +37,7 @@ fn int main(String[] args) {
 	player_status.add_element(bar::new(color::BLUE,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.mn_cur,&world::data.player.mn_max));
 	player_status.add_element(bar::new(color::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&world::data.player.hn_cur,&world::data.player.hn_max));
 	ui::push("status", player_status);
-	//*
+	/*
 	UITextureNPatch* textbox_tex = npatch_texture::new(texture:"textbox");
 	String textbox_text = "Testing";
 	UIElement textbox = textbox::new(
@@ -49,7 +49,7 @@ fn int main(String[] args) {
 	);
 	textbox.set_text("testing this textbox shit.");
 	ui::push("textbox", textbox);
-	//*/
+	*/
 	String uitext;
 	ui::new_text("debug_text",color::WHITE,{10,80},"anakron",&uitext,12,-1);
 
@@ -83,13 +83,12 @@ fn int main(String[] args) {
 
 		system::content();
 			world::draw();
-			camera::main.draw_billboard_pro(*world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
-			//resources::fonts.get("anakron")!!.draw(uitext,{0,200}, 20, 0, color::BLACK);
-			//raylib::draw_billboard_pro(camera::main, *world::data.player.sprite, {0,0,16,32}, camera::main.target, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, raylib::WHITE);
+			Vector3 pos = camera::main.target;
+			pos.y += 0.75;
+			camera::main.draw_billboard_pro(*world::data.player.sprite, {0,0,16,32}, pos, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
 
 		system::ui();
 			ui::draw();
-			raylib::draw_font(fonts.get("anakron")!!,uitext,{0,200}, 20, 0, color::BLACK); 
 			
 		system::end();
 	}

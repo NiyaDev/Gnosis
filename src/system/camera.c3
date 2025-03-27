@@ -47,7 +47,7 @@ fn void update(float delta_time) {
 		//* Follow unit if it has one
 		Vector3 position = {
 			main.unit.position.x - main.unit.position.z,
-			main.unit.position.y,
+			main.unit.position.y - 2,
 			main.unit.position.x + main.unit.position.z,
 		};
 		
