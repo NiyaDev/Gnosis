@@ -6,14 +6,14 @@ import pleroma;
 import gnosis::unit;
 
 
-HashMap{String, Font}     fonts @builtin;
-HashMap{String, Texture}  textures;
-HashMap{String, Model}    models;
-HashMap{String, Mesh}     meshes;
-HashMap{String, Material} materials;
+HashMap{String, Font}     fonts     @builtin;
+HashMap{String, Texture}  textures  @builtin;
+HashMap{String, Model}    models    @builtin;
+HashMap{String, Mesh}     meshes    @builtin;
+HashMap{String, Material} materials @builtin;
 
 //Keybindings keybinds @builtin;
-HashMap{String, Keybind}  keybinds @builtin;
+HashMap{String, Keybind}  keybinds  @builtin;
 
 
 <* Load all resources from file *>

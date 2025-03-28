@@ -84,7 +84,7 @@ fn int main(String[] args) {
 		system::content();
 			world::draw();
 			Vector3 pos = camera::main.target;
-			pos.y += 0.75;
+			pos.y += 0.25;
 			camera::main.draw_billboard_pro(*world::data.player.sprite, {0,0,16,32}, pos, camera::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
 
 		system::ui();

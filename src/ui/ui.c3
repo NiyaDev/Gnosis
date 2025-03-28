@@ -172,7 +172,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
       UITextbox* tbdata = (UITextbox*)self.data;
       if (tbdata.visible) {
         //* Background 
-        resources::textures[tbdata.background.texture]!!.draw_npatch(
+        textures[tbdata.background.texture]!!.draw_npatch(
           tbdata.background.npatch,
           tbdata.rect,
           {0,0}, 0,
