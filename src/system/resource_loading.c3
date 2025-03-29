@@ -12,15 +12,12 @@ HashMap{String, Model}    models    @builtin;
 HashMap{String, Mesh}     meshes    @builtin;
 HashMap{String, Material} materials @builtin;
 
-//Keybindings keybinds @builtin;
-HashMap{String, Keybind}  keybinds  @builtin;
-
 
 <* Load all resources from file *>
 fn void load() {
   //* Keybindings
   Bulk keybind_bulk = bulk::load("resources/002");
-  keybinds.load(keybind_bulk.entries["default_kb"]!!.value);
+  keybind::load(keybind_bulk.entries["default_kb"]!!.value);
   keybind_bulk.free();
 
   //* Settings
