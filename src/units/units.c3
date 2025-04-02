@@ -3,7 +3,6 @@ module gnosis::unit;
 import std::io;
 import std::collections;
 import pleroma;
-//import raylib;
 
 
 struct Unit {
@@ -37,7 +36,7 @@ fn void Unit.init(&self, String spec = "") {
     self.species = species::get(spec)!!;
 
     //* Copy skill values
-    skills::data.@each(; String key, Skill val) {
+    skillslocal.@each(; String key, Skill val) {
       SkillNode node;
       node.skill = &val;
       int? skill_start = self.species.skill_start[node.skill.id_name];
@@ -79,7 +78,6 @@ fn void Unit.move(&self, Vector3 movement) {
 }
 <* General unit logic *>
 fn void Unit.tick(&self) {
-
   //* Regeneration logic
   if (self.hn_cur > 0) {
     //* Health regeneration

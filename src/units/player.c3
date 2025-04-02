@@ -1,13 +1,8 @@
 
 module gnosis::unit::player;
 import std::io;
-import gnosis::system::camera;
-import gnosis::unit;
-import gnosis::world;
-import gnosis::resources;
+import gnosis;
 import pleroma;
-//import raylib;
-//import keybind;
 
 
 struct Player {
@@ -40,13 +35,12 @@ fn void Player.update(&self) {
 	float zoom = raylib::get_mouse_wheel_move();
 	if (zoom != 0) {
 	  camera::zoom(-zoom / 20);
-	  //g_shader.curvature.as_float += (-zoom/20);
 	}
 
   movement = movement.clamp({-7,0,-7}, {7,0,7});
   movement.mul_f(dt);
 
-  self.move(camera::ZERO.rotate(movement, camera::main.rotation));
+  self.move(vector3::ZERO.rotate(movement, camera::main.rotation));
 }
 
 

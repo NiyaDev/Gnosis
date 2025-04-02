@@ -3,12 +3,9 @@ module gnosis::unit::skills;
 import std::io;
 import std::collections;
 import pleroma;
-//import bulk;
-//import localization;
-//import yaml;
 
 
-HashMap{String, Skill} data;
+HashMap{String, Skill} skillslocal @builtin;
 struct Skill {
   String id_name;
   Localization name;
@@ -33,7 +30,7 @@ const float BELLY_MOD = 5;
 const float METABOLISM_MOD = 1;
 
 
-<*  *>
+<* Opens bulk containing skills data and loads it into hashmap *>
 fn void init() {
   Bulk bulk = bulk::load("resources/050");
   defer bulk.free();
@@ -69,8 +66,6 @@ fn void init() {
     }
 
     //data[sk.id] = sk;
-    data.set(key.copy(allocator::heap()), sk);
+    skillslocal.set(key.copy(allocator::heap()), sk);
   };
-
-  //* Iterate through each skill and copy data into array
 }

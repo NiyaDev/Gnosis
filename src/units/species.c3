@@ -4,9 +4,6 @@ import std::io;
 import std::collections;
 import gnosis::unit;
 import pleroma;
-//import bulk;
-//import localization;
-//import yaml;
 
 
 HashMap{String,Species} data;

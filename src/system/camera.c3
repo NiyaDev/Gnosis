@@ -85,9 +85,6 @@ fn void update(float delta_time) {
 	//main.position = main.target.rotate({0.0, 12.0 * main.zoom, 10.0 * main.zoom}, main.rotation);
 	main.position = main.target.rotate({0.0, (float)((12.0).pow(main.zoom * 1.5)), 10.0 * main.zoom}, main.rotation);
 }
-
-const Vector3 ZERO = {0,0,0};
-
 <* Move camera by an amount *>
 fn void move(Vector3 amount) {
 	main.position.x += amount.x;
