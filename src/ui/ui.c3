@@ -21,6 +21,7 @@ enum UIType {
   VERT_BOX,
   HORI_BOX,
   TEXTBOX,
+  TEXTURE_NPATCH,
   // TODO: Status screen
 }
 

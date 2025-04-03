@@ -19,51 +19,51 @@ struct World {
   HashMap{int[3],Chunk} chunks;
 }
 
-int tiles_rendered;
-World data;
-
 <* Create a new chunk in the world *>
-fn void new_chunk(int[3] position) {
+fn void World.new_chunk(&self, int[3] position) {
   Chunk chunk;
   chunk.init();
-  data.chunks.set(position,chunk);
+  self.chunks.set(position,chunk);
 }
 <* Generate world *>
-fn void generate(float framespertick = 3) {
-  data.framespertick = framespertick;
+fn World* generate(float framespertick = 3) {
+  World* output = mem::new(World);
 
-	//world::new_chunk({0,0,0});
-	data.chunks.set({0,0,0}, chunk::load("test",{0,0,0}));
-	world::new_chunk({1,0,0});
-	world::new_chunk({2,0,0});
-	world::new_chunk({0,0,1});
-	world::new_chunk({1,0,1});
-	world::new_chunk({2,0,1});
-	world::new_chunk({0,0,2});
-	world::new_chunk({1,0,2});
-	world::new_chunk({2,0,2});
-	data.chunks[{0,0,0}]!!.save("test");
+  output.framespertick = framespertick;
+	//output.new_chunk({0,0,0});
+	output.chunks.set({0,0,0}, chunk::load("test",{0,0,0}));
+	output.new_chunk({1,0,0});
+	output.new_chunk({2,0,0});
+	output.new_chunk({0,0,1});
+	output.new_chunk({1,0,1});
+	output.new_chunk({2,0,1});
+	output.new_chunk({0,0,2});
+	output.new_chunk({1,0,2});
+	output.new_chunk({2,0,2});
+	output.chunks[{0,0,0}]!!.save("test");
+
+	return output;
 }
 
 <* Update world *>
-fn void update() {
+fn void World.update(&self) {
   //* Tick
-  if (data.ticks >= data.framespertick / 60) {
-    data.player.tick();
-    data.ticks -= (data.framespertick / 60);
+  if (self.ticks >= self.framespertick / 60) {
+    self.player.tick();
+    self.ticks -= (self.framespertick / 60);
   } else {
-    data.ticks += raylib::get_frame_time();
+    self.ticks += raylib::get_frame_time();
   }
 }
 <* Draw world to screen *>
-fn void draw() {
-  tiles_rendered = 0;
-  data.chunks.@each(; int[3] position_raw, Chunk chunk) {
+fn int World.draw(&self) {
+  int tiles_rendered = 0;
+  self.chunks.@each(; int[3] position_raw, Chunk chunk) {
     for (int x = 0; x < 16; x++) {
       for (int z = 0; z < 16; z++) {
         for (int y = 0; y < 16; y++) {
           Tile* t = &(chunk.tiles[x][y][z]);
-          float visibility = tile_visible(position_raw, {x, y, z});
+          float visibility = self.tile_visible(position_raw, {x, y, z});
           if (visibility != 0) {
             Vector3 pos = {
               (float)(x + (position_raw[0] * 16)) - (float)(z + (position_raw[2] * 16)),
@@ -82,11 +82,12 @@ fn void draw() {
       }
     }
   };
+  return tiles_rendered;
 }
 
 <**>
-fn float tile_visible(int[3] chunk_position, int[3] tile) {
-  Chunk* chunk = data.chunks.get_ref(chunk_position)!!;
+fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
+  Chunk* chunk = self.chunks.get_ref(chunk_position)!!;
 
   //* False if tile isn't visible
   if (!chunk.tiles[tile[0]][tile[1]][tile[2]].visible) return 0;
@@ -97,7 +98,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
     (float)((chunk_position[1] * 16) + tile[1]),
     (float)((chunk_position[2] * 16) + tile[2]), 
   };
-  if (data.player.position.distance(position) > 5 + (data.player.skills["perception"]!!.value * 0.2)) return 0;
+  if (self.player.position.distance(position) > 5 + (self.player.skills["perception"]!!.value * 0.2)) return 0;
 
   //* If it's surrounded by visible
   float visible_mod = 1;
@@ -106,7 +107,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[1] == 15) {
     int[3] newchunk = chunk_position;
     newchunk[1]++;
-    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = self.chunks.get_ref(newchunk);
     if (try chunkptr) {
       top = (chunkptr.tiles[tile[0]][0][tile[2]].visible);
     } else { visible_mod = 1; }
@@ -118,7 +119,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[1] == 0) {
     int[3] newchunk = chunk_position;
     newchunk[1]--;
-    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = self.chunks.get_ref(newchunk);
     if (try chunkptr) {
       bottom = (chunkptr.tiles[tile[0]][15][tile[2]].visible);
     } else { visible_mod = 1; }
@@ -130,7 +131,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[2] == 0) {
     int[3] newchunk = chunk_position;
     newchunk[2]--;
-    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = self.chunks.get_ref(newchunk);
     if (try chunkptr) {
       north = (chunkptr.tiles[tile[0]][tile[1]][15].visible);
     } else { visible_mod = 1; }
@@ -142,7 +143,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[2] == 15) {
     int[3] newchunk = chunk_position;
     newchunk[2]++;
-    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = self.chunks.get_ref(newchunk);
     if (try chunkptr) {
       south = (chunkptr.tiles[tile[0]][tile[1]][0].visible);
     } else { visible_mod = 1; }
@@ -154,7 +155,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[0] == 15) {
     int[3] newchunk = chunk_position;
     newchunk[0]++;
-    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = self.chunks.get_ref(newchunk);
     if (try chunkptr) {
       east = (chunkptr.tiles[0][tile[1]][tile[2]].visible);
     } else { visible_mod = 1; }
@@ -166,7 +167,7 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
   if (tile[0] == 0) {
     int[3] newchunk = chunk_position;
     newchunk[0]--;
-    Chunk*? chunkptr = data.chunks.get_ref(newchunk);
+    Chunk*? chunkptr = self.chunks.get_ref(newchunk);
     if (try chunkptr) {
       west = (chunkptr.tiles[15][tile[1]][tile[2]].visible);
     } else { visible_mod = 1; }
@@ -178,8 +179,8 @@ fn float tile_visible(int[3] chunk_position, int[3] tile) {
 
   //* Multiplier for vision
   float vision_multi = 1;
-  if (data.player.position.distance(position) > 3 + (data.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.8;
-  if (data.player.position.distance(position) > 4 + (data.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.4;
+  if (self.player.position.distance(position) > 3 + (self.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.8;
+  if (self.player.position.distance(position) > 4 + (self.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.4;
   //bool above = !chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible;
   //if (chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible) return 0;
 

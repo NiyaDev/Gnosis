@@ -3,8 +3,6 @@ module gnosis::system::camera;
 import std::io;
 import std::math;
 import pleroma;
-//import raylib;
-//import keybind;
 import gnosis;
 import gnosis::unit;
 
