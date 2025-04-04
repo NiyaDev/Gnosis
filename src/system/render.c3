@@ -60,3 +60,7 @@ fn void end() {
 	raylib::end_drawing();
 }
 
+<**>
+fn float get_screen_ratio() {
+	return (float)screen[0] / (float)render[0];
+}

@@ -7,12 +7,23 @@ import gnosis::system;
 import gnosis::resources;
 
 
+// TEMP
+String game_title = "Gnosis";
+String game_version = "0.1.0";
+String play_option = "Play";
+String options_option = "Options";
+String quit_option = "Quit";
+
+fn void test() => io::printfn("fug");
 
 fn int main(String[] args) {
 	//* Initialize systems
 	system::init_renderer();
 	defer system::close();
 	camera::init();
+
+	gamestate.debug_mode = true;
+	//gamestate.state = OVERWORLD;
 
 	//* Load resources
 	resources::load();
@@ -26,12 +37,46 @@ fn int main(String[] args) {
 	gamestate.world.player.sprite = resources::textures.get_ref("player")!!;
 	camera::set_target(gamestate.world.player);
 
-	UIElement player_status = verticalbox::new({10,10,0,0},null);
-	player_status.add_element(bar::new(color::RED,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.hp_cur,&gamestate.world.player.hp_max));
+	// Titlescreen ui elements
+	ui::new_text("ts_title", color::WHITE, {10,10}, "anakron", &game_title, 40, 1);
+	ui::new_text("ts_version", color::WHITE, {((float)system::render[0])-45,((float)system::render[1])-15}, "anakron", &game_version, 10, 1);
+	ui::new_button(
+		name: "ts_play",
+		text_color: color::WHITE,
+		rect: {10, 260, 96, 32},
+		text_padding: { 0,   0, 26,  8},
+		background: "textbox",
+		font: "anakron",
+		text: &play_option,
+		func: &system::ts_play_button,
+	);
+	ui::new_button(
+		name: "ts_options",
+		text_color: color::WHITE,
+		rect: {10, 292, 96, 32},
+		text_padding: { 0,   0,  8,  8},
+		background: "textbox",
+		font: "anakron",
+		text: &options_option,
+		func: &system::ts_options_button,
+	);
+	ui::new_button(
+		name: "ts_quit",
+		text_color: color::WHITE,
+		rect: {10, 324, 96, 32},
+		text_padding: { 0,   0, 26,  8},
+		background: "textbox",
+		font: "anakron",
+		text: &quit_option,
+		func: &system::ts_quit_button,
+	);
+	
+	//UIElement player_status = verticalbox::new({10,10,0,0},null);
+	//player_status.add_element(bar::new(color::RED,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.hp_cur,&gamestate.world.player.hp_max));
 	//player_status.add_element(bar::new(color::GREEN,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.st_cur,&gamestate.world.player.st_max));
-	player_status.add_element(bar::new(color::BLUE,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.mn_cur,&gamestate.world.player.mn_max));
-	player_status.add_element(bar::new(color::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.hn_cur,&gamestate.world.player.hn_max));
-	ui::push("status", player_status);
+	//player_status.add_element(bar::new(color::BLUE,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.mn_cur,&gamestate.world.player.mn_max));
+	//player_status.add_element(bar::new(color::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.hn_cur,&gamestate.world.player.hn_max));
+	//ui::push("status", player_status);
 	/*
 	UITextureNPatch* textbox_tex = npatch_texture::new(color::WHITE,{0,0,32,32},"textbox");
 	String textbox_text = "Testing";
@@ -46,47 +91,11 @@ fn int main(String[] args) {
 	textbox.set_text("testing this textbox shit.");
 	ui::push("textbox", textbox);
 	*/
-	String uitext;
-	ui::new_text("debug_text",color::WHITE,{10,80},"anakron",&uitext,12,-1);
 
-	while (!raylib::window_should_close()) {
-		float dt = raylib::get_frame_time();
-		camera::update(dt);
-		gamestate.world.update();
-		if (raylib::is_key_pressed(raylib::KEY_LEFT_SHIFT)) gamestate.world.player.skills.get_ref("perception")!!.value++;
+	//if (gamestate.debug_mode) ui::new_text("debug_text",color::WHITE,{10,80},"anakron",&debug::uitext,12,-1);
 
-		// Update onscreen debug information string
-		float perc = gamestate.world.player.skills["perception"]!!.value;
-		uitext = string::format(
-			allocator::heap(),
-		  "FPS: %d (%f)\nPos: %d,%d,%d\nTil: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nZoom: %f\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",
-		  raylib::get_fps(),
-		  gamestate.world.framespertick / 60,
-		  camera::main.target.x, camera::main.target.y, camera::main.target.z,
-		  gamestate.world.player.position.x, gamestate.world.player.position.y, gamestate.world.player.position.z,
-		  gamestate.tiles_rendered,
-		  perc, 5 + (perc * 0.2),
-		  camera::main.zoom,
-		  gamestate.world.player.hp_cur, gamestate.world.player.hp_max, gamestate.world.player.hp_tick,
-		  gamestate.world.player.st_cur, gamestate.world.player.st_max, gamestate.world.player.st_tick,
-		  gamestate.world.player.mn_cur, gamestate.world.player.mn_max, gamestate.world.player.mn_tick,
-		  gamestate.world.player.hn_cur, gamestate.world.player.hn_max, gamestate.world.player.hn_tick,
-		);
-		defer uitext.free(allocator::heap());
-
-		// Player controls
-		gamestate.world.player.update();
-
-		system::content();
-			gamestate.world.draw();
-			Vector3 pos = camera::main.target;
-			pos.y += 0.25;
-			camera::main.draw_billboard_pro(*gamestate.world.player.sprite, {0,0,16,32}, pos, vector3::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
-
-		system::ui();
-			ui::draw();
-			
-		system::end();
+	while (!raylib::window_should_close() && !gamestate.end_game) {
+		system::worldstate_loop();
 	}
 
 	ui::free();

@@ -3,7 +3,7 @@ module gnosis::ui;
 import std::io;
 import std::collections;
 import pleroma;
-import gnosis::resources;
+import gnosis;
 
 
 
@@ -22,6 +22,7 @@ enum UIType {
   HORI_BOX,
   TEXTBOX,
   TEXTURE_NPATCH,
+  BUTTON,
   // TODO: Status screen
 }
 
@@ -31,6 +32,7 @@ fn void draw() {
 }
 <* Remove element *>
 fn void remove(String name) {
+  mem::free(uihandler.get_ref(name)!!.data);
   uihandler.remove(name)!!;
 }
 <* Frees all ui data *>
@@ -153,6 +155,46 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
           tbdata.index++;
         }
       }
+    case BUTTON:
+      UIButtonData* button = (UIButtonData*)self.data;
+      
+      // Check if clicked
+      Color col;
+      float ratio = system::get_screen_ratio();
+      Vector2 mouse_pos = raylib::get_mouse_position();
+      mouse_pos.x /= ratio;
+      mouse_pos.y /= ratio; 
+
+      if (!button.active) {
+        col = button.bg_color_disabled;
+      } else if (((mouse_pos.x > button.rect.x && mouse_pos.x < button.rect.x + button.rect.width) && (mouse_pos.y > button.rect.y && mouse_pos.y < button.rect.y + button.rect.height)) && raylib::is_mouse_button_down(LEFT)) {
+        col = button.bg_color_selected;
+      } else { col = button.bg_color_default; }
+
+      // Background
+      Texture tx = textures[button.background]!!;
+      tx.draw_npatch(
+        tx.npatch(),
+        button.rect,
+        {0,0}, 0,
+        col,
+      );
+
+      // Text
+      // TODO: The shader distorts where the buttons are on screen
+      //       Need to calculate its actual position on screen or
+      //       calculate where the mouse would be on the screen.
+      fonts[button.font]!!.draw(
+        *button.text,
+        {button.rect.x + button.text_padding.width, button.rect.y + button.text_padding.height},
+        button.size, button.spacing,
+        button.text_color,
+      );
+
+      if (((mouse_pos.x > button.rect.x && mouse_pos.x < button.rect.x + button.rect.width) && (mouse_pos.y > button.rect.y && mouse_pos.y < button.rect.y + button.rect.height)) && raylib::is_mouse_button_released(LEFT)) {
+        button.func();
+      }
+
     default:
   }
 }

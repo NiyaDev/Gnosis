@@ -40,7 +40,8 @@ fn void set_target(Unit* target) {
 	main.unit = target;
 }
 <* Update camera data *>
-fn void update(float delta_time) {
+fn void update() {
+	float delta_time = raylib::get_frame_time();
 	if (main.unit != null) {
 		//* Follow unit if it has one
 		Vector3 position = {
