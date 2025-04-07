@@ -56,10 +56,76 @@ fn void gen_keybinds() @test {
 
 	char[] kb = keybinds.save();
 
+	for (int i; i < kb.len; i++) io::printf("%d,",kb[i]);
+
   keybindings_bulk.add("default_kb", kb);
   keybindings_bulk.save();
   free(kb);
   keybindings_bulk.free();
+}
+<* 003 *>
+fn void gen_options() @test {
+  Bulk option_bulk = bulk::new("003");
+
+  Options opts;
+
+  // 0 = Window
+  // 1 = Borderless Window
+  // 2 = Fullscreen
+  Option screen_mode;
+  screen_mode.type = BYTE;
+  screen_mode.as_byte = 0;
+
+  // Screen size
+  Option screen_res;
+  screen_res.type = ARRAY;
+  screen_res.as_array = {1280, 720};
+
+  // Field of view
+  Option fovy;
+  fovy.type = BYTE;
+  fovy.as_byte = 70;
+
+  // Target frames per second
+  Option fps;
+  fps.type = BYTE;
+  fps.as_byte = 60;
+
+  // Master volume
+  Option vol_master;
+  vol_master.type = FLOAT;
+  vol_master.as_float = 0.6;
+
+  // Music volume
+  Option vol_music;
+  vol_music.type = FLOAT;
+  vol_music.as_float = 0.6;
+
+  // Ambient sounds volume
+  Option vol_ambient;
+  vol_ambient.type = FLOAT;
+  vol_ambient.as_float = 0.6;
+
+  // Sound effects volume
+  Option vol_sfx;
+  vol_sfx.type = FLOAT;
+  vol_sfx.as_float = 0.6;
+
+  opts.set("screen_mode", screen_mode);
+  opts.set("screen_res", screen_res);
+  opts.set("fovy", fovy);
+  opts.set("fps", fps);
+  opts.set("vol_master", vol_master);
+  opts.set("vol_music", vol_music);
+  opts.set("vol_ambient", vol_ambient);
+  opts.set("vol_sfx", vol_sfx);
+
+  char[] opt = opts.save();
+
+  option_bulk.add("default_options", opt);
+  option_bulk.save();
+  free(opt);
+  option_bulk.free();
 }
 
 <* 009 *>
@@ -69,11 +135,11 @@ fn void gen_font() @test {
   Bulk font_bulk = bulk::new("009");
 
   //* Grab fonts
-  char[] anakron = file::load_temp("resources/raw_files/ANAKRON.ttf");
+  char[] anakron = file::load_temp("resources/raw_files/ANAKRON.ttf")!!;
 
   font_bulk.add("anakron", anakron);
   font_bulk.save();
-  free(data);
+  //free(anakron);
   font_bulk.free();
 }
 <* 010 *>

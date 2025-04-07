@@ -15,7 +15,8 @@ fn void ts_play_button() {
 
 <* Options button functionality *>
 fn void ts_options_button() {
-  io::printn("Options button pressed!");
+  //io::printn("Options button pressed!");
+  update_settings();
 }
 
 <* Quit button functionality *>

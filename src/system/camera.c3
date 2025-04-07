@@ -54,10 +54,10 @@ fn void update() {
 	} else {
 		//* Control directly otherwise
 		Vector3 position = main.target;
-		if (keybind::is_down("move_up"))    position.z -= 0.1;
-  	if (keybind::is_down("move_down"))  position.z += 0.1;
-  	if (keybind::is_down("move_left"))  position.x -= 0.1;
-  	if (keybind::is_down("move_right")) position.x += 0.1;
+		if (keybinds.is_down("move_up"))    position.z -= 0.1;
+  	if (keybinds.is_down("move_down"))  position.z += 0.1;
+  	if (keybinds.is_down("move_left"))  position.x -= 0.1;
+  	if (keybinds.is_down("move_right")) position.x += 0.1;
 		main.target = position;
 	}
 

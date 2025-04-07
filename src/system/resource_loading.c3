@@ -11,17 +11,21 @@ HashMap{String, Texture}  textures  @builtin;
 HashMap{String, Model}    models    @builtin;
 HashMap{String, Mesh}     meshes    @builtin;
 HashMap{String, Material} materials @builtin;
+Keybindings keybinds @builtin;
+Options     options  @builtin;
 
 
 <* Load all resources from file *>
 fn void load() {
   //* Keybindings
   Bulk keybind_bulk = bulk::load("resources/002");
-  keybind::load(keybind_bulk.entries["default_kb"]!!.value);
+  keybinds = keybind::load(keybind_bulk.entries["default_kb"]!!.value);
   keybind_bulk.free();
 
   //* Settings
-
+  Bulk settings_bulk = bulk::load("resources/003");
+  options = options::load(settings_bulk.entries["default_options"]!!.value)!!;
+  settings_bulk.free();
 
   //* Fonts
   Bulk fonts_bulk = bulk::load("resources/009");

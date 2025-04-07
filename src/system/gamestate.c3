@@ -29,11 +29,6 @@ fn void worldstate_loop() {
       system::content();
       system::ui();
         ui::draw();
-        //Font font = fonts.get("anakron")!!;
-        //font.draw("GNOSIS",{10,10},40,1,color::WHITE);
-        //font.draw("Play",{10,260},16,1,color::WHITE);
-        //font.draw("Options",{10,276},16,1,color::WHITE);
-        //font.draw("Quit",{10,292},16,1,color::WHITE);
       system::end();
     case OVERWORLD:
       camera::update();

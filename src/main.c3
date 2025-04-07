@@ -19,7 +19,7 @@ fn void test() => io::printfn("fug");
 fn int main(String[] args) {
 	//* Initialize systems
 	system::init_renderer();
-	defer system::close();
+	defer system::close_renderer();
 	camera::init();
 
 	gamestate.debug_mode = true;
