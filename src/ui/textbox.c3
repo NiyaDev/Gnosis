@@ -5,6 +5,7 @@ import pleroma;
 struct UITextbox {
   bool visible;
   Rectangle rect;
+  Alignment alignment;
   UITextureNPatch* background;
   String font;
   int timer;
@@ -24,14 +25,15 @@ fn void new_textbox(
   String name,
   Rectangle rect = {0,0,32,32},
   Rectangle textspace = {8,8,16,16},
+  Alignment alignment = BOTTOM,
   String font = "default",
-  bool visible = false,
+  bool visible = true,
   float size = 20,
   float spacing = 1,
   int speed = 1,
   UITextureNPatch* bg = null,
 ) {
-  UIElement dat = textbox::new(rect,textspace,font,visible,size,spacing,speed,bg);
+  UIElement dat = textbox::new(rect,textspace,alignment,font,visible,size,spacing,speed,bg);
   uihandler.set(name, dat);
 }
 
@@ -41,19 +43,21 @@ import pleroma;
 
 <* Create new textbox without pushing *>
 fn UIElement new(
-  Rectangle rect,
-  Rectangle textspace,
-  String font,
-  bool visible,
-  float size,
-  float spacing,
-  int speed,
-  UITextureNPatch* bg,
+  Rectangle rect = {0,0,32,32},
+  Rectangle textspace = {8,8,16,16},
+  Alignment alignment = BOTTOM,
+  String font = "default",
+  bool visible = true,
+  float size = 20,
+  float spacing = 1,
+  int speed = 1,
+  UITextureNPatch* bg = null,
 ) {
   UITextbox* tbdata = mem::new(UITextbox);
   tbdata.visible = visible;
   tbdata.background = bg;
   tbdata.rect = rect;
+  tbdata.alignment = alignment;
   tbdata.font = font;
   Rectangle offset_textspace = {
     rect.x + textspace.x,

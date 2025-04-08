@@ -79,7 +79,8 @@ fn void gen_options() @test {
   // Screen size
   Option screen_res;
   screen_res.type = ARRAY;
-  screen_res.as_array = {1280, 720};
+  //screen_res.as_array = {1280, 720};
+  screen_res.as_array = {1920, 1080};
 
   // Field of view
   Option fovy;

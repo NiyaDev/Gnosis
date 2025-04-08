@@ -5,6 +5,7 @@ import pleroma;
 struct UIBarData {
   Color tint;
   Rectangle rect;
+  Alignment alignment;
 
   String background, bar;
   float* value, max;
@@ -15,13 +16,14 @@ fn void new_bar(
   String name,
   Color tint = color::WHITE,
   Rectangle rect = {0,0,16,16},
+  Alignment alignment = TOPLEFT,
   String bg = "default",
   String bar = "default",
   float* value = null,
   float* max = null,
 ) {
-  UIElement dat = bar::new(tint, rect, bg, bar, value, max);
-  uihandler.set(name,dat);
+  UIElement data = bar::new(tint, rect, alignment, bg, bar, value, max);
+  uihandler.set(name, data);
 }
 
 
@@ -33,13 +35,14 @@ import pleroma;
 fn UIElement new(
   Color tint,
   Rectangle rect,
+  Alignment alignment,
   String bg,
   String bar,
   float* value,
   float* max,
 ) {
   UIBarData* bardata = mem::new(UIBarData);
-  *bardata = { tint, rect, bg, bar, value, max };
+  *bardata = { tint, rect, alignment, bg, bar, value, max };
   return { BAR, (void*)bardata };
 }
 

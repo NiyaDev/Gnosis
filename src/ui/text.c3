@@ -6,6 +6,8 @@ import pleroma;
 struct UITextData {
   Color tint;
   Vector2 position;
+  Alignment alignment;
+
   String font;
   String* text;
   float text_size, text_spacing;
@@ -16,12 +18,13 @@ fn void new_text(
   String name,
   Color tint = color::BLACK,
   Vector2 position = {0,0},
+  Alignment alignment = TOPLEFT,
   String font = "default",
   String* text = null,
   float size = 20,
   float spacing = 1,
 ) {
-  UIElement dat = text::new(tint, position, font, text, size, spacing);
+  UIElement dat = text::new(tint, position, alignment, font, text, size, spacing);
   uihandler.set(name,dat);
 }
 
@@ -33,13 +36,14 @@ import pleroma;
 fn UIElement new(
   Color tint,
   Vector2 position,
+  Alignment alignment,
   String font,
   String* text,
   float size,
   float spacing,
 ) {
   UITextData* textdata = mem::new(UITextData);
-  *textdata = { tint, position, font, text, size, spacing };
+  *textdata = { tint, position, alignment, font, text, size, spacing };
   return { TEXT, (void*)textdata };
 }
 

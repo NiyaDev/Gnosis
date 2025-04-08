@@ -38,13 +38,29 @@ fn int main(String[] args) {
 	camera::set_target(gamestate.world.player);
 
 	// Titlescreen ui elements
-	ui::new_text("ts_title", color::WHITE, {10,10}, "anakron", &game_title, 40, 1);
-	ui::new_text("ts_version", color::WHITE, {((float)system::render[0])-45,((float)system::render[1])-15}, "anakron", &game_version, 10, 1);
+	ui::new_text(
+		name: "ts_title",
+		tint: color::WHITE,
+		position: {10,10},
+		font: "anakron",
+		text: &game_title,
+		size: 40,
+	);
+	ui::new_text(
+		name: "ts_version",
+		tint: color::WHITE,
+		position: {-45, -15},
+		alignment: BOTTOMRIGHT,
+		font: "anakron",
+		text: &game_version,
+		size: 10,
+	);
 	ui::new_button(
 		name: "ts_play",
 		text_color: color::WHITE,
-		rect: {10, 260, 96, 32},
-		text_padding: { 0,   0, 26,  8},
+		rect: {10, -128, 96, 32},
+		text_padding: {0, 0, 26, 8},
+		alignment: BOTTOMLEFT,
 		background: "textbox",
 		font: "anakron",
 		text: &play_option,
@@ -53,8 +69,9 @@ fn int main(String[] args) {
 	ui::new_button(
 		name: "ts_options",
 		text_color: color::WHITE,
-		rect: {10, 292, 96, 32},
-		text_padding: { 0,   0,  8,  8},
+		rect: {10, -96, 96, 32},
+		text_padding: {0, 0, 8, 8},
+		alignment: BOTTOMLEFT,
 		background: "textbox",
 		font: "anakron",
 		text: &options_option,
@@ -63,32 +80,34 @@ fn int main(String[] args) {
 	ui::new_button(
 		name: "ts_quit",
 		text_color: color::WHITE,
-		rect: {10, 324, 96, 32},
+		rect: {10, -64, 96, 32},
 		text_padding: { 0,   0, 26,  8},
+		alignment: BOTTOMLEFT,
 		background: "textbox",
 		font: "anakron",
 		text: &quit_option,
 		func: &system::ts_quit_button,
 	);
 	
-	//UIElement player_status = verticalbox::new({10,10,0,0},null);
-	//player_status.add_element(bar::new(color::RED,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.hp_cur,&gamestate.world.player.hp_max));
-	//player_status.add_element(bar::new(color::GREEN,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.st_cur,&gamestate.world.player.st_max));
-	//player_status.add_element(bar::new(color::BLUE,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.mn_cur,&gamestate.world.player.mn_max));
-	//player_status.add_element(bar::new(color::YELLOW,{0,0,64,8},"bar_bg","bar_fl",&gamestate.world.player.hn_cur,&gamestate.world.player.hn_max));
-	//ui::push("status", player_status);
 	/*
+	UIElement player_status = verticalbox::new({10,10,0,0},null,TOPLEFT);
+	player_status.add_element(bar::new(color::RED,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.hp_cur,&gamestate.world.player.hp_max));
+	player_status.add_element(bar::new(color::GREEN,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.st_cur,&gamestate.world.player.st_max));
+	player_status.add_element(bar::new(color::BLUE,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.mn_cur,&gamestate.world.player.mn_max));
+	player_status.add_element(bar::new(color::YELLOW,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.hn_cur,&gamestate.world.player.hn_max));
+	ui::push("status", player_status);
 	UITextureNPatch* textbox_tex = npatch_texture::new(color::WHITE,{0,0,32,32},"textbox");
 	String textbox_text = "Testing";
 	UIElement textbox = textbox::new(
-		{20,(float)system::render[1] / 1.5,(float)system::render[0] - 40,((float)system::render[1] / 3) - 10},
-		{16,16,0,0},
-		"anakron",
-		true,
-		16, 1, 1,
-		textbox_tex,
+		rect: {0,-130,600,110},
+		alignment: BOTTOM,
+		font: "anakron",
+		size: 16,
+		spacing: 1,
+		speed: 1,
+		bg: textbox_tex,
 	);
-	textbox.set_text("testing this textbox shit.");
+	textbox.set_text("testing this textbox shit.\ntest line.");
 	ui::push("textbox", textbox);
 	*/
 

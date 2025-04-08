@@ -25,6 +25,17 @@ enum UIType {
   BUTTON,
   // TODO: Status screen
 }
+enum Alignment {
+  TOPLEFT,
+  TOP,
+  TOPRIGHT,
+  LEFT,
+  CENTER,
+  RIGHT,
+  BOTTOMLEFT,
+  BOTTOM,
+  BOTTOMRIGHT,
+}
 
 <* Draw all elements *>
 fn void draw() {
@@ -47,10 +58,13 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
   switch (self.type) {
     case BAR:
       UIBarData* uidata = (UIBarData*)self.data;
-      
+     
+      float[2] pos = uidata.alignment.offset(
+        {uidata.rect.x, uidata.rect.y},
+        {uidata.rect.width, uidata.rect.height},
+      );
       Rectangle rectoff = {
-        uidata.rect.x + offset.x,
-        uidata.rect.y + offset.y,
+        pos[0] + offset.x, pos[1] + offset.y,
         uidata.rect.width + offset.width,
         uidata.rect.height + offset.height, 
       };
@@ -63,8 +77,11 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
       );
 
       //* Bar
-      float percent = *uidata.value / *uidata.max;
-      rectoff.width *= percent;
+      float percent;
+      if (uidata.value != null && uidata.max != null) {
+        percent = *uidata.value / *uidata.max;
+        rectoff.width *= percent;
+      } else { percent = 1; }
       resources::textures[uidata.bar]!!.draw_npatch(
         {{0,0,24,8},8,8,8,8,THREE_PATCH_HORIZONTAL},
         rectoff,
@@ -74,9 +91,16 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
     case TEXT:
       UITextData* uidata = (UITextData*)self.data;
 
-      resources::fonts[uidata.font]!!.draw_pro(
+      // Calculate position
+      Font font = resources::fonts[uidata.font]!!;
+      float[2] pos = uidata.alignment.offset(
+        {uidata.position.x, uidata.position.y},
+        raylib::measure_text_ex(font, *uidata.text, uidata.text_size, uidata.text_spacing),
+      ); 
+
+      font.draw_pro(
         *uidata.text,
-        uidata.position,
+        {pos[0], pos[1]},
         {0,0}, 0,
         uidata.text_size,
         uidata.text_spacing,
@@ -85,16 +109,21 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
     case VERT_BOX:
       UIVerticalBox* uidata = (UIVerticalBox*)self.data;
 
+      float[2] pos = uidata.alignment.offset(
+        {uidata.padding.x, uidata.padding.y},
+        {uidata.padding.width, uidata.padding.height},
+      );
+
       if (uidata.background != null) {
         resources::textures[uidata.background.texture]!!.draw_npatch(
           uidata.background.npatch,
-          uidata.background.rect,
+          {pos[0],pos[1],uidata.background.rect.width,uidata.background.rect.height},
           {0,0}, 0,
           uidata.background.tint,
         );
       }
       for (int i; i < uidata.elements.len(); i++) {
-        Rectangle rect = uidata.padding;
+        Rectangle rect = {pos[0],pos[1],uidata.padding.width,uidata.padding.height};
         rect.y *= (float)i;
         rect.y += uidata.padding.y;
         uidata.elements[i].draw(rect);
@@ -102,16 +131,21 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
     case HORI_BOX:
       UIHorizontalBox* uidata = (UIHorizontalBox*)self.data;
 
+      float[2] pos = uidata.alignment.offset(
+        {uidata.padding.x, uidata.padding.y},
+        {uidata.padding.width, uidata.padding.height},
+      );
+
       if (uidata.background != null) {
         resources::textures[uidata.background.texture]!!.draw_npatch(
           uidata.background.npatch,
-          uidata.background.rect,
+          {pos[0],pos[1],uidata.background.rect.width,uidata.background.rect.height},
           {0,0}, 0,
           uidata.background.tint,
         );
       }
       for (int i; i < uidata.elements.len(); i++) {
-        Rectangle rect = uidata.padding;
+        Rectangle rect = {pos[0],pos[1],uidata.padding.width,uidata.padding.height};
         rect.x *= (float)i;
         rect.x += uidata.padding.y;
         uidata.elements[i].draw(rect);
@@ -119,10 +153,15 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
     case TEXTBOX:
       UITextbox* tbdata = (UITextbox*)self.data;
       if (tbdata.visible) {
+        float[2] pos = tbdata.alignment.offset(
+          {tbdata.rect.x, tbdata.rect.y},
+          {tbdata.rect.width, tbdata.rect.height},
+        );
+
         //* Background 
         textures[tbdata.background.texture]!!.draw_npatch(
           tbdata.background.npatch,
-          tbdata.rect,
+          {pos[0],pos[1],tbdata.rect.width,tbdata.rect.height},
           {0,0}, 0,
           tbdata.background.tint,
         );
@@ -131,13 +170,13 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
         Font font = resources::fonts[tbdata.font]!!;
         for (int i; i < tbdata.display.len - 1; i++) {
           if (tbdata.display[i] != 0) {
-            // TODO: Allow for rich text formatting
+            // TODO: Allow for rich text formatting and multiple lines
             String str = string::format(allocator::heap(), "%c\0",((String)tbdata.display)[i],);
             font.draw_pro(
               str,
               {
-                tbdata.textspace.x + (float)((float)i * ((tbdata.text_size * 0.6) + tbdata.text_spacing)),
-                tbdata.textspace.y,
+                (pos[0] * 1.6) + tbdata.textspace.x + (float)((float)i * ((tbdata.text_size * 0.6) + tbdata.text_spacing)),
+                (pos[1] * 1.6) + tbdata.textspace.y,
               },
               {0,0}, 0,
               tbdata.text_size,
@@ -157,6 +196,11 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
       }
     case BUTTON:
       UIButtonData* button = (UIButtonData*)self.data;
+
+      float[2] pos = button.alignment.offset(
+        {button.rect.x, button.rect.y},
+        {button.rect.width, button.rect.height},
+      );
       
       // Check if clicked
       Color col;
@@ -167,7 +211,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
 
       if (!button.active) {
         col = button.bg_color_disabled;
-      } else if (((mouse_pos.x > button.rect.x && mouse_pos.x < button.rect.x + button.rect.width) && (mouse_pos.y > button.rect.y && mouse_pos.y < button.rect.y + button.rect.height)) && raylib::is_mouse_button_down(LEFT)) {
+      } else if (((mouse_pos.x > pos[0] && mouse_pos.x < pos[0] + button.rect.width) && (mouse_pos.y > pos[1] && mouse_pos.y < pos[1] + button.rect.height)) && raylib::is_mouse_button_down(LEFT)) {
         col = button.bg_color_selected;
       } else { col = button.bg_color_default; }
 
@@ -175,7 +219,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
       Texture tx = textures[button.background]!!;
       tx.draw_npatch(
         tx.npatch(),
-        button.rect,
+        {pos[0],pos[1],button.rect.width,button.rect.height},
         {0,0}, 0,
         col,
       );
@@ -186,12 +230,12 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
       //       calculate where the mouse would be on the screen.
       fonts[button.font]!!.draw(
         *button.text,
-        {button.rect.x + button.text_padding.width, button.rect.y + button.text_padding.height},
+        {pos[0] + button.text_padding.width, pos[1] + button.text_padding.height},
         button.size, button.spacing,
         button.text_color,
       );
 
-      if (((mouse_pos.x > button.rect.x && mouse_pos.x < button.rect.x + button.rect.width) && (mouse_pos.y > button.rect.y && mouse_pos.y < button.rect.y + button.rect.height)) && raylib::is_mouse_button_released(LEFT)) {
+      if (((mouse_pos.x > pos[0] && mouse_pos.x < pos[0] + button.rect.width) && (mouse_pos.y > pos[1] && mouse_pos.y < pos[1] + button.rect.height)) && raylib::is_mouse_button_released(LEFT)) {
         button.func();
       }
 
@@ -220,8 +264,6 @@ fn void push(String name, UIElement element) {
   uihandler.set(name, element);
 }
 
-
-
 <* Add new element to Vertical box
   @require self.type == VERT_BOX || self.type == HORI_BOX
  *>
@@ -246,4 +288,51 @@ fn usz UIElement.len(&self) {
 <**>
 fn usz String.text_length(&self) {
   return 0;
+}
+
+<**>
+fn float[2] Alignment.offset(self, float[2] pos, Vector2 textsize) {
+  switch (self) {
+    case TOPLEFT: return pos;
+    case TOP:
+      return {
+        ((float)system::render[0] / 2) + pos[0] - (textsize.x / 2),
+        pos[1],
+      };
+    case TOPRIGHT:
+      return {
+        (float)system::render[0] + pos[0],
+        pos[1],
+      };
+    case LEFT:
+      return {
+        pos[0],
+        ((float)system::render[1] / 2) + pos[1] - (textsize.y / 2),
+      };
+    case CENTER:
+      return {
+        ((float)system::render[0] / 2) + pos[0] - (textsize.x / 2),
+        ((float)system::render[1] / 2) + pos[1] - (textsize.y / 2), 
+      };
+    case RIGHT:
+      return {
+        (float)system::render[0] + pos[0],
+        ((float)system::render[1] / 2) + pos[1] - (textsize.y / 2),
+      };
+    case BOTTOMLEFT:
+      return {
+        pos[0],
+        (float)system::render[1] + pos[1],
+      };
+    case BOTTOM:
+      return {
+        ((float)system::render[0] / 2) + pos[0] - (textsize.x / 2),
+        (float)system::render[1] + pos[1],
+      }; 
+    case BOTTOMRIGHT:
+      return {
+        (float)system::render[0] + pos[0],
+        (float)system::render[1] + pos[1],
+      };
+  }
 }

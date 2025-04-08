@@ -10,6 +10,7 @@ struct UIButtonData {
   Color bg_color_disabled;
   Rectangle rect;
   Rectangle text_padding;
+  Alignment alignment;
   String background;
   String font;
   float size;
@@ -28,6 +29,7 @@ fn void new_button(
   Color bg_color_disabled = color::DARKGRAY,
   Rectangle rect = {0,0,32,32},
   Rectangle text_padding = {0,0,16,16},
+  Alignment alignment = TOPLEFT,
   String background = "default",
   String font = "default",
   float size = 16,
@@ -36,7 +38,7 @@ fn void new_button(
   ButtonFunc func = null,
   bool active = true,
 ) {
-  UIElement data = button::new(text_color, bg_color_default, bg_color_selected, bg_color_disabled, rect, text_padding, background, font, size, spacing, text, func, active);
+  UIElement data = button::new(text_color, bg_color_default, bg_color_selected, bg_color_disabled, rect, text_padding, alignment, background, font, size, spacing, text, func, active);
   uihandler.set(name, data);
 }
 
@@ -52,6 +54,7 @@ fn UIElement new(
   Color bg_color_disabled,
   Rectangle rect,
   Rectangle text_padding,
+  Alignment alignment,
   String background,
   String font,
   float size,
@@ -61,6 +64,6 @@ fn UIElement new(
   bool active,
 ) {
   UIButtonData* buttondata = mem::new(UIButtonData);
-  *buttondata = { text_color, bg_color_default, bg_color_selected, bg_color_disabled, rect, text_padding, background, font, size, spacing, text, func, active };
+  *buttondata = { text_color, bg_color_default, bg_color_selected, bg_color_disabled, rect, text_padding, alignment, background, font, size, spacing, text, func, active };
   return { BUTTON, (void*)buttondata };
 }
