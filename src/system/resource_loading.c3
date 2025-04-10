@@ -11,8 +11,9 @@ HashMap{String, Texture}  textures  @builtin;
 HashMap{String, Model}    models    @builtin;
 HashMap{String, Mesh}     meshes    @builtin;
 HashMap{String, Material} materials @builtin;
-Keybindings keybinds @builtin;
-Options     options  @builtin;
+Keybindings  keybinds     @builtin;
+Options      options      @builtin;
+Localization localization @builtin;
 
 
 <* Load all resources from file *>
@@ -84,7 +85,17 @@ fn void load() {
   species::init();
 
   //* Skill data
-  skills::init();
+  //skills::init();
+
+  //* localization
+  Bulk local_00 = bulk::load("resources/060");
+  defer local_00.free();
+
+  String skills = (String)local_00.get("skills");
+  Yaml skills_yaml = yaml::parse(skills);
+  defer skills_yaml.free();
+
+  localization.add(skills_yaml);
 }
 
 <*  *>

@@ -11,9 +11,10 @@ import pleroma;
   * 009      - Fonts
   * 010->029 - Textures
   * 030->049 - UI Textures
-  * 050      - Skills yaml
-  * 051      - Species yaml
+  * 050      - Skills yaml - old
+  * 051      - Species yaml - old
   * 052->069 - 
+  * 060      - Localization
 */
 
 <* 001 *>
@@ -223,5 +224,17 @@ fn void gen_species_yaml() @test {
   species_yaml_bulk.save();
   free(data);
   species_yaml_bulk.free();
+}
+
+<* 060 *>
+fn void gen_localization() @test {
+  Bulk local_bulk = bulk::new("060");
+
+  // Load Yaml as raw data
+  char[] skills = file::load_temp("resources/raw_files/localization/skills.yaml")!!;
+
+  local_bulk.add("skills", skills);
+  local_bulk.save();
+  local_bulk.free();
 }
 

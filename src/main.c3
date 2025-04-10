@@ -111,7 +111,7 @@ fn int main(String[] args) {
 	ui::push("textbox", textbox);
 	*/
 
-	//if (gamestate.debug_mode) ui::new_text("debug_text",color::WHITE,{10,80},"anakron",&debug::uitext,12,-1);
+	if (gamestate.debug_mode) ui::new_text("debug_text",color::WHITE,{10,80},TOPRIGHT,"anakron",&debug::uitext,12,-1);
 
 	while (!raylib::window_should_close() && !gamestate.end_game) {
 		system::worldstate_loop();

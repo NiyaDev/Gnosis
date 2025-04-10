@@ -98,7 +98,7 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
     (float)((chunk_position[1] * 16) + tile[1]),
     (float)((chunk_position[2] * 16) + tile[2]), 
   };
-  if (self.player.position.distance(position) > 5 + (self.player.skills["perception"]!!.value * 0.2)) return 0;
+  if (self.player.position.distance(position) > 5 + (self.player.skills[Skills.PERCEPTION.ordinal].value * 0.2)) return 0;
 
   //* If it's surrounded by visible
   float visible_mod = 1;
@@ -179,8 +179,8 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
 
   //* Multiplier for vision
   float vision_multi = 1;
-  if (self.player.position.distance(position) > 3 + (self.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.8;
-  if (self.player.position.distance(position) > 4 + (self.player.skills["perception"]!!.value * 0.2)) vision_multi = 0.4;
+  if (self.player.position.distance(position) > 3 + (self.player.skills[Skills.PERCEPTION.ordinal].value * 0.2)) vision_multi = 0.8;
+  if (self.player.position.distance(position) > 4 + (self.player.skills[Skills.PERCEPTION.ordinal].value * 0.2)) vision_multi = 0.4;
   //bool above = !chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible;
   //if (chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible) return 0;
 

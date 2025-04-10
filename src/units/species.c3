@@ -8,8 +8,8 @@ import pleroma;
 
 HashMap{String,Species} data;
 struct Species {
-  Localization name;
-  Localization description;
+  //Localization name;
+  //Localization description;
 
   HashMap{String,int} skill_start;
   HashMap{String,int} skill_max;
@@ -35,16 +35,16 @@ fn void init() {
     String species_name = key;
 
     //* Name localization
-    TypedValue name = val.get_object("name");
-    ((yaml::Object*)name.value).@each(; String key_name, TypedValue val_name) {
-      species.name.add(key_name.to_language(), val_name.v_string);
-    };
+    //TypedValue name = val.get_object("name");
+    //((yaml::Object*)name.value).@each(; String key_name, TypedValue val_name) {
+    //  species.name.add(key_name.to_language(), val_name.v_string);
+    //};
 
     //* Description localization
-    TypedValue desc = val.get_object("description");
-    ((yaml::Object*)desc.value).@each(; String key_desc, TypedValue val_desc) {
-      species.description.add(key_desc.to_language(), val_desc.v_string);
-    };
+    //TypedValue desc = val.get_object("description");
+    //((yaml::Object*)desc.value).@each(; String key_desc, TypedValue val_desc) {
+    //  species.description.add(key_desc.to_language(), val_desc.v_string);
+    //};
 
     //* Skills
     TypedValue skills = val.get_object("skill");
@@ -72,12 +72,12 @@ fn void print() {
   data.@each(; String key, Species val) {
     io::printfn("%s:",key);
     io::printfn("  Name:"); 
-    val.name.@each(; String key1, String val1) {
-      io::printfn("    %s: %s",key1,val1);
-    };
-    val.description.@each(; String key1, String val1) {
-      io::printfn("    %s: %s",key1,val1);
-    };
+    //val.name.@each(; String key1, String val1) {
+    //  io::printfn("    %s: %s",key1,val1);
+    //};
+    //val.description.@each(; String key1, String val1) {
+    //  io::printfn("    %s: %s",key1,val1);
+    //};
     val.skill_start.@each(; String key1, int val1) {
       io::printfn("      %s: %d-%d",key1,val1,val.skill_max.get(key1)!!);
     };

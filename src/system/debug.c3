@@ -1,6 +1,7 @@
 
 module gnosis::system::debug;
 import gnosis::system;
+import gnosis::unit;
 import pleroma;
 
 
@@ -10,7 +11,7 @@ String uitext;
 fn void update_onscreen_text() {
   uitext.free(allocator::heap());
 
-  float perc = gamestate.world.player.skills["perception"]!!.value;
+  float perc = gamestate.world.player.skills[Skills.PERCEPTION.ordinal].value;
   uitext = string::format(
 	  allocator::heap(),
 		"FPS: %d (%f)\nPos: %d,%d,%d\nTil: %d,%d,%d\nTiles Rendered: %d\nPerception: %d->%d\nZoom: %f\nHP: %d/%d - %d\nST: %d/%d - %d\nMN: %d/%d - %d\nHN: %d/%d - %d\0",

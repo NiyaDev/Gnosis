@@ -1,5 +1,6 @@
 
 module gnosis::unit::skills;
+import gnosis::unit::species;
 import std::io;
 import std::collections;
 import pleroma;
@@ -14,9 +15,23 @@ struct Skill {
 }
 
 struct SkillNode {
-  Skill* skill;
+//  Skill* skill;
+  Local localization;
   int value;
   bool discovered;
+}
+
+enum Skills {
+  HEALTH,
+  REGENERATION,
+  STAMINA,
+  ENDURANCE,
+  MANA,
+  CURRENT,
+  BELLY,
+  METABOLISM,
+
+  PERCEPTION,
 }
 
 
@@ -29,7 +44,18 @@ const float CURRENT_MOD = -0.01;
 const float BELLY_MOD = 5;
 const float METABOLISM_MOD = 1;
 
+<**>
+fn SkillNode[] get(Species* species) {
+  SkillNode[] output = mem::new_array(SkillNode, Skills.len);
 
+  for (int i; i < output.len; i++) {
+    //output[i] = {{}, species};
+  }
+
+  return output;
+}
+
+/*
 <* Opens bulk containing skills data and loads it into hashmap *>
 fn void init() {
   Bulk bulk = bulk::load("resources/050");
@@ -69,3 +95,5 @@ fn void init() {
     skillslocal.set(key.copy(allocator::heap()), sk);
   };
 }
+*/
+
