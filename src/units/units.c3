@@ -16,61 +16,34 @@ struct Unit {
   float hn_cur, hn_max, hn_tick;
 
   //* Data
-  Species* species;
-  //HashMap{String, SkillNode} skills;
+  Species species;
   SkillNode[] skills;
 }
 
-<* Create a new Unit - Deprecated? *>
-fn Unit* new(String spec = "") {
-  Unit* output = mem::new(Unit);
-  
-  if (spec != "") {
-    output.species = species::get(spec)!!;
-  }
 
-  return output;
-}
 <* Initialize a unit to base values *>
-fn void Unit.init(&self, String spec = "") {
-  if (spec != "") {
-    self.species = species::get(spec)!!;
-    self.skills  = skills::get(self.species);
+fn void Unit.init(&self, Species spec = HUMAN) {
+  self.species = spec;
+  self.skills  = skills::get(spec);
 
-    //* Copy skill values
-    /*
-    skillslocal.@each(; String key, Skill val) {
-      SkillNode node;
-      node.skill = &val;
-      int? skill_start = self.species.skill_start[node.skill.id_name];
-      if (try skill_start) {
-        node.value = skill_start;
-        node.discovered = false;
-      }
-      
-      // TODO: Have yaml store whether the skill is discovered
+  // Calculate status skills
+  float size_mod = spec.get_size();
 
-      self.skills.set(key.copy(allocator::heap()), node);
-    };
-    */
+  // Health
+  self.hp_max = (float)self.skills[Skills.HEALTH.ordinal].value * (skills::HEALTH_MOD * size_mod);
+  self.hp_cur = self.hp_max;
 
-    //* Calculate status skills
-    // Health
-    self.hp_max = (float)self.skills[Skills.HEALTH.ordinal].value * skills::HEALTH_MOD;
-    self.hp_cur = self.hp_max;
+  // Stamina
+  self.st_max = (float)self.skills[Skills.STAMINA.ordinal].value * (skills::STAMINA_MOD * size_mod);
+  self.st_cur = self.st_max;
 
-    // Stamina
-    self.st_max = (float)self.skills[Skills.STAMINA.ordinal].value * skills::STAMINA_MOD;
-    self.st_cur = self.st_max;
+  // Mana
+  self.mn_max = (float)self.skills[Skills.MANA.ordinal].value * (skills::MANA_MOD * size_mod);
+  self.mn_cur = self.mn_max;
 
-    // Mana
-    self.mn_max = (float)self.skills[Skills.MANA.ordinal].value * skills::MANA_MOD;
-    self.mn_cur = self.mn_max;
-
-    // Hunger
-    self.hn_max = (float)self.skills[Skills.BELLY.ordinal].value * skills::BELLY_MOD;
-    self.hn_cur = self.hn_max;
-  }
+  // Hunger
+  self.hn_max = (float)self.skills[Skills.BELLY.ordinal].value * (skills::BELLY_MOD * size_mod);
+  self.hn_cur = self.hn_max;
 }
 <* Move unit in space 
   @param movement "Amount to move"

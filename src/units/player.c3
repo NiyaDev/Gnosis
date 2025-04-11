@@ -13,7 +13,7 @@ struct Player {
 <* Creates and initializes a player *>
 fn Player* new() {
   Player* output = mem::new(Player);
-  output.init("human");
+  output.init(RAT);
   return output;
 }
 <* Updates player *>

@@ -14,6 +14,8 @@ String play_option = "Play";
 String options_option = "Options";
 String quit_option = "Quit";
 
+Language lang = ENGLISH;
+
 fn void test() => io::printfn("fug");
 
 fn int main(String[] args) {
@@ -43,7 +45,7 @@ fn int main(String[] args) {
 		tint: color::WHITE,
 		position: {10,10},
 		font: "anakron",
-		text: &game_title,
+		text: localization["game_name"]!!.get_ref(lang)!!,
 		size: 40,
 	);
 	ui::new_text(
@@ -52,7 +54,7 @@ fn int main(String[] args) {
 		position: {-45, -15},
 		alignment: BOTTOMRIGHT,
 		font: "anakron",
-		text: &game_version,
+		text: localization["game_version"]!!.get_ref(lang)!!,
 		size: 10,
 	);
 	ui::new_button(
@@ -63,7 +65,7 @@ fn int main(String[] args) {
 		alignment: BOTTOMLEFT,
 		background: "textbox",
 		font: "anakron",
-		text: &play_option,
+		text: localization["ts_play_option"]!!.get_ref(lang)!!,
 		func: &system::ts_play_button,
 	);
 	ui::new_button(
@@ -74,7 +76,7 @@ fn int main(String[] args) {
 		alignment: BOTTOMLEFT,
 		background: "textbox",
 		font: "anakron",
-		text: &options_option,
+		text: localization["ts_options_option"]!!.get_ref(lang)!!,
 		func: &system::ts_options_button,
 	);
 	ui::new_button(
@@ -85,7 +87,7 @@ fn int main(String[] args) {
 		alignment: BOTTOMLEFT,
 		background: "textbox",
 		font: "anakron",
-		text: &quit_option,
+		text: localization["ts_quit_option"]!!.get_ref(lang)!!,
 		func: &system::ts_quit_button,
 	);
 	
@@ -111,7 +113,7 @@ fn int main(String[] args) {
 	ui::push("textbox", textbox);
 	*/
 
-	if (gamestate.debug_mode) ui::new_text("debug_text",color::WHITE,{10,80},TOPRIGHT,"anakron",&debug::uitext,12,-1);
+	if (gamestate.debug_mode) ui::new_text("debug_text",color::WHITE,{10,80},TOPLEFT,"anakron",&debug::uitext,12,-1);
 
 	while (!raylib::window_should_close() && !gamestate.end_game) {
 		system::worldstate_loop();

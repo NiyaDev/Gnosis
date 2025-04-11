@@ -81,21 +81,25 @@ fn void load() {
   };
   other_textures.free();
 
-  //* Species data
-  species::init();
-
-  //* Skill data
-  //skills::init();
-
   //* localization
   Bulk local_00 = bulk::load("resources/060");
   defer local_00.free();
+
+  String titlescreen = (String)local_00.get("titlescreen");
+  Yaml titlescreen_yaml = yaml::parse(titlescreen);
+  defer titlescreen_yaml.free();
 
   String skills = (String)local_00.get("skills");
   Yaml skills_yaml = yaml::parse(skills);
   defer skills_yaml.free();
 
+  String species = (String)local_00.get("species");
+  Yaml species_yaml = yaml::parse(species);
+  defer species_yaml.free();
+
+  localization.add(titlescreen_yaml);
   localization.add(skills_yaml);
+  localization.add(species_yaml);
 }
 
 <*  *>

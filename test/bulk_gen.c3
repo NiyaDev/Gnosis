@@ -231,9 +231,13 @@ fn void gen_localization() @test {
   Bulk local_bulk = bulk::new("060");
 
   // Load Yaml as raw data
-  char[] skills = file::load_temp("resources/raw_files/localization/skills.yaml")!!;
+  char[] titlescreen  = file::load_temp("resources/raw_files/localization/titlescreen.yaml")!!;
+  char[] skills  = file::load_temp("resources/raw_files/localization/skills.yaml")!!;
+  char[] species = file::load_temp("resources/raw_files/localization/species.yaml")!!;
 
+  local_bulk.add("titlescreen", titlescreen);
   local_bulk.add("skills", skills);
+  local_bulk.add("species", species);
   local_bulk.save();
   local_bulk.free();
 }

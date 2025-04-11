@@ -15,10 +15,9 @@ struct Skill {
 }
 
 struct SkillNode {
-//  Skill* skill;
-  Local localization;
-  int value;
-  bool discovered;
+  int value, max;
+  uint exp;
+  uint discovery;
 }
 
 enum Skills {
@@ -30,6 +29,7 @@ enum Skills {
   CURRENT,
   BELLY,
   METABOLISM,
+  SOMNOLENCE,
 
   PERCEPTION,
 }
@@ -37,63 +37,170 @@ enum Skills {
 
 const float HEALTH_MOD = 10;
 const float REGENERATION_MOD = -0.01;
+
 const float STAMINA_MOD = 10;
 const float ENDURANCE_MOD = -0.1;
+
 const float MANA_MOD = 10;
 const float CURRENT_MOD = -0.01;
+
 const float BELLY_MOD = 5;
 const float METABOLISM_MOD = 1;
 
+const float SOMNOLENCE_BASE = 12;
+
+
 <**>
-fn SkillNode[] get(Species* species) {
+fn SkillNode[] get(Species species) {
   SkillNode[] output = mem::new_array(SkillNode, Skills.len);
 
-  for (int i; i < output.len; i++) {
-    //output[i] = {{}, species};
+  switch (species) {
+    case HUMAN:
+      output[Skills.HEALTH.ordinal]       = { 5, 20, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 2, 10, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 5, 20, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 2, 20, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 5, 20, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 2, 10, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 5, 20, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 5, 20, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 2, 60, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = {15, 30, 0, 1};
+    case ELF:
+      output[Skills.HEALTH.ordinal]       = { 4, 16, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 2,  8, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 5, 20, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 2, 20, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 8, 25, 0, 1};
+      output[Skills.CURRENT.ordinal]      = { 3, 20, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 4, 14, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 5, 20, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 4, 80, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = {20, 40, 0, 1};
+    case DWARF:
+      output[Skills.HEALTH.ordinal]       = { 8, 24, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 4, 12, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 8, 22, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 4, 30, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 3,  6, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 1,  8, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 4, 14, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 5, 20, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 3, 80, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = {10, 20, 0, 1};
+    case ORC:
+      output[Skills.HEALTH.ordinal]       = {10, 30, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 5, 15, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 8, 22, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 4, 30, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 2,  8, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 1,  8, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 5, 20, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 5, 20, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 0,  0, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = {20, 40, 0, 1};
+    case GOBLIN:
+      output[Skills.HEALTH.ordinal]       = { 5, 18, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 2, 10, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 5, 24, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 2, 18, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 5, 10, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 2, 12, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 6, 20, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 1, 10, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 1, 70, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = {15, 30, 0, 1};
+    case KOBOLD:
+      output[Skills.HEALTH.ordinal]       = { 5, 18, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 2, 10, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 5, 24, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 2, 18, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 5, 10, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 2, 12, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 6, 20, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 1, 10, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 1, 70, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = {10, 20, 0, 1};
+    case SKELETON:
+      output[Skills.HEALTH.ordinal]       = { 5, 10, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 0,  0, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 1, 10, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 1, 10, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 1, 10, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 1, 10, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 0,  0, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 0,  0, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 0,  0, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = {15, 20, 0, 1};
+    case SLIME:
+      output[Skills.HEALTH.ordinal]       = { 5, 20, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 5, 40, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 5, 20, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 5, 40, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 5, 20, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 5, 40, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 8, 30, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 1,  8, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 0,  0, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = { 5, 10, 0, 1};
+    case RAT:
+      output[Skills.HEALTH.ordinal]       = { 1,  2, 0, 1};
+      output[Skills.REGENERATION.ordinal] = { 2, 10, 0, 0};
+
+      output[Skills.STAMINA.ordinal]      = { 1,  2, 0, 1};
+      output[Skills.ENDURANCE.ordinal]    = { 1, 10, 0, 0};
+
+      output[Skills.MANA.ordinal]         = { 1,  4, 0, 0};
+      output[Skills.CURRENT.ordinal]      = { 1, 10, 0, 0};
+
+      output[Skills.BELLY.ordinal]        = { 2,  4, 0, 1};
+      output[Skills.METABOLISM.ordinal]   = { 3, 20, 0, 0};
+
+      output[Skills.SOMNOLENCE.ordinal]   = { 2, 20, 0, 0};
+
+      output[Skills.PERCEPTION.ordinal]   = { 5, 10, 0, 1};
   }
 
   return output;
 }
-
-/*
-<* Opens bulk containing skills data and loads it into hashmap *>
-fn void init() {
-  Bulk bulk = bulk::load("resources/050");
-  defer bulk.free();
-
-  String raw_text = (String)bulk.get("yaml");
-
-  Yaml yaml = yaml::parse(raw_text);
-  defer yaml.free();
-
-
-  yaml.@each(; String key, TypedValue val) {
-    Skill sk;
-    sk.id_name = key.copy(allocator::heap());
-
-    //* Name localization
-    TypedValue name = val.get_object("name");
-    ((yaml::Object*)name.value).@each(; String key_name, TypedValue val_name) {
-      sk.name.add(key_name.to_language(), val_name.v_string);
-    };
-
-    //* Description localization
-    TypedValue desc = val.get_object("description");
-    ((yaml::Object*)desc.value).@each(; String key_name, TypedValue val_name) {
-      sk.name.add(key_name.to_language(), val_name.v_string);
-    };
-
-    //* Indepth localization
-    if (val.has_key("indepth")) {
-      TypedValue indepth = val.get_object("indepth");
-      ((yaml::Object*)indepth.value).@each(; String key_name, TypedValue val_name) {
-        sk.name.add(key_name.to_language(), val_name.v_string);
-      };
-    }
-
-    //data[sk.id] = sk;
-    skillslocal.set(key.copy(allocator::heap()), sk);
-  };
-}
-*/
 
