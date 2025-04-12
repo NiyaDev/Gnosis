@@ -85,9 +85,9 @@ fn void load() {
   Bulk local_00 = bulk::load("resources/060");
   defer local_00.free();
 
-  String titlescreen = (String)local_00.get("titlescreen");
-  Yaml titlescreen_yaml = yaml::parse(titlescreen);
-  defer titlescreen_yaml.free();
+  String ui = (String)local_00.get("ui");
+  Yaml ui_yaml = yaml::parse(ui);
+  defer ui_yaml.free();
 
   String skills = (String)local_00.get("skills");
   Yaml skills_yaml = yaml::parse(skills);
@@ -97,7 +97,7 @@ fn void load() {
   Yaml species_yaml = yaml::parse(species);
   defer species_yaml.free();
 
-  localization.add(titlescreen_yaml);
+  localization.add(ui_yaml);
   localization.add(skills_yaml);
   localization.add(species_yaml);
 }

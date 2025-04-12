@@ -8,15 +8,7 @@ import gnosis::resources;
 
 
 // TEMP
-String game_title = "Gnosis";
-String game_version = "0.1.0";
-String play_option = "Play";
-String options_option = "Options";
-String quit_option = "Quit";
-
-Language lang = ENGLISH;
-
-fn void test() => io::printfn("fug");
+Language lang @builtin = ENGLISH;
 
 fn int main(String[] args) {
 	//* Initialize systems
@@ -40,15 +32,8 @@ fn int main(String[] args) {
 	camera::set_target(gamestate.world.player);
 
 	// Titlescreen ui elements
-	ui::new_text(
-		name: "ts_title",
-		tint: color::WHITE,
-		position: {10,10},
-		font: "anakron",
-		text: localization["game_name"]!!.get_ref(lang)!!,
-		size: 40,
-	);
-	ui::new_text(
+	ui::open_titlescreen();
+	ui::new_text( // Version
 		name: "ts_version",
 		tint: color::WHITE,
 		position: {-45, -15},
@@ -57,47 +42,8 @@ fn int main(String[] args) {
 		text: localization["game_version"]!!.get_ref(lang)!!,
 		size: 10,
 	);
-	ui::new_button(
-		name: "ts_play",
-		text_color: color::WHITE,
-		rect: {10, -128, 96, 32},
-		text_padding: {0, 0, 26, 8},
-		alignment: BOTTOMLEFT,
-		background: "textbox",
-		font: "anakron",
-		text: localization["ts_play_option"]!!.get_ref(lang)!!,
-		func: &system::ts_play_button,
-	);
-	ui::new_button(
-		name: "ts_options",
-		text_color: color::WHITE,
-		rect: {10, -96, 96, 32},
-		text_padding: {0, 0, 8, 8},
-		alignment: BOTTOMLEFT,
-		background: "textbox",
-		font: "anakron",
-		text: localization["ts_options_option"]!!.get_ref(lang)!!,
-		func: &system::ts_options_button,
-	);
-	ui::new_button(
-		name: "ts_quit",
-		text_color: color::WHITE,
-		rect: {10, -64, 96, 32},
-		text_padding: { 0,   0, 26,  8},
-		alignment: BOTTOMLEFT,
-		background: "textbox",
-		font: "anakron",
-		text: localization["ts_quit_option"]!!.get_ref(lang)!!,
-		func: &system::ts_quit_button,
-	);
 	
 	/*
-	UIElement player_status = verticalbox::new({10,10,0,0},null,TOPLEFT);
-	player_status.add_element(bar::new(color::RED,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.hp_cur,&gamestate.world.player.hp_max));
-	player_status.add_element(bar::new(color::GREEN,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.st_cur,&gamestate.world.player.st_max));
-	player_status.add_element(bar::new(color::BLUE,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.mn_cur,&gamestate.world.player.mn_max));
-	player_status.add_element(bar::new(color::YELLOW,{0,0,64,8},TOPLEFT,"bar_bg","bar_fl",&gamestate.world.player.hn_cur,&gamestate.world.player.hn_max));
-	ui::push("status", player_status);
 	UITextureNPatch* textbox_tex = npatch_texture::new(color::WHITE,{0,0,32,32},"textbox");
 	String textbox_text = "Testing";
 	UIElement textbox = textbox::new(

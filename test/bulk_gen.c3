@@ -93,6 +93,11 @@ fn void gen_options() @test {
   fps.type = BYTE;
   fps.as_byte = 60;
 
+  // Language
+  Option language;
+  language.type = STRING;
+  language.as_string = "English";
+
   // Master volume
   Option vol_master;
   vol_master.type = FLOAT;
@@ -117,6 +122,7 @@ fn void gen_options() @test {
   opts.set("screen_res", screen_res);
   opts.set("fovy", fovy);
   opts.set("fps", fps);
+  opts.set("language", language);
   opts.set("vol_master", vol_master);
   opts.set("vol_music", vol_music);
   opts.set("vol_ambient", vol_ambient);
@@ -191,51 +197,17 @@ fn void gen_uitextures() @test {
   ui_texture_bulk.free();
 }
 
-<* 050 *>
-fn void gen_skills_yaml() @test {
-  Bulk skills_yaml_bulk = bulk::new("050");
-
-  //* Load yaml as raw data
-  usz size = file::get_size("resources/raw_files/skills.yaml")!!;
-  File file = file::open("resources/raw_files/skills.yaml", "rb")!!;
-  defer file.close()!!;
-
-  char[] data = mem::new_array(char, size);
-  file.read(data)!!;
-
-  skills_yaml_bulk.add("yaml", data);
-  skills_yaml_bulk.save();
-  free(data);
-  skills_yaml_bulk.free();
-}
-<* 051 *>
-fn void gen_species_yaml() @test {
-  Bulk species_yaml_bulk = bulk::new("051");
-
-  //* Load yaml as raw data
-  usz size = file::get_size("resources/raw_files/species.yaml")!!;
-  File file = file::open("resources/raw_files/species.yaml", "rb")!!;
-  defer file.close()!!;
-
-  char[] data = mem::new_array(char, size);
-  file.read(data)!!;
-
-  species_yaml_bulk.add("yaml", data);
-  species_yaml_bulk.save();
-  free(data);
-  species_yaml_bulk.free();
-}
 
 <* 060 *>
 fn void gen_localization() @test {
   Bulk local_bulk = bulk::new("060");
 
   // Load Yaml as raw data
-  char[] titlescreen  = file::load_temp("resources/raw_files/localization/titlescreen.yaml")!!;
+  char[] ui  = file::load_temp("resources/raw_files/localization/ui.yaml")!!;
   char[] skills  = file::load_temp("resources/raw_files/localization/skills.yaml")!!;
   char[] species = file::load_temp("resources/raw_files/localization/species.yaml")!!;
 
-  local_bulk.add("titlescreen", titlescreen);
+  local_bulk.add("ui", ui);
   local_bulk.add("skills", skills);
   local_bulk.add("species", species);
   local_bulk.save();
