@@ -25,7 +25,7 @@ fn void load() {
 
   //* Settings
   Bulk settings_bulk = bulk::load("resources/003");
-  options = options::load(settings_bulk.entries["default_options"]!!.value)!!;
+  options = options::load(settings_bulk.entries["default_options"]!!.value);
   settings_bulk.free();
 
   //* Fonts

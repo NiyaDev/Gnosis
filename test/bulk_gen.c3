@@ -73,50 +73,24 @@ fn void gen_options() @test {
   // 0 = Window
   // 1 = Borderless Window
   // 2 = Fullscreen
-  Option screen_mode;
-  screen_mode.type = BYTE;
-  screen_mode.as_byte = 0;
-
+  Option screen_mode = {.type=CHAR,.as_char=0};
   // Screen size
-  Option screen_res;
-  screen_res.type = ARRAY;
-  //screen_res.as_array = {1280, 720};
-  screen_res.as_array = {1920, 1080};
-
+  Option screen_res = {.type=INT_ARRAY,.as_int_array={1920,1080}};
   // Field of view
-  Option fovy;
-  fovy.type = BYTE;
-  fovy.as_byte = 70;
-
+  Option fovy = {.type=CHAR,.as_char=70};
   // Target frames per second
-  Option fps;
-  fps.type = BYTE;
-  fps.as_byte = 60;
+  Option fps = {.type=CHAR,.as_char=60};
 
   // Language
-  Option language;
-  language.type = STRING;
-  language.as_string = "English";
-
+  Option language = {.type=STRING,.as_string="English"};
   // Master volume
-  Option vol_master;
-  vol_master.type = FLOAT;
-  vol_master.as_float = 0.6;
-
+  Option vol_master = {.type=FLOAT,.as_float=0.6};
   // Music volume
-  Option vol_music;
-  vol_music.type = FLOAT;
-  vol_music.as_float = 0.6;
-
+  Option vol_music = {.type=FLOAT,.as_float=0.6};
   // Ambient sounds volume
-  Option vol_ambient;
-  vol_ambient.type = FLOAT;
-  vol_ambient.as_float = 0.6;
-
+  Option vol_ambient = {.type=FLOAT,.as_float=0.6};
   // Sound effects volume
-  Option vol_sfx;
-  vol_sfx.type = FLOAT;
-  vol_sfx.as_float = 0.6;
+  Option vol_sfx = {.type=FLOAT,.as_float=0.6};
 
   opts.set("screen_mode", screen_mode);
   opts.set("screen_res", screen_res);

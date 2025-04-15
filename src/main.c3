@@ -31,6 +31,8 @@ fn int main(String[] args) {
 	gamestate.world.player.sprite = resources::textures.get_ref("player")!!;
 	camera::set_target(gamestate.world.player);
 
+	gamestate.world.save();
+
 	// Titlescreen ui elements
 	ui::open_titlescreen();
 	ui::new_text( // Version

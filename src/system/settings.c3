@@ -8,7 +8,7 @@ import pleroma;
 fn void update_settings() {
   // Screen size
   //  Done first because it resets the window
-  int[] screen_size = options["screen_res"]!!.as_array;
+  int[] screen_size = options["screen_res"]!!.as_int_array;
   screen[0] = screen_size[0];
   screen[1] = screen_size[1];
   render[0] = screen[0] / 2;
@@ -17,7 +17,7 @@ fn void update_settings() {
   reset_renderer();
 
   // Screen mode
-  char screen_mode = options["screen_mode"]!!.as_byte;
+  char screen_mode = options["screen_mode"]!!.as_char;
   switch (screen_mode) {
     case 0: // Windowed
       raylib::clear_window_state(0);

@@ -5,10 +5,11 @@ import std::io;
 import gnosis::unit;
 import gnosis::resources;
 import pleroma;
-//import raylib;
 
 
 struct World {
+  String name;
+
   Player* player;
 
   //* Clock
@@ -19,19 +20,49 @@ struct World {
   HashMap{int[3],Chunk} chunks;
 }
 
+<* Saves world data to file *>
+fn void World.save(&self) {
+  // World data
+  Logos file = logos::new(comp:DEFLATE);
+  // Player
+  file.write({.type=FLOAT_ARRAY,.as_float_array=self.player.position.to_array()});
+  file.write({.type=FLOAT,.as_float=self.player.hp_cur});
+  file.write({.type=FLOAT,.as_float=self.player.st_cur});
+  file.write({.type=FLOAT,.as_float=self.player.mn_cur});
+  file.write({.type=FLOAT,.as_float=self.player.hn_cur});
+  file.write({.type=INT,.as_int=self.player.species.ordinal});
+  file.write({.type=INT,.as_int=self.player.skills.len});
+  for (int i; i < self.player.skills.len; i++) {
+    file.write({.type=INT,.as_int=self.player.skills[i].value});
+    file.write({.type=INT,.as_int=(int)self.player.skills[i].exp});
+    file.write({.type=INT,.as_int=(int)self.player.skills[i].discovery});
+  }
+  String path = string::format(allocator::heap(), "saves/%s/worlddata.dat", self.name);
+  file.save(path);
+
+  // Chunks
+  self.chunks.@each(; int[3] pos, Chunk chunk) {
+    //chunk.save(self.name);
+    self.chunks.get_ref(pos)!!.save(self.name);
+  };
+}
+//<* Loads world data from file *>
+//fn World load(String name) {}
+
 <* Create a new chunk in the world *>
 fn void World.new_chunk(&self, int[3] position) {
   Chunk chunk;
-  chunk.init();
+  chunk.init(position);
   self.chunks.set(position,chunk);
 }
 <* Generate world *>
 fn World* generate(float framespertick = 3) {
   World* output = mem::new(World);
+  output.name = "test";
 
   output.framespertick = framespertick;
-	//output.new_chunk({0,0,0});
-	output.chunks.set({0,0,0}, chunk::load("test",{0,0,0}));
+	output.new_chunk({0,0,0});
+	//output.chunks.set({0,0,0}, chunk::load("test",{0,0,0}));
 	output.new_chunk({1,0,0});
 	output.new_chunk({2,0,0});
 	output.new_chunk({0,0,1});
@@ -40,7 +71,7 @@ fn World* generate(float framespertick = 3) {
 	output.new_chunk({0,0,2});
 	output.new_chunk({1,0,2});
 	output.new_chunk({2,0,2});
-	output.chunks[{0,0,0}]!!.save("test");
+	//output.chunks[{0,0,0}]!!.save("test");
 
 	return output;
 }
