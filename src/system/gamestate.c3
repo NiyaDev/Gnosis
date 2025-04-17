@@ -30,14 +30,20 @@ fn void worldstate_loop() {
       system::content();
       system::ui();
         //ui::draw();
-        //raygui::line({0,80,360,16},"fugandulu");
-        raygui::enable();
-        raygui::set_style(0, 16, 40);
-        //raygui::set_style(0, 2, color::WHITE.to_int());
-        raygui::label({9,14,360,32},(char*)localization["game_name"]!!.get(lang)!!);
-        raygui::set_style(0, 16, 12);
-        int play = raygui::button({9,250,96,32},(char*)localization["ts_play_option"]!![lang]!!);
-        if (play != 0) io::printfn("fug");//ui::ts_play_button();
+        // General setup
+        kenoma::set_font(fonts.get_ref("anakron")!!);
+        kenoma::set_style(FONT_COLOR, color::WHITE.to_int());
+
+        // Title
+        kenoma::set_style(FONT_SIZE, 40);
+        kenoma::label({9,14,360,32}, localization["game_name"]!![lang]!!);
+
+        // Buttons
+        kenoma::set_style(FONT_SIZE, 12);
+        kenoma::button({9,250,96,32}, localization["ts_play_option"]!![lang]!!);
+
+        // Version
+        kenoma::label({(float)render[0] - 46, (float)render[1] - 16,0,0}, localization["game_version"]!![lang]!!);
       system::end();
     case OVERWORLD:
       camera::update();
