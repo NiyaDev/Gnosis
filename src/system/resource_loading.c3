@@ -35,6 +35,7 @@ fn void load() {
     fonts.set(key, font);
   };
   fonts_bulk.free();
+  raygui::set_font(fonts["anakron"]!!);
 
   //* UI Textures
   Bulk ui_textures = bulk::load("resources/030");

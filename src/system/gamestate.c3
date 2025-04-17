@@ -2,6 +2,7 @@
 module gnosis::system;
 import gnosis;
 import pleroma;
+import std::io;
 
 
 Gamestate gamestate @builtin;
@@ -28,7 +29,15 @@ fn void worldstate_loop() {
     case TITLE:
       system::content();
       system::ui();
-        ui::draw();
+        //ui::draw();
+        //raygui::line({0,80,360,16},"fugandulu");
+        raygui::enable();
+        raygui::set_style(0, 16, 40);
+        //raygui::set_style(0, 2, color::WHITE.to_int());
+        raygui::label({9,14,360,32},(char*)localization["game_name"]!!.get(lang)!!);
+        raygui::set_style(0, 16, 12);
+        int play = raygui::button({9,250,96,32},(char*)localization["ts_play_option"]!![lang]!!);
+        if (play != 0) io::printfn("fug");//ui::ts_play_button();
       system::end();
     case OVERWORLD:
       camera::update();

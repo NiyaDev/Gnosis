@@ -42,7 +42,7 @@ fn void new_dropdown(
 }
 
 
-module gnosis::ui::button;
+module gnosis::ui::dropdown;
 import pleroma;
 
 <* Creates a new Dropdown element without pushing it to UI *>

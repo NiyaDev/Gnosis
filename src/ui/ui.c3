@@ -239,7 +239,7 @@ fn void UIElement.draw(&self, Rectangle offset = {0,0,0,0}) {
       if (((mouse_pos.x > pos[0] && mouse_pos.x < pos[0] + button.rect.width) && (mouse_pos.y > pos[1] && mouse_pos.y < pos[1] + button.rect.height)) && raylib::is_mouse_button_released(LEFT)) {
         button.func();
       }
-    case DROPDOWN:
+    //case DROPDOWN:
       
     default:
   }
