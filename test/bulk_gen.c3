@@ -73,7 +73,7 @@ fn void gen_options() @test {
   // 0 = Window
   // 1 = Borderless Window
   // 2 = Fullscreen
-  Option screen_mode = {.type=CHAR,.as_char=0};
+  Option screen_mode = {.type=INT,.as_int=0};
   // Screen size
   Option screen_res = {.type=INT_ARRAY,.as_int_array={1920,1080}};
   // Field of view

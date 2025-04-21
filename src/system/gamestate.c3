@@ -29,6 +29,11 @@ enum OptionsTabs {
   AUDIO,
 }
 
+int res_kem;
+int res_ray;
+bool act_kem;
+bool act_ray;
+
 <**>
 fn void worldstate_loop() {
   switch (gamestate.state) {
@@ -64,7 +69,8 @@ fn void worldstate_loop() {
 
           switch (gamestate.options_tab) {
             case VIDEO:
-              kenoma::label({opt_menu_rect.x + 20, opt_menu_rect.y + 40, 0,0}, "Fugan");
+              kenoma::label({opt_menu_rect.x + 20, opt_menu_rect.y + 20,0,0}, localization["opts_screen_mode"]!![lang]!!);
+              if (kenoma::dropdown({opt_menu_rect.x + 20, opt_menu_rect.y + 35,96,32}, "Window\nBorderless\nFullscreen", &options.get_ref("screen_mode")!!.as_int, act_kem)) act_kem = !act_kem;
             case AUDIO:
               kenoma::label({opt_menu_rect.x + 20, opt_menu_rect.y + 40, 0,0}, "Dulu");
           }
@@ -79,6 +85,7 @@ fn void worldstate_loop() {
           if (kenoma::button({9,250,96,32}, localization["ts_play_option"]!![lang]!!, true))    gamestate.state = OVERWORLD;
           if (kenoma::button({9,284,96,32}, localization["ts_options_option"]!![lang]!!, true)) gamestate.options_menu = true;
           if (kenoma::button({9,318,96,32}, localization["ts_quit_option"]!![lang]!!, true))    gamestate.end_game = true;
+          
         }
 
         // Version
