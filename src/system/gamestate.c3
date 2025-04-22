@@ -26,6 +26,7 @@ enum CurrentState {
 }
 enum OptionsTabs {
   VIDEO,
+  SHADER,
   AUDIO,
 }
 
@@ -58,8 +59,9 @@ fn void worldstate_loop() {
             render_w,
             render_h,
           };
-          if (kenoma::button({opt_menu_rect.x + 10, opt_menu_rect.y - 24, 64, 32}, localization["opts_video_tab"]!![lang]!!, gamestate.options_tab != VIDEO)) gamestate.options_tab = VIDEO;
-          if (kenoma::button({opt_menu_rect.x + 74, opt_menu_rect.y - 24, 64, 32}, localization["opts_audio_tab"]!![lang]!!, gamestate.options_tab != AUDIO)) gamestate.options_tab = AUDIO;
+          if (kenoma::button({opt_menu_rect.x +  10, opt_menu_rect.y - 24, 64, 32}, localization["opts_video_tab"]!![lang]!!, gamestate.options_tab != VIDEO)) gamestate.options_tab = VIDEO;
+          if (kenoma::button({opt_menu_rect.x +  74, opt_menu_rect.y - 24, 64, 32}, localization["opts_shader_tab"]!![lang]!!, gamestate.options_tab != SHADER)) gamestate.options_tab = SHADER;
+          if (kenoma::button({opt_menu_rect.x + 138, opt_menu_rect.y - 24, 64, 32}, localization["opts_audio_tab"]!![lang]!!, gamestate.options_tab != AUDIO)) gamestate.options_tab = AUDIO;
           kenoma::tiled_texture(opt_menu_rect, color::WHITE);
           if (kenoma::button({opt_menu_rect.width + opt_menu_rect.x - 16, opt_menu_rect.y - 16, 32, 32}, localization["opts_close_tab"]!![lang]!!, true)) gamestate.options_menu = false;
           if (kenoma::button({opt_menu_rect.width + opt_menu_rect.x - 48, opt_menu_rect.y + opt_menu_rect.height - 16, 64, 32}, localization["opts_apply_tab"]!![lang]!!, true)) {
@@ -69,6 +71,9 @@ fn void worldstate_loop() {
 
           switch (gamestate.options_tab) {
             case VIDEO:
+              kenoma::label({opt_menu_rect.x + 20, opt_menu_rect.y + 20,0,0}, localization["opts_screen_mode"]!![lang]!!);
+              if (kenoma::dropdown({opt_menu_rect.x + 20, opt_menu_rect.y + 35,96,32}, "Window\nBorderless\nFullscreen", &options.get_ref("screen_mode")!!.as_int, act_kem)) act_kem = !act_kem;
+            case SHADER:
               kenoma::label({opt_menu_rect.x + 20, opt_menu_rect.y + 20,0,0}, localization["opts_screen_mode"]!![lang]!!);
               if (kenoma::dropdown({opt_menu_rect.x + 20, opt_menu_rect.y + 35,96,32}, "Window\nBorderless\nFullscreen", &options.get_ref("screen_mode")!!.as_int, act_kem)) act_kem = !act_kem;
             case AUDIO:
