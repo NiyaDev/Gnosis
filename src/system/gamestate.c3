@@ -22,6 +22,7 @@ struct Gamestate {
 
 enum CurrentState {
   TITLE,
+  WORLDMENU,
   OVERWORLD,
 }
 enum OptionsTabs {
@@ -87,12 +88,17 @@ fn void worldstate_loop() {
 
           // Buttons
           kenoma::set_style(FONT_SIZE, 12);
-          if (kenoma::button({9,250,96,32}, localization["ts_play_option"]!![lang]!!, true))    gamestate.state = OVERWORLD;
+          if (kenoma::button({9,250,96,32}, localization["ts_play_option"]!![lang]!!, true))    gamestate.state = WORLDMENU;
           if (kenoma::button({9,284,96,32}, localization["ts_options_option"]!![lang]!!, true)) gamestate.options_menu = true;
           if (kenoma::button({9,318,96,32}, localization["ts_quit_option"]!![lang]!!, true))    gamestate.end_game = true;
           
         }
 
+        // Version
+        kenoma::label({(float)render[0] - 46, (float)render[1] - 16,0,0}, localization["game_version"]!![lang]!!);
+    case WORLDMENU:
+      system::ui();
+        // Create a button for each world save
         // Version
         kenoma::label({(float)render[0] - 46, (float)render[1] - 16,0,0}, localization["game_version"]!![lang]!!);
     case OVERWORLD:
