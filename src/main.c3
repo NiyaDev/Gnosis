@@ -33,36 +33,6 @@ fn int main(String[] args) {
 
 	gamestate.world.save();
 
-	// Titlescreen ui elements
-	ui::open_titlescreen();
-	ui::new_text( // Version
-		name: "ts_version",
-		tint: color::WHITE,
-		position: {-45, -15},
-		alignment: BOTTOMRIGHT,
-		font: "anakron",
-		text: localization["game_version"]!!.get_ref(lang)!!,
-		size: 10,
-	);
-	
-	/*
-	UITextureNPatch* textbox_tex = npatch_texture::new(color::WHITE,{0,0,32,32},"textbox");
-	String textbox_text = "Testing";
-	UIElement textbox = textbox::new(
-		rect: {0,-130,600,110},
-		alignment: BOTTOM,
-		font: "anakron",
-		size: 16,
-		spacing: 1,
-		speed: 1,
-		bg: textbox_tex,
-	);
-	textbox.set_text("testing this textbox shit.\ntest line.");
-	ui::push("textbox", textbox);
-	*/
-
-	if (gamestate.debug_mode) ui::new_text("debug_text",color::WHITE,{10,80},TOPLEFT,"anakron",&debug::uitext,12,-1);
-
 	while (!raylib::window_should_close() && !gamestate.end_game) {
 		system::worldstate_loop();
 	}
