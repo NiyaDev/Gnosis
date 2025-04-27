@@ -27,7 +27,7 @@ fn int main(String[] args) {
 
 	//* Player
 	gamestate.world.player = player::new();
-	gamestate.world.player.position = {8,9,8};
+	gamestate.world.player.position = {8,8,8};
 	gamestate.world.player.sprite = resources::textures.get_ref("player")!!;
 	camera::set_target(gamestate.world.player);
 

@@ -46,7 +46,7 @@ fn void update() {
 		//* Follow unit if it has one
 		Vector3 position = {
 			main.unit.position.x - main.unit.position.z,
-			main.unit.position.y - 1.5,
+			main.unit.position.y,
 			main.unit.position.x + main.unit.position.z,
 		};
 		

@@ -1,8 +1,11 @@
 
 module gnosis::unit;
 import std::io;
+import std::math;
 import std::collections;
 import pleroma;
+import gnosis::world;
+import gnosis::system;
 
 
 struct Unit {
@@ -17,8 +20,10 @@ struct Unit {
 
   //* Data
   Species species;
-  //SkillNode[] skills;
   SkillList skills;
+
+  // data
+  float gravity;
 }
 
 
@@ -56,7 +61,21 @@ fn void Unit.move(&self, Vector3 movement) {
 }
 <* General unit logic *>
 fn void Unit.tick(&self) {
-  //* Regeneration logic
+  // Gravity
+  BoundingBox bounds = self.unit_bounds();
+  int[3] tile_position = {
+    (int)self.position.x,
+    (int)self.position.y - 1,
+    (int)self.position.z,
+  };
+  Tile* tile = gamestate.world.tile(tile_position);
+  //io::printfn("[%s]%s-%s",tile_position,tile.type,tile.solid);
+  if (tile == null || !tile.solid) {
+    self.gravity += 0.75;
+    self.gravity = self.gravity.clamp(0.0, 9.0);
+  } else { self.gravity = 0; }
+
+  // Regeneration logic
   if (self.hn_cur > 0) {
     //* Health regeneration
     if ((self.hp_cur < self.hp_max) && self.hp_tick <= 0) {
@@ -89,5 +108,19 @@ fn void Unit.tick(&self) {
       self.hp_cur--;
     } else if (self.hn_tick > 0) { self.hn_tick--; }
   } 
+}
+
+<* Get bounding box for unit based on position and size *>
+fn BoundingBox Unit.unit_bounds(&self) {
+  float modifier = 0.25; // TODO: Size modifier
+  Vector3 pos = {
+    self.position.x - self.position.z,
+    self.position.y,
+    self.position.x + self.position.z,
+  };
+  return {
+    {pos.x - modifier, pos.y, pos.z - modifier},
+    {pos.x + modifier, pos.y + (modifier * 2), pos.z + modifier},
+  };
 }
 

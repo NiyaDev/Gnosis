@@ -38,6 +38,7 @@ fn void Player.update(&self) {
 	}
 
   movement = movement.clamp({-7,0,-7}, {7,0,7});
+  movement.y -= self.gravity;
   movement.mul_f(dt);
 
   self.move(vector3::ZERO.rotate(movement, camera::main.rotation));

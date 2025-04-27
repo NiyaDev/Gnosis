@@ -88,7 +88,7 @@ fn void worldstate_loop() {
 
           // Buttons
           kenoma::set_style(FONT_SIZE, 12);
-          if (kenoma::button({9,250,96,32}, localization["ts_play_option"]!![lang]!!, true))    gamestate.state = WORLDMENU;
+          if (kenoma::button({9,250,96,32}, localization["ts_play_option"]!![lang]!!, true))    gamestate.state = OVERWORLD;
           if (kenoma::button({9,284,96,32}, localization["ts_options_option"]!![lang]!!, true)) gamestate.options_menu = true;
           if (kenoma::button({9,318,96,32}, localization["ts_quit_option"]!![lang]!!, true))    gamestate.end_game = true;
           
@@ -111,7 +111,8 @@ fn void worldstate_loop() {
       system::content();
         gamestate.world.draw();
         Vector3 pos = camera::main.target;
-        pos.y += 0.25;
+        pos.y += 0.2;
+        gamestate.world.player.unit_bounds().draw(color::PURPLE);
         camera::main.draw_billboard_pro(*gamestate.world.player.sprite, {0,0,16,32}, pos, vector3::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
 
 		  system::ui();

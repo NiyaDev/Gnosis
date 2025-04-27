@@ -218,6 +218,23 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
   return visible_mod * vision_multi;
 }
 
+<**>
+fn Tile* World.tile(&self, int[3] position) {
+  int[3] chunk_pos = {
+    (int)$$floor((float)position[0] / 16),
+    (int)$$floor((float)position[1] / 16),
+    (int)$$floor((float)position[2] / 16),
+  };
+  int[3] tile_pos = {
+    $$abs(position[0]) % 16,
+    $$abs(position[1]) % 16,
+    $$abs(position[2]) % 16,
+  };
+  Chunk*? chunk = self.chunks.get_ref(chunk_pos);
+  if (catch chunk) return null;
+  return chunk.tile(tile_pos);
+}
+
 fn uint int[3].hash(self) {
   return (uint)(10000 + (self[0] * 2) + (self[1] * 4) + (self[2] * 3));
 }

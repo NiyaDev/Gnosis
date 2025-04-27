@@ -64,3 +64,8 @@ fn Chunk load(String savename, int[3] position) {
   return output;
 }
 
+<**>
+fn Tile* Chunk.tile(&self, int[3] position) {
+  return &self.tiles[position[0]][position[1]][position[2]];
+}
+
