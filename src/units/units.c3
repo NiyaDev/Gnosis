@@ -62,18 +62,27 @@ fn void Unit.move(&self, Vector3 movement) {
 <* General unit logic *>
 fn void Unit.tick(&self) {
   // Gravity
-  BoundingBox bounds = self.unit_bounds();
+  BoundingBox f_bounds = self.unit_bounds();
+  BoundingBox g_bounds = self.ground_bounds();
+  Vector3 tile_pos = {
+    self.position.x,
+    $$floor(self.position.y),
+    self.position.z,
+  };
   int[3] tile_position = {
     (int)self.position.x,
-    (int)self.position.y - 1,
+    (int)$$floor(self.position.y),
     (int)self.position.z,
   };
-  Tile* tile = gamestate.world.tile(tile_position);
-  //io::printfn("[%s]%s-%s",tile_position,tile.type,tile.solid);
-  if (tile == null || !tile.solid) {
-    self.gravity += 0.75;
-    self.gravity = self.gravity.clamp(0.0, 9.0);
-  } else { self.gravity = 0; }
+  Tile* tile = gamestate.world.tile(tile_pos.to_int_array());
+  if (tile != null) {
+    BoundingBox t_bounds = tile.bounds(tile_pos);
+    io::printfn("%s",raylib::check_collision_boxes(g_bounds,t_bounds));
+    if (!raylib::check_collision_boxes(g_bounds,t_bounds)) {
+      self.gravity += 0.75;
+      self.gravity = self.gravity.clamp(0.0, 9.0);
+    } else { self.gravity = 0; }
+  }
 
   // Regeneration logic
   if (self.hn_cur > 0) {
@@ -113,14 +122,20 @@ fn void Unit.tick(&self) {
 <* Get bounding box for unit based on position and size *>
 fn BoundingBox Unit.unit_bounds(&self) {
   float modifier = 0.25; // TODO: Size modifier
-  Vector3 pos = {
-    self.position.x - self.position.z,
-    self.position.y,
-    self.position.x + self.position.z,
-  };
+  Vector3 pos = self.position;
   return {
     {pos.x - modifier, pos.y, pos.z - modifier},
     {pos.x + modifier, pos.y + (modifier * 2), pos.z + modifier},
+  };
+}
+
+<**>
+fn BoundingBox Unit.ground_bounds(&self) {
+  float modifier = 0.23; // TODO: Size modifier
+  Vector3 pos = self.position;
+  return {
+    {pos.x - modifier, pos.y - (modifier / 4), pos.z - modifier},
+    {pos.x + modifier, pos.y + (modifier / 2), pos.z + modifier},
   };
 }
 

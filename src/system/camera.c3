@@ -31,9 +31,10 @@ fn void init() {
 
 		.zoom 				= 0.5,
 
-		.rotation    	= 0,
-		.rot_target  	= 0,
+		.rotation    	= -45,
+		.rot_target  	= -45,
 	};
+	//rotate(45);
 }
 <* Set unit to follow *>
 fn void set_target(Unit* target) {
@@ -43,12 +44,8 @@ fn void set_target(Unit* target) {
 fn void update() {
 	float delta_time = raylib::get_frame_time();
 	if (main.unit != null) {
-		//* Follow unit if it has one
-		Vector3 position = {
-			main.unit.position.x - main.unit.position.z,
-			main.unit.position.y,
-			main.unit.position.x + main.unit.position.z,
-		};
+		// Follow unit if it has one
+		Vector3 position = main.unit.position;
 		
 		main.target = position;
 	} else {

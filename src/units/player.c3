@@ -21,11 +21,12 @@ fn void Player.update(&self) {
   Vector3 movement;
   float dt = raylib::get_frame_time();
 
-  //* Movement
-  if (keybinds.is_down("move_up"))    movement.add({-5, 0, -5});
-  if (keybinds.is_down("move_down"))  movement.add({ 5, 0,  5});
-  if (keybinds.is_down("move_left"))  movement.add({-5, 0,  5});
-  if (keybinds.is_down("move_right")) movement.add({ 5, 0, -5});
+  // Movement
+  if (keybinds.is_down("move_up"))    movement.add({ 0, 0, -5});
+  if (keybinds.is_down("move_down"))  movement.add({ 0, 0,  5});
+  if (keybinds.is_down("move_left"))  movement.add({-5, 0,  0});
+  if (keybinds.is_down("move_right")) movement.add({ 5, 0,  0});
+  // TODO: diagonal movement
 
   //* Camera rotation
   if (keybinds.is_pressed("rotate_right")) camera::rotate( 90);

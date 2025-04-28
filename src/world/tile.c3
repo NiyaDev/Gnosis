@@ -1,6 +1,7 @@
 
 module gnosis::world::tile;
 import gnosis::world::chunk;
+import pleroma;
 
 
 struct Tile {
@@ -81,3 +82,16 @@ fn Tile new(Chunk* chunk, TileType type) {
 
   return output;
 }
+<**>
+fn BoundingBox Tile.bounds(&self, Vector3 position) {
+  switch (self.type) {
+    case DUST:
+    case DIRT:
+    case GRASS:
+    case OAK_LOG:
+    case OAK_LEAVES:
+      return {{position.x - 0.5, position.y - 0.5, position.z - 0.5}, {position.x + 0.5, position.y + 0.5, position.z + 0.5}};
+    default: return {};
+  }
+}
+

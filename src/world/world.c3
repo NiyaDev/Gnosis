@@ -78,13 +78,18 @@ fn World* generate(float framespertick = 3) {
 
 <* Update world *>
 fn void World.update(&self) {
-  //* Tick
+  // Tick
   if (self.ticks >= self.framespertick / 60) {
+    // Tick everything
     self.player.tick();
+
     self.ticks -= (self.framespertick / 60);
   } else {
     self.ticks += raylib::get_frame_time();
   }
+
+  // Update everything
+  self.player.update();
 }
 <* Draw world to screen *>
 fn int World.draw(&self) {
@@ -97,16 +102,21 @@ fn int World.draw(&self) {
           float visibility = self.tile_visible(position_raw, {x, y, z});
           if (visibility != 0) {
             Vector3 pos = {
-              (float)(x + (position_raw[0] * 16)) - (float)(z + (position_raw[2] * 16)),
+              //(float)(x + (position_raw[0] * 16)) - (float)(z + (position_raw[2] * 16)),
+              //(float)(y + (position_raw[1] * 16)),
+              //(float)(x + (position_raw[0] * 16)) + (float)(z + (position_raw[2] * 16)),
+              (float)(x + (position_raw[0] * 16)),
               (float)(y + (position_raw[1] * 16)),
-              (float)(x + (position_raw[0] * 16)) + (float)(z + (position_raw[2] * 16)),
+              (float)(z + (position_raw[2] * 16)),
             };
             Mesh mesh = resources::meshes[t.model]!!;
             Material mat = resources::materials[t.material]!!;
             mat.set_texture(resources::textures[t.texture]!!);
             Matrix matr = matrix::translate(pos);
             mat.maps[0].color = color::WHITE.multiply(visibility);
-            mesh.draw(mat,matr.add(matrix::rotate_y(1.6)));
+            //mesh.draw(mat,matr.add(matrix::rotate_y(1.6)));
+            mesh.draw(mat,matr);
+            //t.bounds(pos).draw(color::WHITE);
             tiles_rendered++;
           }
         }

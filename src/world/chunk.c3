@@ -17,8 +17,14 @@ fn void Chunk.init(&self, int[3] position) {
   self.position = position;
   for (int x = 0; x < 16; x++) {
     for (int z = 0; z < 16; z++) {
-      for (int y = 0; y < 8; y++) {
+      for (int y = 0; y < 9; y++) {
         //self.tiles[x][y][z] = {.chunk = self, .type = DUST};
+        if (y == 8) {
+          if (x == 15) {
+            self.tiles[x][y][z] = tile::new(self, GRASS);
+          }
+          continue;
+        }
         if (x == 15) { self.tiles[x][y][z] = tile::new(self, GRASS); }
         else { self.tiles[x][y][z] = tile::new(self, DUST); }
       }
