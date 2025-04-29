@@ -23,7 +23,8 @@ struct Unit {
   SkillList skills;
 
   // data
-  float gravity;
+  Vector3 momentum;
+  bool[4] collisions;
 }
 
 
@@ -55,34 +56,75 @@ fn void Unit.init(&self, Species spec = HUMAN) {
   @param movement "Amount to move"
  *>
 fn void Unit.move(&self, Vector3 movement) {
-  self.position.x += movement.x;
-  self.position.y += movement.y;
-  self.position.z += movement.z;
+  Vector3 mv = movement;
+  if (self.collisions[0] && mv.z > 0) mv.z = 0;
+  if (self.collisions[2] && mv.z < 0) mv.z = 0;
+  if (self.collisions[1] && mv.x > 0) mv.x = 0;
+  if (self.collisions[3] && mv.x < 0) mv.x = 0;
+  
+  self.position.x += mv.x;
+  self.position.y += mv.y;
+  self.position.z += mv.z;
 }
 <* General unit logic *>
 fn void Unit.tick(&self) {
   // Gravity
-  BoundingBox f_bounds = self.unit_bounds();
   BoundingBox g_bounds = self.ground_bounds();
   Vector3 tile_pos = {
     self.position.x,
-    $$floor(self.position.y),
+    self.position.y.floor(),
     self.position.z,
-  };
-  int[3] tile_position = {
-    (int)self.position.x,
-    (int)$$floor(self.position.y),
-    (int)self.position.z,
   };
   Tile* tile = gamestate.world.tile(tile_pos.to_int_array());
   if (tile != null) {
     BoundingBox t_bounds = tile.bounds(tile_pos);
-    io::printfn("%s",raylib::check_collision_boxes(g_bounds,t_bounds));
     if (!raylib::check_collision_boxes(g_bounds,t_bounds)) {
-      self.gravity += 0.75;
-      self.gravity = self.gravity.clamp(0.0, 9.0);
-    } else { self.gravity = 0; }
+      self.momentum.y -= 0.75;
+      self.momentum.y = self.momentum.y.clamp(-9.0, 0.0);
+    } else { self.momentum.y = 0; }
   }
+
+  // Collision
+  BoundingBox f_bounds = self.unit_bounds();
+
+  Vector3 north_dir = self.position;
+  north_dir.y++;
+  north_dir.z--;
+  Tile* north = gamestate.world.tile(north_dir.get_tile_pos().to_int_array());
+  if (north != null || !north.solid) {
+    BoundingBox t_bounds = north.bounds(north_dir.get_tile_pos());
+    self.collisions[0] = raylib::check_collision_boxes(f_bounds, t_bounds);
+  } else { self.collisions[0] = false; }
+
+  Vector3 south_dir = self.position;
+  south_dir.y++;
+  south_dir.z++;
+  Tile* south = gamestate.world.tile(south_dir.get_tile_pos().to_int_array());
+  if (south != null || !south.solid) {
+    BoundingBox t_bounds = south.bounds(south_dir.get_tile_pos());
+    self.collisions[2] = raylib::check_collision_boxes(f_bounds, t_bounds);
+  } else { self.collisions[2] = false; }
+
+  Vector3 east_dir = self.position;
+  east_dir.y++;
+  east_dir.z++;
+  Tile* east = gamestate.world.tile(east_dir.get_tile_pos().to_int_array());
+  if (east != null || !east.solid) {
+    BoundingBox t_bounds = east.bounds(east_dir.get_tile_pos());
+    self.collisions[1] = raylib::check_collision_boxes(f_bounds, t_bounds);
+  } else { self.collisions[1] = false; }
+
+  Vector3 west_dir = self.position;
+  west_dir.y++;
+  west_dir.z++;
+  Tile* west = gamestate.world.tile(west_dir.get_tile_pos().to_int_array());
+  if (west != null || !west.solid) {
+    BoundingBox t_bounds = west.bounds(west_dir.get_tile_pos());
+    self.collisions[3] = raylib::check_collision_boxes(f_bounds, t_bounds);
+  } else { self.collisions[3] = false; }
+
+
+  io::printfn("%s",self.collisions);
 
   // Regeneration logic
   if (self.hn_cur > 0) {
@@ -128,7 +170,6 @@ fn BoundingBox Unit.unit_bounds(&self) {
     {pos.x + modifier, pos.y + (modifier * 2), pos.z + modifier},
   };
 }
-
 <**>
 fn BoundingBox Unit.ground_bounds(&self) {
   float modifier = 0.23; // TODO: Size modifier
@@ -136,6 +177,25 @@ fn BoundingBox Unit.ground_bounds(&self) {
   return {
     {pos.x - modifier, pos.y - (modifier / 4), pos.z - modifier},
     {pos.x + modifier, pos.y + (modifier / 2), pos.z + modifier},
+  };
+}
+
+<**>
+fn Vector3 Vector3.get_tile_pos(&self) {
+  // Vector3 min = {
+    // (self.x + 0.5).floor(),
+    // (self.y + 0.5).floor(),
+    // (self.z + 0.5).floor(),
+  // };
+  // Vector3 max = {
+    // (self.x + 0.5).ceil(),
+    // (self.y + 0.5).ceil(),
+    // (self.z + 0.5).ceil(),
+  // };
+  return {
+    (int)((self.x + 0.5).floor()),
+    (int)((self.y + 0.5).floor()),
+    (int)((self.z + 0.5).floor()),
   };
 }
 

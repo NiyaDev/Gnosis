@@ -1,5 +1,6 @@
 
 module gnosis::world::tile;
+import std::io;
 import gnosis::world::chunk;
 import pleroma;
 
@@ -93,5 +94,10 @@ fn BoundingBox Tile.bounds(&self, Vector3 position) {
       return {{position.x - 0.5, position.y - 0.5, position.z - 0.5}, {position.x + 0.5, position.y + 0.5, position.z + 0.5}};
     default: return {};
   }
+}
+
+<**>
+fn void Tile.print(&self) {
+  io::printfn("TYPE: %s SOLID: %s", self.type, self.solid);
 }
 
