@@ -122,8 +122,6 @@ fn void Unit.tick(&self) {
     BoundingBox t_bounds = west.bounds(west_dir.get_tile_pos());
     self.collisions[3] = raylib::check_collision_boxes(f_bounds, t_bounds);
   } else { self.collisions[3] = false; }
-
-
   io::printfn("%s",self.collisions);
 
   // Regeneration logic
@@ -182,16 +180,6 @@ fn BoundingBox Unit.ground_bounds(&self) {
 
 <**>
 fn Vector3 Vector3.get_tile_pos(&self) {
-  // Vector3 min = {
-    // (self.x + 0.5).floor(),
-    // (self.y + 0.5).floor(),
-    // (self.z + 0.5).floor(),
-  // };
-  // Vector3 max = {
-    // (self.x + 0.5).ceil(),
-    // (self.y + 0.5).ceil(),
-    // (self.z + 0.5).ceil(),
-  // };
   return {
     (int)((self.x + 0.5).floor()),
     (int)((self.y + 0.5).floor()),
