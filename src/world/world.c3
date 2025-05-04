@@ -2,6 +2,7 @@
 module gnosis::world;
 import std::collections;
 import std::io;
+import std::math;
 import gnosis::unit;
 import gnosis::resources;
 import pleroma;
@@ -18,6 +19,12 @@ struct World {
 
   //* Map
   HashMap{int[3],Chunk} chunks;
+}
+
+enum Direction : char {
+  TOP, BOTTOM,
+  NORTH, SOUTH,
+  EAST, WEST,
 }
 
 <* Saves world data to file *>
@@ -89,7 +96,7 @@ fn void World.update(&self) {
   }
 
   // Update everything
-  self.player.update();
+  self.player.p_update();
 }
 <* Draw world to screen *>
 fn int World.draw(&self) {
@@ -102,9 +109,6 @@ fn int World.draw(&self) {
           float visibility = self.tile_visible(position_raw, {x, y, z});
           if (visibility != 0) {
             Vector3 pos = {
-              //(float)(x + (position_raw[0] * 16)) - (float)(z + (position_raw[2] * 16)),
-              //(float)(y + (position_raw[1] * 16)),
-              //(float)(x + (position_raw[0] * 16)) + (float)(z + (position_raw[2] * 16)),
               (float)(x + (position_raw[0] * 16)),
               (float)(y + (position_raw[1] * 16)),
               (float)(z + (position_raw[2] * 16)),
@@ -114,9 +118,7 @@ fn int World.draw(&self) {
             mat.set_texture(resources::textures[t.texture]!!);
             Matrix matr = matrix::translate(pos);
             mat.maps[0].color = color::WHITE.multiply(visibility);
-            //mesh.draw(mat,matr.add(matrix::rotate_y(1.6)));
             mesh.draw(mat,matr);
-            //t.bounds(pos).draw(color::WHITE);
             tiles_rendered++;
           }
         }
@@ -153,7 +155,8 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
       top = (chunkptr.tiles[tile[0]][0][tile[2]].visible);
     } else { visible_mod = 1; }
   } else {
-    top = (chunk.tiles[tile[0]][tile[1]+1][tile[2]].visible);
+    Tile t = chunk.tiles[tile[0]][tile[1]+1][tile[2]];
+    top = (t.visible && t.solid);
   }
   //* Bottom
   bool bottom;
@@ -165,7 +168,8 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
       bottom = (chunkptr.tiles[tile[0]][15][tile[2]].visible);
     } else { visible_mod = 1; }
   } else {
-    bottom = (chunk.tiles[tile[0]][tile[1]-1][tile[2]].visible);
+    Tile t = chunk.tiles[tile[0]][tile[1]-1][tile[2]];
+    bottom = (t.visible && t.solid);
   }
   //* North
   bool north;
@@ -177,7 +181,8 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
       north = (chunkptr.tiles[tile[0]][tile[1]][15].visible);
     } else { visible_mod = 1; }
   } else {
-    north = (chunk.tiles[tile[0]][tile[1]][tile[2]-1].visible);
+    Tile t = chunk.tiles[tile[0]][tile[1]][tile[2]-1];
+    north = (t.visible && t.solid);
   }
   //* South
   bool south;
@@ -189,7 +194,8 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
       south = (chunkptr.tiles[tile[0]][tile[1]][0].visible);
     } else { visible_mod = 1; }
   } else {
-    south = (chunk.tiles[tile[0]][tile[1]][tile[2]+1].visible);
+    Tile t = chunk.tiles[tile[0]][tile[1]][tile[2]+1];
+    south = (t.visible && t.solid);
   }
   //* East
   bool east;
@@ -201,7 +207,8 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
       east = (chunkptr.tiles[0][tile[1]][tile[2]].visible);
     } else { visible_mod = 1; }
   } else {
-    east = (chunk.tiles[tile[0]+1][tile[1]][tile[2]].visible);
+    Tile t = chunk.tiles[tile[0]+1][tile[1]][tile[2]];
+    east = (t.visible && t.solid);
   }
   //* West
   bool west;
@@ -213,7 +220,8 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
       west = (chunkptr.tiles[15][tile[1]][tile[2]].visible);
     } else { visible_mod = 1; }
   } else {
-    west = (chunk.tiles[tile[0]-1][tile[1]][tile[2]].visible);
+    Tile t = chunk.tiles[tile[0]-1][tile[1]][tile[2]];
+    west = (t.visible && t.solid);
   }
 
   if (top && bottom && north && south && east && west) return 0;
@@ -231,9 +239,9 @@ fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {
 <**>
 fn Tile* World.tile(&self, int[3] position) {
   int[3] chunk_pos = {
-    (int)$$floor((float)position[0] / 16),
-    (int)$$floor((float)position[1] / 16),
-    (int)$$floor((float)position[2] / 16),
+    (int)((float)position[0] / 16).floor(),
+    (int)((float)position[1] / 16).floor(),
+    (int)((float)position[2] / 16).floor(),
   };
   int[3] tile_pos = {
     $$abs(position[0]) % 16,

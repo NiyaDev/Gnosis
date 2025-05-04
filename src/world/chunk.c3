@@ -18,7 +18,6 @@ fn void Chunk.init(&self, int[3] position) {
   for (int x = 0; x < 16; x++) {
     for (int z = 0; z < 16; z++) {
       for (int y = 0; y < 9; y++) {
-        //self.tiles[x][y][z] = {.chunk = self, .type = DUST};
         if (y == 8) {
           if (x == 15) {
             self.tiles[x][y][z] = tile::new(self, GRASS);
@@ -30,6 +29,8 @@ fn void Chunk.init(&self, int[3] position) {
       }
     }
   }
+  self.tiles[4][8][10] = tile::new(self, OAK_SAPLING);
+  self.tiles[3][7][2] = tile::new(self, AIR);
   //self.update();
 }
 <* Save chunk to file *>

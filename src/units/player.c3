@@ -17,15 +17,15 @@ fn Player* new() {
   return output;
 }
 <* Updates player *>
-fn void Player.update(&self) {
-  Vector3 movement;
+fn void Player.p_update(&self) {
+  //Vector3 movement;
   float dt = raylib::get_frame_time();
 
   // Movement
-  if (keybinds.is_down("move_up"))    movement.add({ 0, 0, -5});
-  if (keybinds.is_down("move_down"))  movement.add({ 0, 0,  5});
-  if (keybinds.is_down("move_left"))  movement.add({-5, 0,  0});
-  if (keybinds.is_down("move_right")) movement.add({ 5, 0,  0});
+  if (keybinds.is_down("move_up"))    self.momentum += { 0, 0, -5};
+  if (keybinds.is_down("move_down"))  self.momentum += { 0, 0,  5};
+  if (keybinds.is_down("move_left"))  self.momentum += {-5, 0,  0};
+  if (keybinds.is_down("move_right")) self.momentum += { 5, 0,  0};
   // TODO: diagonal movement
 
   //* Camera rotation
@@ -38,11 +38,7 @@ fn void Player.update(&self) {
 	  camera::zoom(-zoom / 20);
 	}
 
-  movement = movement.clamp({-7,0,-7}, {7,0,7});
-  movement.y += self.momentum.y;
-  movement *= dt;
-
-  self.move(vector3::ZERO.rotate(movement, camera::main.rotation));
+	self.update(true);
 }
 
 

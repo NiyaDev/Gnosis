@@ -8,7 +8,7 @@ import gnosis::unit;
 
 HashMap{String, Font}     fonts     @builtin;
 HashMap{String, Texture}  textures  @builtin;
-HashMap{String, Model}    models    @builtin;
+//HashMap{String, Model}    models    @builtin;
 HashMap{String, Mesh}     meshes    @builtin;
 HashMap{String, Material} materials @builtin;
 Keybindings  keybinds     @builtin;
@@ -49,7 +49,9 @@ fn void load() {
   //* Generate models
   Mesh simple_mesh = mesh::cube(1,1,1);
   meshes.set("simple_tile", simple_mesh);
-  models.set("simple_tile", simple_mesh.model());
+  //models.set("simple_tile", simple_mesh.model());
+  Mesh plane_mesh = mesh::plane(1,1,1,1);
+  meshes.set("plane_tile", plane_mesh);
 
   //* Load models
 
@@ -71,7 +73,7 @@ fn void load() {
   Material def_mat = material::load_default();
   def_mat.set_texture(textures["default"]!!);
   materials.set("default", def_mat);
-  models["simple_tile"]!!.materials[0] = def_mat;
+  //models["simple_tile"]!!.materials[0] = def_mat;
 
   //* Textures
   Bulk other_textures = bulk::load("resources/010");

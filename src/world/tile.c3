@@ -69,6 +69,9 @@ fn Tile new(Chunk* chunk, TileType type) {
       output.visible = true;
       output.gravity = false;
       output.solid = false;
+      output.model = "plane_tile";
+      output.material = "default";
+      output.texture = "grass_0";
 
     case AIR:
       output.visible = false;
@@ -94,6 +97,12 @@ fn BoundingBox Tile.bounds(&self, Vector3 position) {
       return {{position.x - 0.5, position.y - 0.5, position.z - 0.5}, {position.x + 0.5, position.y + 0.5, position.z + 0.5}};
     default: return {};
   }
+}
+<**>
+fn bool is_solid(Tile* self) {
+  if (self == null) return true;
+
+  return self.solid;
 }
 
 <**>

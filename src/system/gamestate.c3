@@ -114,7 +114,30 @@ fn void worldstate_loop() {
         pos.y += 0.2;
         gamestate.world.player.unit_bounds().draw(color::PURPLE);
         gamestate.world.player.ground_bounds().draw(color::BROWN);
+
+        BoundingBox north = {
+          ((gamestate.world.player.position + {0,0,-1}).get_tile_pos() - {0.5,0.5,0.5}),
+          ((gamestate.world.player.position + {0,0,-1}).get_tile_pos() + {0.5,0.5,0.5}),
+        };
+        north.draw(color::WHITE);
+        BoundingBox south = {
+          ((gamestate.world.player.position + {0,0,1}).get_tile_pos() - {0.5,0.5,0.5}),
+          ((gamestate.world.player.position + {0,0,1}).get_tile_pos() + {0.5,0.5,0.5}),
+        };
+        south.draw(color::WHITE);
+        BoundingBox east = {
+          ((gamestate.world.player.position + {-1,0,0}).get_tile_pos() - {0.5,0.5,0.5}),
+          ((gamestate.world.player.position + {-1,0,0}).get_tile_pos() + {0.5,0.5,0.5}),
+        };
+        east.draw(color::WHITE);
+        BoundingBox west = {
+          ((gamestate.world.player.position + {1,0,0}).get_tile_pos() - {0.5,0.5,0.5}),
+          ((gamestate.world.player.position + {1,0,0}).get_tile_pos() + {0.5,0.5,0.5}),
+        };
+        west.draw(color::WHITE);
+
         camera::main.draw_billboard_pro(*gamestate.world.player.sprite, {0,0,16,32}, pos, vector3::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
+        
 
 		  system::ui();
 		    // HP / Stamina / Mana / Hunger bars
