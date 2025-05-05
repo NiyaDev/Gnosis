@@ -5,6 +5,7 @@ import std::io;
 import std::math;
 import gnosis::unit;
 import gnosis::resources;
+import gnosis::system;
 import pleroma;
 
 
@@ -19,6 +20,7 @@ struct World {
 
   //* Map
   HashMap{int[3],Chunk} chunks;
+  List{Unit*} units;
 }
 
 enum Direction : char {
@@ -49,7 +51,6 @@ fn void World.save(&self) {
 
   // Chunks
   self.chunks.@each(; int[3] pos, Chunk chunk) {
-    //chunk.save(self.name);
     self.chunks.get_ref(pos)!!.save(self.name);
   };
 }
@@ -69,7 +70,6 @@ fn World* generate(float framespertick = 3) {
 
   output.framespertick = framespertick;
 	output.new_chunk({0,0,0});
-	//output.chunks.set({0,0,0}, chunk::load("test",{0,0,0}));
 	output.new_chunk({1,0,0});
 	output.new_chunk({2,0,0});
 	output.new_chunk({0,0,1});
@@ -78,7 +78,12 @@ fn World* generate(float framespertick = 3) {
 	output.new_chunk({0,0,2});
 	output.new_chunk({1,0,2});
 	output.new_chunk({2,0,2});
-	//output.chunks[{0,0,0}]!!.save("test");
+
+	Unit* test = mem::new(Unit);
+	test.init(RAT);
+	test.position = {5,10,6};
+	test.personality = HOSTILE;
+	output.units.push(test);
 
 	return output;
 }
@@ -89,6 +94,7 @@ fn void World.update(&self) {
   if (self.ticks >= self.framespertick / 60) {
     // Tick everything
     self.player.tick();
+    for(int i; i < self.units.len(); i++) self.units[i].tick();
 
     self.ticks -= (self.framespertick / 60);
   } else {
@@ -96,6 +102,7 @@ fn void World.update(&self) {
   }
 
   // Update everything
+  for (int i; i < self.units.len(); i++) { self.units[i].update(); }
   self.player.p_update();
 }
 <* Draw world to screen *>
@@ -125,6 +132,29 @@ fn int World.draw(&self) {
       }
     }
   };
+  
+  // NPC Units
+  // TODO: Maybe draw player with units?
+  for (int i; i < self.units.len(); i++) {
+    camera::main.draw_billboard_pro(
+      *gamestate.world.player.sprite,
+      {0,0,16,32},
+      self.units[i].position + {0,0.2,0},
+      vector3::ZERO.rotate({0,1,-1}, camera::main.rotation),
+      {1,1},
+      {0.5,0.25},
+      0,
+      color::WHITE,
+    );
+  }
+
+  // Player
+  Vector3 pos = camera::main.target;
+  pos.y += 0.2;
+  gamestate.world.player.unit_bounds().draw(color::PURPLE);
+  gamestate.world.player.ground_bounds().draw(color::BROWN); 
+  camera::main.draw_billboard_pro(*gamestate.world.player.sprite, {0,0,16,32}, pos, vector3::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
+
   return tiles_rendered;
 }
 

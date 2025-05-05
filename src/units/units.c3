@@ -23,8 +23,15 @@ struct Unit {
   SkillList skills;
 
   // data
+  Personality personality;
   Vector3 momentum;
-  bool[4] collisions;
+  bool grounded;
+}
+
+enum Personality {
+  EMPTY,
+  PASSIVE,
+  HOSTILE,
 }
 
 
@@ -73,15 +80,18 @@ fn void Unit.update(&self, bool is_player = false) {
   if (tile != null) {
     BoundingBox t_bounds = tile.bounds(tile_pos);
     if (!raylib::check_collision_boxes(g_bounds,t_bounds)) {
+      self.grounded = false;
       self.momentum.y -= 0.75;
-      self.momentum.y = self.momentum.y.clamp(-9.0, 0.0);
+      self.momentum.y = self.momentum.y.clamp(-3.5, 0.0);
     } else {
+      self.grounded = true;
       self.momentum.y = 0;
       self.position.y = (float)((int)self.position.y) + 0.5;
     }
   } else {
+    self.grounded = false;
     self.momentum.y -= 0.75;
-    self.momentum.y = self.momentum.y.clamp(-9.0, 0.0);
+    self.momentum.y = self.momentum.y.clamp(-3.5, 0.0);
   }
 
   self.momentum = self.momentum * dt;
@@ -93,6 +103,26 @@ fn void Unit.update(&self, bool is_player = false) {
   }
 
   Vector3 rotated_dir = vector3::ZERO.rotate(self.momentum, camera::main.rotation);
+
+  // Personality
+  switch (self.personality) {
+    case PASSIVE:
+    case HOSTILE:
+      // Perception check against player
+      // TODO:
+      //io::printfn("SQUEEEEEEEE");
+      (self.position.move_towards(gamestate.world.player.position, 1) - self.position).print();
+      if (self.grounded && gamestate.world.player.position.distance(self.position) < 5 + (self.skills[Skills.PERCEPTION].value * 0.2)) {
+        Vector3 movement = self.position.move_towards(gamestate.world.player.position, 0.05);
+        if (movement != {0,0,0}) { movement -= self.position; }
+        movement.x = movement.x.clamp(-1,1);
+        movement.y = 0;
+        movement.z = movement.z.clamp(-1,1);
+        rotated_dir = movement;
+        //self.momentum.y = 0;
+      }
+    default:
+  }
   
   // Collision
   BoundingBox f_bounds = self.unit_bounds();
@@ -140,15 +170,10 @@ fn void Unit.update(&self, bool is_player = false) {
     if (rotated_dir.x > 0) rotated_dir.x = 0;
   }
 
-
-  if (is_player) self.move(rotated_dir);
+  self.move(rotated_dir);
 }
 <* General unit logic *>
 fn void Unit.tick(&self) {
-  
-
-  
-
   // Regeneration logic
   if (self.hn_cur > 0) {
     //* Health regeneration
@@ -181,7 +206,14 @@ fn void Unit.tick(&self) {
       self.hn_tick = (float)self.skills[Skills.METABOLISM].value * 50;
       self.hp_cur--;
     } else if (self.hn_tick > 0) { self.hn_tick--; }
-  } 
+  }
+
+  //
+  switch (self.personality) {
+    case HOSTILE:
+    default:
+  }
+
 }
 
 <* Get bounding box for unit based on position and size *>
