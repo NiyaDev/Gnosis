@@ -213,7 +213,18 @@ fn void Unit.tick(&self) {
     case HOSTILE:
     default:
   }
+}
 
+<**>
+fn bool contested_roll(Unit* attacker, Unit* defender, Skill skill) {
+  switch (skill) {
+    case STEALTH:
+      int atk_roll = random::rand(20) + (attacker.skill[Skill.PERCEPTION] / 10);
+      int def_roll = random::rand(20) + (defender.skill[Skill.STEALTH] / 10);
+
+      return (atk_roll >= def_roll);
+    default:
+  }
 }
 
 <* Get bounding box for unit based on position and size *>

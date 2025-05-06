@@ -26,6 +26,8 @@ enum Skills {
   SOMNOLENCE,
 
   PERCEPTION,
+
+  STEALTH,
 }
 
 
@@ -65,6 +67,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 2, 60, 0, 0};
 
       output[Skills.PERCEPTION]   = {15, 30, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 20, 0, 0};
     case ELF:
       output[Skills.HEALTH]       = { 4, 16, 0, 1};
       output[Skills.REGENERATION] = { 2,  8, 0, 0};
@@ -81,6 +85,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 4, 80, 0, 0};
 
       output[Skills.PERCEPTION]   = {20, 40, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 30, 0, 0};
     case DWARF:
       output[Skills.HEALTH]       = { 8, 24, 0, 1};
       output[Skills.REGENERATION] = { 4, 12, 0, 0};
@@ -97,6 +103,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 3, 80, 0, 0};
 
       output[Skills.PERCEPTION]   = {10, 20, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 10, 0, 0};
     case ORC:
       output[Skills.HEALTH]       = {10, 30, 0, 1};
       output[Skills.REGENERATION] = { 5, 15, 0, 0};
@@ -113,6 +121,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 0,  0, 0, 0};
 
       output[Skills.PERCEPTION]   = {20, 40, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 20, 0, 0};
     case GOBLIN:
       output[Skills.HEALTH]       = { 5, 18, 0, 1};
       output[Skills.REGENERATION] = { 2, 10, 0, 0};
@@ -129,6 +139,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 1, 70, 0, 0};
 
       output[Skills.PERCEPTION]   = {15, 30, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 40, 0, 0};
     case KOBOLD:
       output[Skills.HEALTH]       = { 5, 18, 0, 1};
       output[Skills.REGENERATION] = { 2, 10, 0, 0};
@@ -145,6 +157,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 1, 70, 0, 0};
 
       output[Skills.PERCEPTION]   = {10, 20, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 40, 0, 0};
     case SKELETON:
       output[Skills.HEALTH]       = { 5, 10, 0, 1};
       output[Skills.REGENERATION] = { 0,  0, 0, 0};
@@ -161,6 +175,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 0,  0, 0, 0};
 
       output[Skills.PERCEPTION]   = {15, 20, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 20, 0, 0};
     case SLIME:
       output[Skills.HEALTH]       = { 5, 20, 0, 1};
       output[Skills.REGENERATION] = { 5, 40, 0, 0};
@@ -177,6 +193,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 0,  0, 0, 0};
 
       output[Skills.PERCEPTION]   = { 5, 10, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 10, 0, 0};
     case RAT:
       output[Skills.HEALTH]       = { 1,  2, 0, 1};
       output[Skills.REGENERATION] = { 2, 10, 0, 0};
@@ -193,6 +211,8 @@ fn SkillList get(Species species) {
       output[Skills.SOMNOLENCE]   = { 2, 20, 0, 0};
 
       output[Skills.PERCEPTION]   = { 5, 10, 0, 1};
+
+      output[Skills.STEALTH]      = { 0, 50, 0, 0};
   }
 
   return output;
