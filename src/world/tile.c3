@@ -86,7 +86,7 @@ fn Tile new(Chunk* chunk, TileType type) {
 
   return output;
 }
-<**>
+<* Get collision box of tile *>
 fn BoundingBox Tile.bounds(&self, Vector3 position) {
   switch (self.type) {
     case DUST:
@@ -98,14 +98,14 @@ fn BoundingBox Tile.bounds(&self, Vector3 position) {
     default: return {};
   }
 }
-<**>
+<* Checks if tile is solid or null *>
 fn bool is_solid(Tile* self) {
   if (self == null) return true;
 
   return self.solid;
 }
 
-<**>
+<* Prints tile data *>
 fn void Tile.print(&self) {
   io::printfn("TYPE: %s SOLID: %s", self.type, self.solid);
 }
