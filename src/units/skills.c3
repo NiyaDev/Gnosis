@@ -224,6 +224,11 @@ fn SkillNode SkillList.get(&self, Skills skill) @operator([]) {
   return (*array)[skill.ordinal];
 }
 <**>
+fn SkillNode* SkillList.get_ref(&self, Skills skill) @operator(&[]) {
+  SkillNode[]* array = (SkillNode[]*)self;
+  return &(*array)[skill.ordinal];
+}
+<**>
 fn void SkillList.set(&self, Skills skill, SkillNode node) @operator([]=) {
   SkillNode[]* array = (SkillNode[]*)self;
   (*array)[skill.ordinal] = node;

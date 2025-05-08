@@ -216,14 +216,24 @@ fn void Unit.tick(&self) {
 }
 
 <**>
-fn bool contested_roll(Unit* attacker, Unit* defender, Skill skill) {
+fn bool contested_roll(Unit* attacker, Unit* defender, Skills skill) {
   switch (skill) {
     case STEALTH:
-      int atk_roll = random::rand(20) + (attacker.skill[Skill.PERCEPTION] / 10);
-      int def_roll = random::rand(20) + (defender.skill[Skill.STEALTH] / 10);
+      int atk_roll = random::rand(20) + (attacker.skills[Skills.PERCEPTION].value / 10);
+      int def_roll = random::rand(20) + (defender.skills[Skills.STEALTH].value / 10);
 
-      return (atk_roll >= def_roll);
+      bool result = (atk_roll >= def_roll);
+      if (result) {
+        SkillNode* node = &attacker.skills[Skills.PERCEPTION];
+        node.exp += 1;
+      } else {
+        SkillNode* node = &defender.skills[Skills.STEALTH];
+        node.exp += 1;
+      }
+
+      return result;
     default:
+      return false;
   }
 }
 
