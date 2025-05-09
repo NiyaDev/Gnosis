@@ -10,7 +10,10 @@ import gnosis::system;
 
 struct Unit {
   Vector3 position;
+  Vector3 momentum;
   Texture* sprite;
+  bool grounded;
+  bool stealthed;
 
   //* General
   float hp_cur, hp_max, hp_tick;
@@ -18,14 +21,13 @@ struct Unit {
   float mn_cur, mn_max, mn_tick;
   float hn_cur, hn_max, hn_tick;
 
-  //* Data
+  //* Information
   Species species;
   SkillList skills;
 
-  // data
+  // Personality
   Personality personality;
-  Vector3 momentum;
-  bool grounded;
+  Memories memories;
 }
 
 enum Personality {
@@ -111,15 +113,15 @@ fn void Unit.update(&self, bool is_player = false) {
       // Perception check against player
       // TODO:
       //io::printfn("SQUEEEEEEEE");
-      (self.position.move_towards(gamestate.world.player.position, 1) - self.position).print();
       if (self.grounded && gamestate.world.player.position.distance(self.position) < 5 + (self.skills[Skills.PERCEPTION].value * 0.2)) {
-        Vector3 movement = self.position.move_towards(gamestate.world.player.position, 0.05);
-        if (movement != {0,0,0}) { movement -= self.position; }
-        movement.x = movement.x.clamp(-1,1);
-        movement.y = 0;
-        movement.z = movement.z.clamp(-1,1);
-        rotated_dir = movement;
-        //self.momentum.y = 0;
+        if (!gamestate.world.player.stealthed || (gamestate.world.player.stealthed && contested_roll(self, gamestate.world.player, STEALTH))) {
+          Vector3 movement = self.position.move_towards(gamestate.world.player.position, 0.05);
+          if (movement != {0,0,0}) { movement -= self.position; }
+          movement.x = movement.x.clamp(-1,1);
+          movement.y = 0;
+          movement.z = movement.z.clamp(-1,1);
+          rotated_dir = movement;
+        }
       }
     default:
   }
@@ -213,22 +215,50 @@ fn void Unit.tick(&self) {
     case HOSTILE:
     default:
   }
+
+  // Memories
+  for (int i; i < self.memories.len(); i++) {
+    self.memories[i].timer--;
+
+    if (self.memories[i].timer <= 0) {
+      io::printfn("Forgot %s",self.memories[i].type);
+      self.memories.remove_at(i);
+      i--;
+    }
+  }
 }
 
 <**>
 fn bool contested_roll(Unit* attacker, Unit* defender, Skills skill) {
   switch (skill) {
     case STEALTH:
+      Memory mem_seen = {
+        TARGET_SEEN,
+        (void*)defender,
+        (int)(gamestate.world.ticks_per_second() * 10), // Ticks per second * seconds
+      };
+      Memory mem_hidden = {
+        TARGET_HIDDEN,
+        (void*)defender,
+        (int)(gamestate.world.ticks_per_second() * 10), // Ticks per second * seconds
+      };
+      if (attacker.memories.has_memory(mem_seen))   return true;
+      if (attacker.memories.has_memory(mem_hidden)) return false;
+
       int atk_roll = random::rand(20) + (attacker.skills[Skills.PERCEPTION].value / 10);
       int def_roll = random::rand(20) + (defender.skills[Skills.STEALTH].value / 10);
 
       bool result = (atk_roll >= def_roll);
       if (result) {
         SkillNode* node = &attacker.skills[Skills.PERCEPTION];
-        node.exp += 1;
+        node.exp += 10;
+        attacker.memories.push(mem_seen);
+        io::printfn("Remembered TARGET_SEEN");
       } else {
         SkillNode* node = &defender.skills[Skills.STEALTH];
         node.exp += 1;
+        attacker.memories.push(mem_hidden);
+        io::printfn("Remembered TARGET_HIDDEN");
       }
 
       return result;

@@ -29,6 +29,9 @@ fn void Player.p_update(&self) {
     if (keybinds.is_down("move_left"))  self.momentum += {-5, 0,  0};
     if (keybinds.is_down("move_right")) self.momentum += { 5, 0,  0};
   } else {}
+  if (keybinds.is_down("stealth")) {
+    self.stealthed = true;
+  } else { self.stealthed = false; }
 
   //* Camera rotation
   if (keybinds.is_pressed("rotate_right")) camera::rotate( 90);

@@ -64,7 +64,7 @@ fn void World.new_chunk(&self, int[3] position) {
   self.chunks.set(position,chunk);
 }
 <* Generate world *>
-fn World* generate(float framespertick = 3) {
+fn World* generate(float framespertick = 6) {
   World* output = mem::new(World);
   output.name = "test";
 
@@ -91,15 +91,13 @@ fn World* generate(float framespertick = 3) {
 <* Update world *>
 fn void World.update(&self) {
   // Tick
-  if (self.ticks >= self.framespertick / 60) {
+  if (self.ticks >= self.framespertick) {
     // Tick everything
     self.player.tick();
     for(int i; i < self.units.len(); i++) self.units[i].tick();
 
-    self.ticks -= (self.framespertick / 60);
-  } else {
-    self.ticks += raylib::get_frame_time();
-  }
+    self.ticks = 0;
+  } else { self.ticks++; }
 
   // Update everything
   for (int i; i < self.units.len(); i++) { self.units[i].update(); }
@@ -281,6 +279,12 @@ fn Tile* World.tile(&self, int[3] position) {
   Chunk*? chunk = self.chunks.get_ref(chunk_pos);
   if (catch chunk) return null;
   return chunk.tile(tile_pos);
+}
+
+<**>
+fn float World.ticks_per_second(&self) {
+  char framerate = options["fps"].as_char!!;
+  return ((float)framerate / self.framespertick);
 }
 
 fn uint int[3].hash(self) {
