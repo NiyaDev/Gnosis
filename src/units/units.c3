@@ -61,9 +61,7 @@ fn void Unit.init(&self, Species spec = HUMAN) {
   self.hn_max = (float)self.skills[Skills.BELLY].value * (skills::BELLY_MOD * size_mod);
   self.hn_cur = self.hn_max;
 }
-<* Move unit in space 
-  @param movement "Amount to move"
- *>
+<* Move unit in space *>
 fn void Unit.move(&self, Vector3 movement) {
   self.position += movement;
 }
@@ -73,11 +71,8 @@ fn void Unit.update(&self, bool is_player = false) {
 
   // Gravity
   BoundingBox g_bounds = self.ground_bounds();
-  Vector3 tile_pos = {
-    self.position.x,
-    self.position.y.floor(),
-    self.position.z,
-  };
+  Vector3 tile_pos = self.position;
+  //tile_pos.y.floor();
   Tile* tile = gamestate.world.tile(tile_pos.to_int_array());
   if (tile != null) {
     BoundingBox t_bounds = tile.bounds(tile_pos);
@@ -127,6 +122,67 @@ fn void Unit.update(&self, bool is_player = false) {
   }
   
   // Collision
+  self.collision(&rotated_dir);
+
+  self.move(rotated_dir);
+}
+<* General unit logic *>
+fn void Unit.tick(&self) {
+  // Regeneration logic
+  if (self.hn_cur > 0) {
+    //* Health regeneration
+    if ((self.hp_cur < self.hp_max) && self.hp_tick <= 0) {
+      self.hp_tick = self.use_skill(Skills.REGENERATION) / skills::REGENERATION_MOD;
+      self.hp_cur++;
+      self.hn_cur -= skills::METABOLISM_TICK;
+    } else if (self.hp_tick > 0) { self.hp_tick--; }
+    if (self.hp_cur > self.hp_max) self.hp_cur = self.hp_max;
+    //* Stamina regeneration
+    if ((self.st_cur < self.st_max) && self.st_tick <= 0) {
+      self.st_tick = self.use_skill(Skills.ENDURANCE) / skills::ENDURANCE_MOD;
+      self.st_cur++;
+      self.hn_cur -= skills::METABOLISM_TICK;
+    } else if (self.st_tick > 0) { self.st_tick--; }
+    if (self.st_cur > self.st_max) self.st_cur = self.st_max;
+    //* Mana regeneration
+    if ((self.mn_cur < self.mn_max) && self.mn_tick <= 0) {
+      self.mn_tick = self.use_skill(Skills.CURRENT) / skills::CURRENT_MOD;
+      self.mn_cur++;
+      self.hn_cur -= skills::METABOLISM_TICK;
+    } else if (self.mn_tick > 0) { self.mn_tick--; }
+    if (self.mn_cur > self.mn_max) self.mn_cur = self.mn_max;
+    //* Natural hunger tick
+    if (self.hn_tick <= 0) {
+      self.hn_tick = self.use_skill(Skills.METABOLISM) / skills::METABOLISM_MOD;
+      self.hn_cur -= skills::METABOLISM_TICK / 10;
+    } else { self.hn_tick--; }
+  } else {
+    //* Tick Health down from hunger 
+    if (self.hn_tick <= 0) {
+      self.hn_tick = self.use_skill(Skills.METABOLISM) / skills::METABOLISM_MOD;
+      self.hn_cur -= skills::METABOLISM_TICK / 10;
+    } else if (self.hn_tick > 0) { self.hn_tick--; }
+  }
+
+  // Personaility
+  switch (self.personality) {
+    case HOSTILE:
+    default:
+  }
+
+  // Memories
+  for (int i; i < self.memories.len(); i++) {
+    self.memories[i].timer--;
+
+    if (self.memories[i].timer <= 0) {
+      io::printfn("Forgot %s",self.memories[i].type);
+      self.memories.remove_at(i);
+      i--;
+    }
+  }
+}
+<* Collision checking *>
+fn void Unit.collision(&self, Vector3* rotated_dir) {
   BoundingBox f_bounds = self.unit_bounds();
 
   // North
@@ -171,64 +227,9 @@ fn void Unit.update(&self, bool is_player = false) {
   if (west_s && raylib::check_collision_boxes(f_bounds, west)) {
     if (rotated_dir.x > 0) rotated_dir.x = 0;
   }
-
-  self.move(rotated_dir);
-}
-<* General unit logic *>
-fn void Unit.tick(&self) {
-  // Regeneration logic
-  if (self.hn_cur > 0) {
-    //* Health regeneration
-    if ((self.hp_cur < self.hp_max) && self.hp_tick <= 0) {
-      self.hp_tick = (float)self.skills[Skills.REGENERATION].value / 0.05;
-      self.hp_cur++;
-      self.hn_cur -= 0.2;
-    } else if (self.hp_tick > 0) { self.hp_tick--; }
-    if (self.hp_cur > self.hp_max) self.hp_cur = self.hp_max;
-    //* Stamina regeneration
-    if ((self.st_cur < self.st_max) && self.st_tick <= 0) {
-      self.st_tick = (float)self.skills[Skills.ENDURANCE].value / 0.1;
-      self.st_cur++;
-    } else if (self.st_tick > 0) { self.st_tick--; }
-    if (self.st_cur > self.st_max) self.st_cur = self.st_max;
-    //* Mana regeneration
-    if ((self.mn_cur < self.mn_max) && self.mn_tick <= 0) {
-      self.mn_tick = (float)self.skills[Skills.CURRENT].value / 0.025;
-      self.mn_cur++;
-    } else if (self.mn_tick > 0) { self.mn_tick--; }
-    if (self.mn_cur > self.mn_max) self.mn_cur = self.mn_max;
-    //* Natural hunger tick
-    if (self.hn_tick <= 0) {
-      self.hn_tick = (float)self.skills[Skills.METABOLISM].value * 50;
-      self.hn_cur -= 0.1;
-    } else { self.hn_tick--; }
-  } else {
-    //* Tick Health down from hunger 
-    if (self.hn_tick <= 0) {
-      self.hn_tick = (float)self.skills[Skills.METABOLISM].value * 50;
-      self.hp_cur--;
-    } else if (self.hn_tick > 0) { self.hn_tick--; }
-  }
-
-  //
-  switch (self.personality) {
-    case HOSTILE:
-    default:
-  }
-
-  // Memories
-  for (int i; i < self.memories.len(); i++) {
-    self.memories[i].timer--;
-
-    if (self.memories[i].timer <= 0) {
-      io::printfn("Forgot %s",self.memories[i].type);
-      self.memories.remove_at(i);
-      i--;
-    }
-  }
 }
 
-<**>
+<* Rolls a contested skill check depending on the inputted skill *>
 fn bool contested_roll(Unit* attacker, Unit* defender, Skills skill) {
   switch (skill) {
     case STEALTH:
@@ -266,6 +267,22 @@ fn bool contested_roll(Unit* attacker, Unit* defender, Skills skill) {
       return false;
   }
 }
+<* Use a skill, increasing experience and returning current value *>
+fn int Unit.use_skill(&self, Skills skill, int amount = 1) {
+  SkillNode* node = &self.skills[skill];
+  node.exp += amount;
+
+  // Level up based on individual skill
+  switch (skill) {
+    case BELLY:
+      if (node.exp >= 100) {
+        node.exp -= 100;
+        node.value++;
+      }
+      return node.value;
+    default: return node.value;
+  }
+}
 
 <* Get bounding box for unit based on position and size *>
 fn BoundingBox Unit.unit_bounds(&self) {
@@ -276,7 +293,7 @@ fn BoundingBox Unit.unit_bounds(&self) {
     {pos.x + modifier, pos.y + (modifier * 2), pos.z + modifier},
   };
 }
-<**>
+<* Get grounding bounding box for unit based on position and size *>
 fn BoundingBox Unit.ground_bounds(&self) {
   float modifier = 0.23; // TODO: Size modifier
   Vector3 pos = self.position;
@@ -286,7 +303,7 @@ fn BoundingBox Unit.ground_bounds(&self) {
   };
 }
 
-<**>
+<* Returns Unit position in whole tiles *>
 fn Vector3 Vector3.get_tile_pos(&self) {
   return {
     (int)((self.x + 0.5).floor()),

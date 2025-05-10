@@ -32,21 +32,22 @@ enum Skills {
 
 
 const float HEALTH_MOD = 10;
-const float REGENERATION_MOD = -0.01;
+const float REGENERATION_MOD = 0.05;
 
 const float STAMINA_MOD = 10;
-const float ENDURANCE_MOD = -0.1;
+const float ENDURANCE_MOD = 0.1;
 
 const float MANA_MOD = 10;
-const float CURRENT_MOD = -0.01;
+const float CURRENT_MOD = 0.025;
 
 const float BELLY_MOD = 5;
-const float METABOLISM_MOD = 1;
+const float METABOLISM_MOD = 50;
+const float METABOLISM_TICK = 0.2;
 
 const float SOMNOLENCE_BASE = 12;
 
 
-<**>
+<* Get base skills, levels, and max by species *>
 fn SkillList get(Species species) {
   SkillList output = (SkillList)mem::new_array(SkillNode, Skills.len);
 
@@ -218,17 +219,17 @@ fn SkillList get(Species species) {
   return output;
 }
 
-<**>
+<* Get whole Skillnode from array *>
 fn SkillNode SkillList.get(&self, Skills skill) @operator([]) {
   SkillNode[]* array = (SkillNode[]*)self;
   return (*array)[skill.ordinal];
 }
-<**>
+<* Get reference to Skillnode in array *>
 fn SkillNode* SkillList.get_ref(&self, Skills skill) @operator(&[]) {
   SkillNode[]* array = (SkillNode[]*)self;
   return &(*array)[skill.ordinal];
 }
-<**>
+<* Set Skillnode in array *>
 fn void SkillList.set(&self, Skills skill, SkillNode node) @operator([]=) {
   SkillNode[]* array = (SkillNode[]*)self;
   (*array)[skill.ordinal] = node;
