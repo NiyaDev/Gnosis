@@ -52,6 +52,7 @@ fn void gen_keybinds() @test {
 	keybinds.set("move_left",	 {.type=KEYBOARD,.kb=raylib::KEY_A});
 	keybinds.set("move_right", {.type=KEYBOARD,.kb=raylib::KEY_D});
 	keybinds.set("stealth",    {.type=KEYBOARD,.kb=raylib::KEY_LEFT_SHIFT});
+	keybinds.set("skills",     {.type=KEYBOARD,.kb=raylib::KEY_K});
 
 	keybinds.set("rotate_right", {.type=KEYBOARD,.kb=raylib::KEY_Q});
 	keybinds.set("rotate_left",  {.type=KEYBOARD,.kb=raylib::KEY_E});

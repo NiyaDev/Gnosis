@@ -105,6 +105,8 @@ fn void worldstate_loop() {
       camera::update();
       gamestate.world.update();
 
+      if (keybinds.is_pressed("skills")) ui::skills_screen.open = !ui::skills_screen.open;
+
       if (gamestate.debug_mode) debug::update_onscreen_text();
 
       system::content();
@@ -130,6 +132,8 @@ fn void worldstate_loop() {
 			    kenoma::set_style(BAR_COLOR, color::YELLOW.to_int());
 			    kenoma::bar({10,offset++ * 10,64,8}, &gamestate.world.player.hn_cur,&gamestate.world.player.hn_max);
 			  }
+
+			  ui::draw_skill_screen();
 
 			  // Version
         kenoma::label({(float)render[0] - 46, (float)render[1] - 16,0,0}, localization["game_version"]!![lang]!!);

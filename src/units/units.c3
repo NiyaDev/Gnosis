@@ -47,7 +47,7 @@ fn void Unit.init(&self, Species spec = HUMAN) {
 
   // Health
   self.hp_max = (float)self.skills[Skills.HEALTH].value * (skills::HEALTH_MOD * size_mod);
-  self.hp_cur = self.hp_max;
+  self.hp_cur = self.hp_max / 2;
 
   // Stamina
   self.st_max = (float)self.skills[Skills.STAMINA].value * (skills::STAMINA_MOD * size_mod);
@@ -59,7 +59,7 @@ fn void Unit.init(&self, Species spec = HUMAN) {
 
   // Hunger
   self.hn_max = (float)self.skills[Skills.BELLY].value * (skills::BELLY_MOD * size_mod);
-  self.hn_cur = self.hn_max;
+  self.hn_cur = self.hn_max / 5;
 }
 <* Move unit in space *>
 fn void Unit.move(&self, Vector3 movement) {
@@ -159,8 +159,8 @@ fn void Unit.tick(&self) {
   } else {
     //* Tick Health down from hunger 
     if (self.hn_tick <= 0) {
-      self.hn_tick = self.use_skill(Skills.METABOLISM) / skills::METABOLISM_MOD;
-      self.hn_cur -= skills::METABOLISM_TICK / 10;
+      self.hn_tick = self.skills[Skills.METABOLISM].value / skills::METABOLISM_MOD;
+      self.hp_cur -= skills::METABOLISM_TICK / 10;
     } else if (self.hn_tick > 0) { self.hn_tick--; }
   }
 
@@ -246,19 +246,17 @@ fn bool contested_roll(Unit* attacker, Unit* defender, Skills skill) {
       if (attacker.memories.has_memory(mem_seen))   return true;
       if (attacker.memories.has_memory(mem_hidden)) return false;
 
-      int atk_roll = random::rand(20) + (attacker.skills[Skills.PERCEPTION].value / 10);
-      int def_roll = random::rand(20) + (defender.skills[Skills.STEALTH].value / 10);
+      int atk_roll = random::rand(20) + (attacker.skills[PERCEPTION].value / 10);
+      int def_roll = random::rand(20) + (defender.skills[STEALTH].value / 10);
 
       bool result = (atk_roll >= def_roll);
       if (result) {
-        SkillNode* node = &attacker.skills[Skills.PERCEPTION];
-        node.exp += 10;
         attacker.memories.push(mem_seen);
+        attacker.use_skill(PERCEPTION);
         io::printfn("Remembered TARGET_SEEN");
       } else {
-        SkillNode* node = &defender.skills[Skills.STEALTH];
-        node.exp += 1;
         attacker.memories.push(mem_hidden);
+        defender.use_skill(STEALTH);
         io::printfn("Remembered TARGET_HIDDEN");
       }
 
@@ -274,9 +272,41 @@ fn int Unit.use_skill(&self, Skills skill, int amount = 1) {
 
   // Level up based on individual skill
   switch (skill) {
-    case BELLY:
+    // Regeneration stats
+    case REGENERATION:
       if (node.exp >= 100) {
         node.exp -= 100;
+        node.value++;
+      }
+      return node.value;
+    case ENDURANCE:
+      if (node.exp >= 100) {
+        node.exp -= 100;
+        node.value++;
+      }
+      return node.value;
+    case CURRENT:
+      if (node.exp >= 100) {
+        node.exp -= 100;
+        node.value++;
+      }
+      return node.value;
+    case METABOLISM:
+      if (node.exp >= 500) {
+        node.exp -= 500;
+        node.value++;
+      }
+      return node.value;
+    // Perception / Stealth
+    case PERCEPTION:
+      if (node.exp >= 10) {
+        node.exp -= 10;
+        node.value++;
+      }
+      return node.value;
+    case STEALTH:
+      if (node.exp >= 10) {
+        node.exp -= 10;
         node.value++;
       }
       return node.value;
