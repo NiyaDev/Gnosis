@@ -19,7 +19,6 @@ fn Player* new() {
 }
 <* Updates player *>
 fn void Player.p_update(&self) {
-  //Vector3 movement;
   float dt = raylib::get_frame_time();
 
   if (!gamestate.combat) {

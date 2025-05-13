@@ -32,8 +32,3 @@ fn bool Memories.has_memory(&self, Memory mem) {
   return false;
 }
 
-<* Converting type into int for hashing *>
-fn uint MemoryType.hash(&self) {
-  return self.ordinal.hash();
-}
-
