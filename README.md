@@ -9,6 +9,6 @@ Start as just some person and learn where you are and how to survive in a world 
 ### Controls
 WASD - Movement
 QE   - Camera Rotation
-LShift - Stealth
+LShift - Stealth mode
 K - Skill menu
 
