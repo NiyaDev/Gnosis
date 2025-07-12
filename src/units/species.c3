@@ -3,7 +3,7 @@ module gnosis::unit::species;
 import std::io;
 import std::collections;
 import gnosis::unit;
-import pleroma;
+import ennoia;
 
 
 const float SIZE_MOD_TINY   = 0.25;

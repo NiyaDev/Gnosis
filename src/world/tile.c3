@@ -2,7 +2,7 @@
 module gnosis::world::tile;
 import std::io;
 import gnosis::world::chunk;
-import pleroma;
+import ennoia;
 
 
 struct Tile {

@@ -6,7 +6,7 @@ import std::math;
 import gnosis::unit;
 import gnosis::resources;
 import gnosis::system;
-import pleroma;
+import ennoia;
 
 
 struct World {

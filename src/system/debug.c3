@@ -2,7 +2,7 @@
 module gnosis::system::debug;
 import gnosis::system;
 import gnosis::unit;
-import pleroma;
+import ennoia;
 
 
 String uitext;

@@ -2,7 +2,7 @@
 module gnosis::resources;
 import std::io;
 import std::collections;
-import pleroma;
+import ennoia;
 import gnosis::unit;
 
 

@@ -1,7 +1,7 @@
 
 module gnosis;
 import std::io;
-import pleroma;
+import ennoia;
 
 
 <* Load Texture from bulk *>

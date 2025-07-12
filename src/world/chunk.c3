@@ -3,7 +3,7 @@ module gnosis::world::chunk;
 import std::io;
 import gnosis::world::tile;
 import gnosis::resources;
-import pleroma;
+import ennoia;
 
 
 struct Chunk {

@@ -3,7 +3,7 @@ module gnosis::unit;
 import std::io;
 import std::math;
 import std::collections;
-import pleroma;
+import ennoia;
 import gnosis::world;
 import gnosis::system;
 

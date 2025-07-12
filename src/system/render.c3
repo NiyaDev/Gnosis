@@ -1,6 +1,6 @@
 
 module gnosis::system;
-import pleroma;
+import ennoia;
 import std::io;
 
 

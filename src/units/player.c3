@@ -2,7 +2,7 @@
 module gnosis::unit::player;
 import std::io;
 import gnosis;
-import pleroma;
+import ennoia;
 
 
 struct Player {

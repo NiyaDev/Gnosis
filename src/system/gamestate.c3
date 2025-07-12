@@ -1,7 +1,7 @@
 
 module gnosis::system;
 import gnosis;
-import pleroma;
+import ennoia;
 import std::io;
 
 

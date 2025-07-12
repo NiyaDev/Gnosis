@@ -2,8 +2,7 @@
 module gnosis::ui;
 import gnosis::system;
 import gnosis::unit;
-import pleroma::kenoma;
-import pleroma::raylib;
+import ennoia;
 
 
 WindowDetails skills_screen;

@@ -2,7 +2,7 @@
 module gnosis;
 import std::io;
 import std::math::random;
-import pleroma;
+import ennoia;
 import gnosis::system;
 import gnosis::resources;
 

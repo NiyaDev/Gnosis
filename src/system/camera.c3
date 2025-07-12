@@ -2,7 +2,7 @@
 module gnosis::system::camera;
 import std::io;
 import std::math;
-import pleroma;
+import ennoia;
 import gnosis;
 import gnosis::unit;
 

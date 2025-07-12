@@ -3,7 +3,7 @@ module gnosis::unit::skills;
 import gnosis::unit::species;
 import std::io;
 import std::collections;
-import pleroma;
+import ennoia;
 
 
 typedef SkillList = SkillNode[];
