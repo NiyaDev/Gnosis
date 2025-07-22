@@ -11,7 +11,7 @@ HashMap{String, Texture}  textures  @builtin;
 //HashMap{String, Model}    models    @builtin;
 HashMap{String, Mesh}     meshes    @builtin;
 HashMap{String, Material} materials @builtin;
-Keybindings  keybinds     @builtin;
+//Keybindings  keybinds     @builtin;
 Options      options      @builtin;
 Localization localization @builtin;
 
@@ -19,9 +19,9 @@ Localization localization @builtin;
 <* Load all resources from file *>
 fn void load() {
   //* Keybindings
-  Bulk keybind_bulk = bulk::load("resources/002");
-  keybinds = keybind::load(keybind_bulk.entries["default_kb"]!!.value);
-  keybind_bulk.free();
+  //Bulk keybind_bulk = bulk::load("resources/002");
+  //keybinds = keybind::load(keybind_bulk.entries["default_kb"]!!.value);
+  //keybind_bulk.free();
 
   //* Settings
   Bulk settings_bulk = bulk::load("resources/003");
