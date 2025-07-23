@@ -8,25 +8,18 @@ import gnosis::unit;
 
 HashMap{String, Font}     fonts     @builtin;
 HashMap{String, Texture}  textures  @builtin;
-//HashMap{String, Model}    models    @builtin;
 HashMap{String, Mesh}     meshes    @builtin;
-HashMap{String, Material} materials @builtin;
-//Keybindings  keybinds     @builtin;
-Options      options      @builtin;
+//HashMap{String, Material} materials @builtin;
 Localization localization @builtin;
 
 
 <* Load all resources from file *>
 fn void load() {
   //* Keybindings
-  //Bulk keybind_bulk = bulk::load("resources/002");
-  //keybinds = keybind::load(keybind_bulk.entries["default_kb"]!!.value);
-  //keybind_bulk.free();
+  bulk::load_all_keybinds("resources/keybinds");
 
   //* Settings
-  Bulk settings_bulk = bulk::load("resources/003");
-  options = options::load(settings_bulk.entries["default_options"]!!.value);
-  settings_bulk.free();
+  bulk::load_all_options("resources/options");
 
   //* Fonts
   Bulk fonts_bulk = bulk::load("resources/009");
