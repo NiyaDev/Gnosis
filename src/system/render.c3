@@ -7,10 +7,10 @@ import std::io;
 int[2] screen = {1280, 720};
 int[2] render = {640, 360};
 int fps = 60;
-RenderTexture render_texture;
+//RenderTexture render_texture;
 bool is_rendering;
 
-
+/*
 <* Initialize render system *>
 fn void init_renderer() {
 	//* Setup raylib
@@ -77,3 +77,4 @@ fn void end() {
 fn float get_screen_ratio() {
 	return (float)screen[0] / (float)render[0];
 }
+*/

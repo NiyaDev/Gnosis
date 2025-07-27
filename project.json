@@ -3,7 +3,7 @@
   "warnings": [ "no-unused" ],
   "dependency-search-paths":[ "lib" ],
   "dependencies": [ "ennoia" ],
-  "linked-libraries": [ "raygui" ],
+  "linked-libraries": [ ],
   "authors": [ "Josh <Niya> Zemenski" ],
   "version": "0.1.0",
   "sources": [ "src/**", "test" ],

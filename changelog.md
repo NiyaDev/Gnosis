@@ -9,3 +9,8 @@
 ==== [7/23/25]
 - Changed over to new Keybinds and Options loading.
 
+==== [7/27/25]
+- Commented out render.c3 and camera.c3.
+- Commented out localization.
+- Converted raylib::get_Frame_time() to ennoia::deltaTime.
+

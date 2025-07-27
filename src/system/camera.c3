@@ -6,7 +6,7 @@ import ennoia;
 import gnosis;
 import gnosis::unit;
 
-
+/*
 Camera main;
 
 struct Camera {
@@ -98,4 +98,4 @@ fn void zoom(float change) {
 fn void rotate(float change) {
 	main.rot_target += change;
 }
-
+*/
