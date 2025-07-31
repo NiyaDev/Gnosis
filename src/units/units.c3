@@ -67,7 +67,7 @@ fn void Unit.move(&self, Vector3 movement) {
 }
 <* Unit update *>
 fn void Unit.update(&self, bool is_player = false) {
-  float dt = raylib::get_frame_time();
+  float dt = (float)ennoia::deltaTime;
 
   // Gravity
   BoundingBox g_bounds = self.ground_bounds();
@@ -76,7 +76,7 @@ fn void Unit.update(&self, bool is_player = false) {
   Tile* tile = gamestate.world.tile(tile_pos.to_int_array());
   if (tile != null) {
     BoundingBox t_bounds = tile.bounds(tile_pos);
-    if (!raylib::check_collision_boxes(g_bounds,t_bounds)) {
+    if (!bounds::check_boxes(g_bounds,t_bounds)) {
       self.grounded = false;
       self.momentum.y -= 0.75;
       self.momentum.y = self.momentum.y.clamp(-3.5, 0.0);
@@ -99,7 +99,7 @@ fn void Unit.update(&self, bool is_player = false) {
     self.momentum.z *= 0.8;
   }
 
-  Vector3 rotated_dir = vector3::ZERO.rotate(self.momentum, camera::main.rotation);
+  Vector3 rotated_dir = (Vector3){0,0,0}.rotate(self.momentum, camera::main.rotation);
 
   // Personality
   switch (self.personality) {
@@ -191,7 +191,7 @@ fn void Unit.collision(&self, Vector3* rotated_dir) {
     (gamestate.world.player.position + {0,0,-1}).get_tile_pos() + {0.5,0.5,0.5},
   };
   bool north_s = tile::is_solid(gamestate.world.tile((gamestate.world.player.position + {0,0,-1}).get_tile_pos().to_int_array()));
-  if ((north_s && raylib::check_collision_boxes(f_bounds, north))) {
+  if ((north_s && bounds::check_boxes(f_bounds, north))) {
     if (rotated_dir.z < 0) rotated_dir.z = 0;
   }
 
@@ -202,7 +202,7 @@ fn void Unit.collision(&self, Vector3* rotated_dir) {
     (gamestate.world.player.position + {0,0,1}).get_tile_pos() + {0.5,0.5,0.5},
   };
   bool south_s = tile::is_solid(gamestate.world.tile((gamestate.world.player.position + {0,0,1}).get_tile_pos().to_int_array()));
-  if (south_s && raylib::check_collision_boxes(f_bounds, south)) {
+  if (south_s && bounds::check_boxes(f_bounds, south)) {
     if (rotated_dir.z > 0) rotated_dir.z = 0;
   }
 
@@ -213,7 +213,7 @@ fn void Unit.collision(&self, Vector3* rotated_dir) {
     (gamestate.world.player.position + {-1,0,0}).get_tile_pos() + {0.5,0.5,0.5},
   };
   bool east_s = tile::is_solid(gamestate.world.tile((gamestate.world.player.position + {-1,0,0}).get_tile_pos().to_int_array()));
-  if (east_s && raylib::check_collision_boxes(f_bounds, east)) {
+  if (east_s && bounds::check_boxes(f_bounds, east)) {
     if (rotated_dir.x < 0) rotated_dir.x = 0;
   }
 
@@ -224,7 +224,7 @@ fn void Unit.collision(&self, Vector3* rotated_dir) {
     (gamestate.world.player.position + {1,0,0}).get_tile_pos() + {0.5,0.5,0.5},
   };
   bool west_s = tile::is_solid(gamestate.world.tile((gamestate.world.player.position + {1,0,0}).get_tile_pos().to_int_array()));
-  if (west_s && raylib::check_collision_boxes(f_bounds, west)) {
+  if (west_s && bounds::check_boxes(f_bounds, west)) {
     if (rotated_dir.x > 0) rotated_dir.x = 0;
   }
 }
