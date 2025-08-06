@@ -68,8 +68,8 @@ CRTShader g_shader @builtin;
 
 <* Initialize *>
 fn void shader_init() {
-  Bulk shader_bulk = bulk::load("resources/001");
-  g_shader.sh = shader::load_mem(null, shader_bulk.get("frag_shader"));
+  //Bulk shader_bulk = bulk::load("resources/001");
+  //g_shader.sh = shader::load_mem(null, shader_bulk.get("frag_shader"));
 
   Image mask = image::load_mem(".png", shader_bulk.get("mask"));
   defer mask.unload();

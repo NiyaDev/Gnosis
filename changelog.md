@@ -18,3 +18,6 @@
 - Replaced raylibs boundingbox checking and deltatime in units.c3
 - Started changing resource loading over to new bulk format, but now going to finish after v3.0 of bulk.
 
+==== [8/6/25]
+- More resource loading
+
