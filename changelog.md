@@ -19,5 +19,8 @@
 - Started changing resource loading over to new bulk format, but now going to finish after v3.0 of bulk.
 
 ==== [8/6/25]
-- More resource loading
+- More resource loading.
+
+==== [8/8/25]
+- Even more resource loading.
 

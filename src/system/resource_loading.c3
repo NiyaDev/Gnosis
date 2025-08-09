@@ -14,11 +14,6 @@ HashMap{String, Mesh}     meshes    @builtin;
 
 <* Load all resources from file *>
 fn void load() {
-  // Keybindings
-  bulk::load_all_keybinds("resources/keybinds");
-  // Settings
-  bulk::load_all_options("resources/options");
-
   //* Fonts
   bulk::load_all("resources/009");
 
