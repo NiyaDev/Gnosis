@@ -24,3 +24,6 @@
 ==== [8/8/25]
 - Even more resource loading.
 
+==== [8/26/25]
+- Commented out everything in gamestate to test.
+

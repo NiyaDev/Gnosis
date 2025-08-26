@@ -23,7 +23,7 @@ fn void draw_skill_screen() {
     //kenoma::tiled_texture(skills_screen.rect, color::WHITE);
 
     Unit* player = gamestate.world.player;
-    Rectangle text_rect = skills_screen.rect + {10,10,0,0};
+    Rectangle text_rect = skills_screen.rect + {10,10};
     for (int i; i < player.skills.len; i++) {
       if ((text_rect.y + 20) > skills_screen.rect.h + skills_screen.rect.y) continue;
 

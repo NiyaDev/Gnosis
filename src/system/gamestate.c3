@@ -39,7 +39,8 @@ bool act_ray;
 <**>
 fn void worldstate_loop() {
   switch (gamestate.state) {
-    case TITLE:
+    case TITLE: break;
+      /*
       system::content();
       system::ui();
         // General setup
@@ -96,13 +97,17 @@ fn void worldstate_loop() {
 
         // Version
         kenoma::label({(float)render[0] - 46, (float)render[1] - 16,0,0}, localization["game_version"]!![lang]!!);
-    case WORLDMENU:
+        */
+    case WORLDMENU: break;
+      /*
       system::ui();
         // Create a button for each world save
         // Version
         kenoma::label({(float)render[0] - 46, (float)render[1] - 16,0,0}, localization["game_version"]!![lang]!!);
+      */
     case OVERWORLD:
       camera::update();
+      /*
       gamestate.world.update();
 
       if (keybinds.is_pressed("skills")) ui::skills_screen.open = !ui::skills_screen.open;
@@ -137,9 +142,10 @@ fn void worldstate_loop() {
 
 			  // Version
         kenoma::label({(float)render[0] - 46, (float)render[1] - 16,0,0}, localization["game_version"]!![lang]!!);
+      */
   }
 
-  system::end();
+  //system::end();
 }
 
 
