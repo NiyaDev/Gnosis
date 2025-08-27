@@ -119,9 +119,9 @@ fn int World.draw(&self) {
               (float)(z + (position_raw[2] * 16)),
             };
             Mesh mesh = resources::meshes[t.model]!!;
-            Material mat = resources::materials[t.material]!!;
+            //Material mat = resources::materials[t.material]!!;
             mat.set_texture(resources::textures[t.texture]!!);
-            Matrix matr = matrix::translate(pos);
+            Matrix matr = matrix::IDENTITY.translate(pos);
             mat.maps[0].color = color::WHITE.multiply(visibility);
             mesh.draw(mat,matr);
             tiles_rendered++;
@@ -134,24 +134,24 @@ fn int World.draw(&self) {
   // NPC Units
   // TODO: Maybe draw player with units?
   for (int i; i < self.units.len(); i++) {
-    camera::main.draw_billboard_pro(
-      *gamestate.world.player.sprite,
-      {0,0,16,32},
-      self.units[i].position + {0,0.2,0},
-      vector3::ZERO.rotate({0,1,-1}, camera::main.rotation),
-      {1,1},
-      {0.5,0.25},
-      0,
-      color::WHITE,
-    );
+    //camera::main.draw_billboard_pro(
+    //  *gamestate.world.player.sprite,
+    //  {0,0,16,32},
+    //  self.units[i].position + {0,0.2,0},
+    //  vector3::ZERO.rotate({0,1,-1}, camera::main.rotation),
+    //  {1,1},
+    //  {0.5,0.25},
+    //  0,
+    //  color::WHITE,
+    //);
   }
 
   // Player
   Vector3 pos = camera::main.target;
   pos.y += 0.2;
-  gamestate.world.player.unit_bounds().draw(color::PURPLE);
-  gamestate.world.player.ground_bounds().draw(color::BROWN); 
-  camera::main.draw_billboard_pro(*gamestate.world.player.sprite, {0,0,16,32}, pos, vector3::ZERO.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
+  //gamestate.world.player.unit_bounds().draw(color::PURPLE);
+  //gamestate.world.player.ground_bounds().draw(color::BROWN); 
+  //camera::main.draw_billboard_pro(*gamestate.world.player.sprite, {0,0,16,32}, pos, (Vector3){}.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
 
   return tiles_rendered;
 }
@@ -283,11 +283,8 @@ fn Tile* World.tile(&self, int[3] position) {
 
 <**>
 fn float World.ticks_per_second(&self) {
-  char framerate = options["fps"].as_char!!;
+  //char framerate = options["fps"].as_char!!;
+  char framerate = options::get_char("fps");
   return ((float)framerate / self.framespertick);
-}
-
-fn uint int[3].hash(self) {
-  return (uint)(10000 + (self[0] * 2) + (self[1] * 4) + (self[2] * 3));
 }
 

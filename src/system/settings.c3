@@ -8,25 +8,30 @@ import ennoia;
 fn void update_settings() {
   // Screen size
   //  Done first because it resets the window
- 
-  ennoia::set_size(options::get_int("screen_width"), option::get_int("screen_height"));
+  ennoia::set_size(options::get_int("screen_width"), options::get_int("screen_height"));
 
   // Screen mode
-  char screen_mode = options["screen_mode"]!!.as_char;
-  switch (screen_mode) {
+  switch (options::get_char("screen_mode")) {
     case 0: // Windowed
-      //raylib::clear_window_state(0);
+      ennoia::set_borderless(true);
+      ennoia::set_fullscreen(false);
     case 1: // Windowed Fullscreen
-      //raylib::clear_window_state(0);
-      //raylib::toggle_borderless();
+      ennoia::set_borderless(true);
+      int[2] newRes = ennoia::get_display_resolution();
+      ennoia::set_size(newRes[0], newRes[1]);
     case 2: // Fullscreen
-      //raylib::clear_window_state(0);
-      //raylib::toggle_fullscreen();
+      ennoia::set_borderless(false);
+      ennoia::set_fullscreen(true);
   }
 
   // Field of view
+  ennoia::set_field_of_view((float)options::get_char("fov"));
+
   // Target fps
+  // TODO: 
+
   // Volume
+  // TODO:
 }
 
 

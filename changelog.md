@@ -27,3 +27,6 @@
 ==== [8/26/25]
 - Commented out everything in gamestate to test.
 
+==== [8/27/25]
+- More conversion work. But gonna just restart.
+
