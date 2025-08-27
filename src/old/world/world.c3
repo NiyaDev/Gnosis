@@ -4,8 +4,6 @@ import std::collections;
 import std::io;
 import std::math;
 import gnosis::unit;
-import gnosis::resources;
-import gnosis::system;
 import ennoia;
 
 
