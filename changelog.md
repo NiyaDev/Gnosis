@@ -30,3 +30,8 @@
 ==== [8/27/25]
 - More conversion work. But gonna just restart.
 
+==== [8/28/25]
+- Added Tile structure and basic functions.
+- Added Chunk structure.
+- Added basic World structure.
+
