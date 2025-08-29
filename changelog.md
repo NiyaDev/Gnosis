@@ -35,3 +35,8 @@
 - Added Chunk structure.
 - Added basic World structure.
 
+==== [8/29/25]
+- Tried to fix folding, but ended up screwing up my entire Nvim setup and having to redo it.
+  - It still isn't back to 100%.
+- Added logic for basic chunk generation.
+
