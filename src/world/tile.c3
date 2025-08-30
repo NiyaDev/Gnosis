@@ -1,5 +1,5 @@
 
-module ennoia::world;
+module ennoia::world::tile;
 
 
 struct Tile {
@@ -18,6 +18,11 @@ enum TileType {
   DUST,
   DIRT,
   CLAY,
+}
+
+<**>
+fn Tile new(Chunk* chunk, TileType type) {
+  return {type, chunk, 0};
 }
 
 // These functions exist to lower tile size

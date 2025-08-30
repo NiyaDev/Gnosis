@@ -4,6 +4,7 @@ import std::io;
 import ennoia;
 
 
+World test;
 
 fn int main(String[] args) {
   // Initialize
@@ -12,8 +13,11 @@ fn int main(String[] args) {
   );
   defer ennoia::clean();
 
-  io::printfn("%d bytes", Tile.sizeof);
-  io::printfn("%d bytes per chunk", Tile.sizeof * (16*16*16));
+  test = world::new("test");
+  io::printfn("%s",test.chunks.get({0,0,0})!!.get({0,4,5}).type);
+
+  //io::printfn("%d bytes", Tile.sizeof);
+  //io::printfn("%d bytes per chunk", Tile.sizeof * (16*16*16));
 
   while (!ennoia::window_should_close()) {
     ennoia::start_drawing();
