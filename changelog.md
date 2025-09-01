@@ -43,3 +43,9 @@
 ==== [8/30/25]
 - Continued chunk work.
 
+==== [9/1/25]
+- Changed Chunks from an aliased hashmap to a structure containing a hashmap.
+- Added ability to get tiles from world level and removed chunk level.
+- Added ability to draw world, including checking for visibility.
+- Changed Tile type variable froms fucntion with switches to just enum associated values.
+

@@ -4,7 +4,10 @@ import ennoia::vector;
 
 
 
-alias Chunk = Tile[16][16][16];
+struct Chunk {
+  Tile[16][16][16] tiles;
+}
+//alias Chunk = Tile[16][16][16];
 
 
 <* Gets reference to tile at position *>
@@ -15,6 +18,7 @@ fn Tile* Chunk.get(&self, Vector3 position) {
   //Tile[16]*     zpos = &ypos[newPos[1]];
   //Tile*         tile = &zpos[newPos[2]];
 
-  return &self[newPos[0]][newPos[1]][newPos[2]];
+  //return &self[newPos[0]][newPos[1]][newPos[2]];
+  return null;
 }
 

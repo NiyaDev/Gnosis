@@ -12,12 +12,18 @@ struct Tile {
   int growthTick;
 }
 
-enum TileType {
-  EMPTY,
+enum TileType : int (
+      bool visible,
+      bool gravity,
+      bool solid,
+      String texture,
+      String model,
+) {
+  EMPTY = {false, false, false, "",""},
 
-  DUST,
-  DIRT,
-  CLAY,
+  DUST = {true,  true, true, "dust", "cube"},
+  DIRT = {true, false, true, "dirt", "cube"},
+  CLAY = {true, false, true, "clay", "cube"},
 }
 
 <**>
@@ -25,55 +31,5 @@ fn Tile new(Chunk* chunk, TileType type) {
   return {type, chunk, 0};
 }
 
-// These functions exist to lower tile size
-<* Returns if tile is visible *>
-fn bool Tile.is_visible(&self) {
-  switch (self.type) {
-    case EMPTY: return false;
-    
-    case DUST: return true;
-    case DIRT: return true;
-    case CLAY: return true;
-  }
-}
-<* Returns if tile has gravity *>
-fn bool Tile.has_gravity(&self) {
-  switch (self.type) {
-    case EMPTY: return false;
 
-    case DUST: return true;
-    case DIRT: return false;
-    case CLAY: return false;
-  }
-}
-<* Returns if tile is solid *>
-fn bool Tile.is_solid(&self) {
-  switch (self.type) {
-    case EMPTY: return false;
-    
-    case DUST: return true;
-    case DIRT: return true;
-    case CLAY: return true;
-  }
-}
-<* Returns name of tile Texture *>
-fn String Tile.texture(&self) {
-  switch (self.type) {
-    case EMPTY: return "";
-    
-    case DUST: return "dust";
-    case DIRT: return "dirt";
-    case CLAY: return "clay";
-  }
-}
-<* Returns name of tile Model *>
-fn String Tile.model(&self) {
-  switch (self.type) {
-    case EMPTY: return "";
-    
-    case DUST: return "cube";
-    case DIRT: return "cube";
-    case CLAY: return "cube";
-  }
-}
 
