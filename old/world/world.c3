@@ -117,7 +117,7 @@ fn int World.draw(&self) {
               (float)(z + (position_raw[2] * 16)),
             };
             Mesh mesh = resources::meshes[t.model]!!;
-            //Material mat = resources::materials[t.material]!!;
+            Material mat = resources::materials[t.material]!!;
             mat.set_texture(resources::textures[t.texture]!!);
             Matrix matr = matrix::IDENTITY.translate(pos);
             mat.maps[0].color = color::WHITE.multiply(visibility);

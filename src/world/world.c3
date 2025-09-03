@@ -3,13 +3,14 @@ module gnosis::world;
 import std::io;
 import std::collections;
 import ennoia;
+import gnosis::unit;
 
 
 struct World {
   String name;
   Clock clock;
 
-  //Player player;
+  Player player;
 
   HashMap{int[3], Chunk*} chunks;
   //HashMap{int, Unit} units;
@@ -68,16 +69,15 @@ faultdef NO_TILE;
 <* Gets tile in world *>
 fn Tile? World.get_tile(&self, Vector3 position) {
   Vector3 chunkPosition = {
-    (float)((int)position.x / 16),
-    (float)((int)position.y / 16),
-    (float)((int)position.z / 16),
+    (float)((int)((position.x < 0) ? position.x - 16 : position.x) / 16),
+    (float)((int)((position.y < 0) ? position.y - 16 : position.y) / 16),
+    (float)((int)((position.z < 0) ? position.z - 16 : position.z) / 16),
   };
   Vector3 tilePosition = {
-    (float)((int)position.x % 16),
-    (float)((int)position.y % 16),
-    (float)((int)position.z % 16),
+    (float)(((position.x < 0) ? (16 + (int)position.x) % 16 : (int)position.x % 16)),
+    (float)(((position.y < 0) ? (16 + (int)position.y) % 16 : (int)position.y % 16)),
+    (float)(((position.z < 0) ? (16 + (int)position.z) % 16 : (int)position.z % 16)),
   };
-  io::printfn("{%f,%f,%f} {%f,%f,%f}",chunkPosition.x,chunkPosition.y,chunkPosition.z,tilePosition.x, tilePosition.y, tilePosition.z);
 
   Chunk*? chunk = self.chunks[chunkPosition.to_int_array()];
   if (try chunk) {
@@ -92,7 +92,7 @@ fn void World.save(&self) {}
 <* Load world from file *>
 fn World load() { return {}; }
 
-<**>
+<* Draw world *>
 fn int World.draw(&self) {
   int tilesRendered;
 
@@ -111,6 +111,8 @@ fn int World.draw(&self) {
       }
     }
   };
+  
+  //io::printfn("%d", tilesRendered);
 
   return tilesRendered;
 }
@@ -127,7 +129,7 @@ fn float World.tile_visible(&self, Vector3 position) {
 
   // Check if outside of player vision
   // TODO: come back to this once the player and units are made
-  //if (self.player.position.distance(position) > 5 + (self.player.skills[Skills.PERCEPTION].value * 0.2)) return 0;
+  if (self.player.position.distance(position) > 5 + (self.player.skills.get(PERCEPTION)!!.level * 0.2)) return 0;
   
   // Check if surrounded
   float visibleMod = 1;
@@ -145,7 +147,7 @@ fn float World.tile_visible(&self, Vector3 position) {
   bool? west  = !self.get_tile(position + {-1, 0, 0}).type.visible;
   if (catch west) west = true;
 
-  if (top!! && bot!! && north!! && south!! && east!! && west!!) return 0;
+  if (!top!! && !bot!! && !north!! && !south!! && !east!! && !west!!) return 0;
 
   // Multiplier for vision
   // TODO: come back to this once the player and units are made
