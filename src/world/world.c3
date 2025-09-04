@@ -131,7 +131,7 @@ fn int World.draw(&self) {
   return tilesRendered;
 }
 
-<**>
+<* Returns a float describing how visible a tile is to the player *>
 fn float World.tile_visible(&self, Vector3 position) {
   int[3] chunkPosition = (position / 16).to_int_array();
   Vector3 tilePosition = position % 16;
@@ -166,8 +166,8 @@ fn float World.tile_visible(&self, Vector3 position) {
   // Multiplier for vision
   // TODO: come back to this once the player and units are made
   float visionMultiplier = 1;
-  //if (self.player.position.distance(position) > 3 + (self.player.skills[Skills.PERCEPTION].value * 0.2)) vision_multi = 0.8;
-  //if (self.player.position.distance(position) > 4 + (self.player.skills[Skills.PERCEPTION].value * 0.2)) vision_multi = 0.4;
+  if (self.player.position.distance(position) > 3 + (self.player.skills[PERCEPTION]!!.level * 0.2)) visionMultiplier = 0.8;
+  if (self.player.position.distance(position) > 4 + (self.player.skills[PERCEPTION]!!.level * 0.2)) visionMultiplier = 0.4;
   
   return visibleMod * visionMultiplier;
 }

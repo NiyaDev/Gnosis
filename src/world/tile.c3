@@ -6,9 +6,6 @@ struct Tile {
   TileType type;
   Chunk* chunk;
 
-  //String model;
-  //String material;
-
   int growthTick;
 }
 
@@ -18,12 +15,13 @@ enum TileType : int (
       bool solid,
       String texture,
       String model,
+      BoundingBox bounds,
 ) {
-  EMPTY = {false, false, false, "",""},
+  EMPTY = {false, false, false, "", "", {{-0.5,-0.5,-0.5}, {0.5,0.5,0.5}}},
 
-  DUST = {true,  true, true, "dust", "cube"},
-  DIRT = {true, false, true, "dirt", "cube"},
-  CLAY = {true, false, true, "clay", "cube"},
+  DUST = {true,  true, true, "dust", "cube", {{-0.5,-0.5,-0.5}, {0.5,0.5,0.5}}},
+  DIRT = {true, false, true, "dirt", "cube", {{-0.5,-0.5,-0.5}, {0.5,0.5,0.5}}},
+  CLAY = {true, false, true, "clay", "cube", {{-0.5,-0.5,-0.5}, {0.5,0.5,0.5}}},
 }
 
 <**>

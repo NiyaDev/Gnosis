@@ -61,3 +61,8 @@
 - Added basic HP/Mana regen and Hunger.
 - Added framework to give skill experience.
 
+#### [9/4/25]
+- Cleaned up chunk, world, tile, and skills.
+- Removed already replaced functions from chunk, world, skill, and unit in old.
+- Removed tiles in old.
+
