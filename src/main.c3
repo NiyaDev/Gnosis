@@ -19,7 +19,9 @@ fn int main(String[] args) {
   bulk::load_all("resources/010");
   ennoia::models.set("cube",mesh::gen_cube().to_model());
   test.player.position = {0,8,0};
-  test.player.skills.set(PERCEPTION,{});
+  io::printfn("%d/%d",test.player.hpCur,test.player.hpMax);
+
+  bulk::load_all("resources/030"); // UI textures
 
   //io::printfn("%d bytes", Tile.sizeof);
   //io::printfn("%d bytes per chunk", Tile.sizeof * (16*16*16));
@@ -38,17 +40,29 @@ fn int main(String[] args) {
       camera::main.distance = camera::main.distance.clamp({0,1,1},{0,8,8});
     }
     if (keybinds::pressed("debug")) {
-      SkillNode* sn = test.player.skills.get_ref(PERCEPTION)!!;
-      sn.level++;
+      //SkillNode* sn = test.player.skills.get_ref(PERCEPTION)!!;
+      //sn.level++;
+      //test.player.hpCur--;
+      io::printfn("%d-%d/%d",test.player.hpTick, test.player.hpCur, test.player.hpMax);
     }
 
     camera::main.target = test.player.position;
     camera::update();
+    test.update();
 
     ennoia::start_drawing();
 
     test.draw();
     ennoia::models["cube"]!!.draw(position:test.player.position);
+
+    ennoia::textures["bar_bg"]!!.draw_tiled(  dest:{10,10,128,16},layout:THREE_ONE,color:color::RED);
+    ennoia::textures["bar_fill"]!!.draw_tiled(dest:{10,10,128 * ((float)test.player.hpCur / (float)test.player.hpMax),16},layout:THREE_ONE,color:color::RED);
+
+    ennoia::textures["bar_bg"]!!.draw_tiled(  dest:{10,30,128,16},layout:THREE_ONE,color:color::BLUE);
+    ennoia::textures["bar_fill"]!!.draw_tiled(dest:{10,30,128 * ((float)test.player.mnCur / (float)test.player.mnMax),16},layout:THREE_ONE,color:color::BLUE);
+    
+    ennoia::textures["bar_bg"]!!.draw_tiled(  dest:{10,50,128,16},layout:THREE_ONE,color:color::GREEN);
+    ennoia::textures["bar_fill"]!!.draw_tiled(dest:{10,50,128 * ((float)test.player.hnCur / (float)test.player.hnMax),16},layout:THREE_ONE,color:color::GREEN);
 
     ennoia::end_drawing();
   }

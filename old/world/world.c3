@@ -101,58 +101,6 @@ fn void World.update(&self) {
   for (int i; i < self.units.len(); i++) { self.units[i].update(); }
   self.player.p_update();
 }
-<* Draw world to screen *>
-fn int World.draw(&self) {
-  int tiles_rendered = 0;
-  self.chunks.@each(; int[3] position_raw, Chunk chunk) {
-    for (int x = 0; x < 16; x++) {
-      for (int z = 0; z < 16; z++) {
-        for (int y = 0; y < 16; y++) {
-          Tile* t = &(chunk.tiles[x][y][z]);
-          float visibility = self.tile_visible(position_raw, {x, y, z});
-          if (visibility != 0) {
-            Vector3 pos = {
-              (float)(x + (position_raw[0] * 16)),
-              (float)(y + (position_raw[1] * 16)),
-              (float)(z + (position_raw[2] * 16)),
-            };
-            Mesh mesh = resources::meshes[t.model]!!;
-            Material mat = resources::materials[t.material]!!;
-            mat.set_texture(resources::textures[t.texture]!!);
-            Matrix matr = matrix::IDENTITY.translate(pos);
-            mat.maps[0].color = color::WHITE.multiply(visibility);
-            mesh.draw(mat,matr);
-            tiles_rendered++;
-          }
-        }
-      }
-    }
-  };
-  
-  // NPC Units
-  // TODO: Maybe draw player with units?
-  for (int i; i < self.units.len(); i++) {
-    //camera::main.draw_billboard_pro(
-    //  *gamestate.world.player.sprite,
-    //  {0,0,16,32},
-    //  self.units[i].position + {0,0.2,0},
-    //  vector3::ZERO.rotate({0,1,-1}, camera::main.rotation),
-    //  {1,1},
-    //  {0.5,0.25},
-    //  0,
-    //  color::WHITE,
-    //);
-  }
-
-  // Player
-  Vector3 pos = camera::main.target;
-  pos.y += 0.2;
-  //gamestate.world.player.unit_bounds().draw(color::PURPLE);
-  //gamestate.world.player.ground_bounds().draw(color::BROWN); 
-  //camera::main.draw_billboard_pro(*gamestate.world.player.sprite, {0,0,16,32}, pos, (Vector3){}.rotate({0,1,-1}, camera::main.rotation), {1,1}, {0.5,0.25}, 0, color::WHITE);
-
-  return tiles_rendered;
-}
 
 <**>
 fn float World.tile_visible(&self, int[3] chunk_position, int[3] tile) {

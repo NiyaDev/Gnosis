@@ -53,3 +53,11 @@
 - Fixed Tile drawing.
 - Re-Created basic Unit, Player, and Skill structures.
 
+#### [9/3/25]
+- Added UI textures bulk.
+- Created plan for all skills, for now.
+- Added create_unit and Update_stats functions.
+- Created basic HP/Mana/Hunger bars.
+- Added basic HP/Mana regen and Hunger.
+- Added framework to give skill experience.
+

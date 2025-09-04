@@ -17,7 +17,7 @@ struct World {
 }
 
 struct Clock {
-  float ticksPerSecond;
+  float framesPerTick;
   float ticks;
 }
 
@@ -26,7 +26,9 @@ struct Clock {
 fn World new(String name) {
   World output;
   output.name = name;
-  output.clock = {10, 0};
+  output.clock = {6, 0};
+
+  output.player.unit = unit::new();
 
   output.new_chunk({0,0,0});
 
@@ -92,6 +94,18 @@ fn void World.save(&self) {}
 <* Load world from file *>
 fn World load() { return {}; }
 
+<* Update World *>
+fn void World.update(&self) {
+  // Ticks
+  if (self.clock.ticks >= self.clock.framesPerTick) {
+    // Player tick
+    self.player.tick();
+    // Units tick
+    self.clock.ticks = 0;
+  } else {self.clock.ticks++; }
+
+  // Update
+}
 <* Draw world *>
 fn int World.draw(&self) {
   int tilesRendered;
