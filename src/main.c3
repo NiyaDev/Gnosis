@@ -17,7 +17,7 @@ fn int main(String[] args) {
 
   // Temp
   bulk::load_all("resources/010");
-  ennoia::models.set("cube",mesh::gen_cube().to_model());
+  //ennoia::models.set("cube",mesh::gen_cube().to_model());
   test.player.position = {0,8,0};
   io::printfn("%d/%d",test.player.hpCur,test.player.hpMax);
 
@@ -53,6 +53,7 @@ fn int main(String[] args) {
     ennoia::start_drawing();
 
     test.draw();
+    /*
     ennoia::models["cube"]!!.draw(position:test.player.position);
 
     ennoia::textures["bar_bg"]!!.draw_tiled(  dest:{10,10,128,16},layout:THREE_ONE,color:color::RED);
@@ -63,6 +64,7 @@ fn int main(String[] args) {
     
     ennoia::textures["bar_bg"]!!.draw_tiled(  dest:{10,50,128,16},layout:THREE_ONE,color:color::GREEN);
     ennoia::textures["bar_fill"]!!.draw_tiled(dest:{10,50,128 * ((float)test.player.hnCur / (float)test.player.hnMax),16},layout:THREE_ONE,color:color::GREEN);
+    */
 
     ennoia::end_drawing();
   }

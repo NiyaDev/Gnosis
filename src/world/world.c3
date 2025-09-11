@@ -118,7 +118,12 @@ fn int World.draw(&self) {
           Vector3 position = (Vector3){(float)x,(float)y,(float)z} + (chunkPosition.from_int_array() * 16);
           float visibility = self.tile_visible(position);
           if (visibility > 0) {
-            ennoia::models[t.type.model]!!.draw(position:position,texture:ennoia::textures.get_ref(t.type.texture)!!);
+            //ennoia::models[t.type.model]!!.draw(position:position,texture:ennoia::textures.get_ref(t.type.texture)!!);
+            render::draw_mesh(
+              nameMesh:    t.type.model,
+              nameTexture: t.type.texture,
+              position:    position,
+            );
             tilesRendered++;
           }
         }

@@ -66,3 +66,7 @@
 - Removed already replaced functions from chunk, world, skill, and unit in old.
 - Removed tiles in old.
 
+#### [9/11/25]
+- Updated to new Ennoia format.
+- Started applying new renderpipeline calls.
+

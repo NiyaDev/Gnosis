@@ -1,5 +1,6 @@
 
 module ennoia::world::tile;
+import ennoia::bounds;
 
 
 struct Tile {
