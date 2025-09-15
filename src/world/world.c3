@@ -31,6 +31,11 @@ fn World new(String name) {
   output.player.unit = unit::new();
 
   output.new_chunk({0,0,0});
+  output.new_chunk({1,0,0});
+  output.new_chunk({2,0,0});
+  output.new_chunk({0,0,1});
+  output.new_chunk({1,0,1});
+  output.new_chunk({2,0,1});
 
   return output;
 }
@@ -148,7 +153,7 @@ fn float World.tile_visible(&self, Vector3 position) {
 
   // Check if outside of player vision
   // TODO: come back to this once the player and units are made
-  if (self.player.position.distance(position) > 5 + (self.player.skills.get(PERCEPTION)!!.level * 0.2)) return 0;
+  if (self.player.position.distance(position) > 10 + (self.player.skills.get(PERCEPTION)!!.level * 0.2)) return 0;
   
   // Check if surrounded
   float visibleMod = 1;

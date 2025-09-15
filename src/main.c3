@@ -13,7 +13,7 @@ fn int main(String[] args) {
   );
   defer ennoia::clean();
 
-  test = world::new("test");
+  test = world::new("test_2");
 
   // Temp
   bulk::load_all("resources/010");
@@ -53,6 +53,7 @@ fn int main(String[] args) {
     ennoia::start_drawing();
 
     test.draw();
+    //render::draw_texture("dirt",{10,10,640,640});
     /*
     ennoia::models["cube"]!!.draw(position:test.player.position);
 
