@@ -6,6 +6,15 @@
 - 
 
 ##### World Generation
+###### Blocks
+- General
+  - Liquids absorbing into porous tiles?
+  - Maybe directly touching a liquid absorbs to 100% and a block touching a block that's
+    absorbed but no liquid only gets half what they have?
+  - Every 10 seconds the absorbtion
+###### Structures
+- Tree
+  - Single block at bottom and calculates shape based on age.
 ##### Basic skills
 ###### General
 - ~Health~ / ~Regen~
