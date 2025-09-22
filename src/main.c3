@@ -17,14 +17,10 @@ fn int main(String[] args) {
 
   // Temp
   bulk::load_all("resources/010");
-  //ennoia::models.set("cube",mesh::gen_cube().to_model());
   test.player.position = {0,8,0};
   io::printfn("%d/%d",test.player.hpCur,test.player.hpMax);
 
-  bulk::load_all("resources/030"); // UI textures
-
-  //io::printfn("%d bytes", Tile.sizeof);
-  //io::printfn("%d bytes per chunk", Tile.sizeof * (16*16*16));
+  //bulk::load_all("resources/030"); // UI textures
 
   while (!ennoia::window_should_close()) {
     if (keybinds::down("move_up"))         test.player.position.z -= 4 * (float)ennoia::deltaTime;
@@ -43,7 +39,7 @@ fn int main(String[] args) {
       //SkillNode* sn = test.player.skills.get_ref(PERCEPTION)!!;
       //sn.level++;
       //test.player.hpCur--;
-      io::printfn("%d-%d/%d",test.player.hpTick, test.player.hpCur, test.player.hpMax);
+      //io::printfn("%d-%d/%d",test.player.hpTick, test.player.hpCur, test.player.hpMax);
     }
 
     camera::main.target = test.player.position;

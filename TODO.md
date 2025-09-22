@@ -2,8 +2,44 @@
 #### Ver 0.1.0
 
 ##### System
-- give_exp function for skills
-- 
+
+##### Unit
+###### Skills
+- General
+  - give_exp function for skills
+  - 
+  - Breath: How long you can hold your breath
+    - Also used for inhaled poisons to determine how long until you lose consciousnes
+- Damage resistance
+  - Each level gives maybe 2% reduction in that damage type?
+  - Generally max is 10 (20%)
+  - Slashing
+  - Piercing
+  - Bludgeoning
+  - Fire
+  - Cold
+  - Electric
+  - Force / Thunder
+  - Acid
+- Poison Resistance
+  - Each level gives 10% reduction in negative effects
+  - Generally max is 8 (80%)
+  - level 10 means full immunity to negative effects while anything over reverses it
+  - Some stacks with applications, others get worse over time.
+  - Nicotine:     Stacks,    -1 Breath,                  +1 Willpower
+  - Alcohol:      Stacks,    -1 Weapon skills -1 Reflex, +1 Willpower +1 Damage resistance
+  - Spider Venom: Escalates, -1 Health
+###### Traits
+- Addiction (Poison): +2 (Poison) resistance
+  - Every 24 hrs spent without using, get a debuff that increases the negative effects
+  - Inhaled  -2 Breath
+  - Ingested -2 Hunger
+  - Injury   -2 Health
+- Drunken Fighter: +4 Max Alcohol Resistance +2 Alcohol Resistance, Must be taken with Addiction Alcohol
+###### Career
+- Increases base skill level for specific skills based on origin.
+  - Have to decide if I want a lot of skill changes or only a couple...
+- Rogue: +2 Light weapons +4 Stealth
 
 ##### World Generation
 ###### Blocks

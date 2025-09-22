@@ -11,12 +11,12 @@ struct Tile {
 }
 
 enum TileType : int (
-      bool visible,
-      bool gravity,
-      bool solid,
-      String texture,
-      String model,
-      BoundingBox bounds,
+  bool visible,
+  bool gravity,
+  bool solid,
+  String texture,
+  String model,
+  BoundingBox bounds,
 ) {
   EMPTY = {false, false, false, "", "", {{-0.5,-0.5,-0.5}, {0.5,0.5,0.5}}},
 
