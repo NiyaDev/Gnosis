@@ -70,3 +70,6 @@
 - Updated to new Ennoia format.
 - Started applying new renderpipeline calls.
 
+#### [9/23/25]
+- Changed world drawing from just checking every tile in radius and drawing if visible to sending out "rays" from player and drawing based on that.
+

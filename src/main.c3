@@ -49,6 +49,10 @@ fn int main(String[] args) {
     ennoia::start_drawing();
 
     test.draw();
+    render::draw_mesh(
+      nameMesh:    "cube",
+      position:    test.player.position,
+    );
     //render::draw_texture("dirt",{10,10,640,640});
     /*
     ennoia::models["cube"]!!.draw(position:test.player.position);

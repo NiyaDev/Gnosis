@@ -67,6 +67,14 @@ fn bool World.new_chunk(&self, Vector3 position) {
       }
     }
   }
+  chunk.tiles[4][8][0] = tile::new(chunk, DIRT);
+  chunk.tiles[4][8][1] = tile::new(chunk, DIRT);
+  chunk.tiles[4][8][3] = tile::new(chunk, DIRT);
+  chunk.tiles[4][8][4] = tile::new(chunk, DIRT);
+  chunk.tiles[3][8][4] = tile::new(chunk, DIRT);
+  chunk.tiles[2][8][4] = tile::new(chunk, DIRT);
+  chunk.tiles[1][8][4] = tile::new(chunk, DIRT);
+  chunk.tiles[0][8][4] = tile::new(chunk, DIRT);
   self.chunks.set(newPos, chunk);
 
   return true;
@@ -115,28 +123,25 @@ fn void World.update(&self) {
 fn int World.draw(&self) {
   int tilesRendered;
 
-  self.chunks.@each(; int[3] chunkPosition, Chunk* chunk) {
-    for (int x; x < 16; x++) {
-      for (int z; z < 16; z++) {
-        for (int y; y < 16; y++) {
-          Tile* t = &(chunk.tiles[x][y][z]);
-          Vector3 position = (Vector3){(float)x,(float)y,(float)z} + (chunkPosition.from_int_array() * 16);
-          float visibility = self.tile_visible(position);
-          if (visibility > 0) {
-            //ennoia::models[t.type.model]!!.draw(position:position,texture:ennoia::textures.get_ref(t.type.texture)!!);
-            render::draw_mesh(
-              nameMesh:    t.type.model,
-              nameTexture: t.type.texture,
-              position:    position,
-            );
-            tilesRendered++;
-          }
-        }
-      }
-    }
-  };
-  
-  //io::printfn("%d", tilesRendered);
+  //*
+  Vector3 pos = self.player.position.get_whole_tile();
+
+  // Draw below player
+  Tile t = self.get_tile(pos-{0,1,0})!!;
+  if (t.type.visible) {
+    render::draw_mesh(
+      nameMesh:    t.type.model,
+      nameTexture: t.type.texture,
+      position:    pos-{0,1,0},
+    );
+  }
+
+  // Send rays in all directions
+  int rays = 64;
+  for (int i; i < rays; i++) {
+    Vector3 dir = (Vector3){0,0,0}.rotate({0,0,1}, (360 / (float)rays) * (float)i);
+    self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
+  }
 
   return tilesRendered;
 }
@@ -180,5 +185,47 @@ fn float World.tile_visible(&self, Vector3 position) {
   if (self.player.position.distance(position) > 4 + (self.player.skills[PERCEPTION]!!.level * 0.2)) visionMultiplier = 0.4;
   
   return visibleMod * visionMultiplier;
+}
+<**>
+fn void World.check_direction(&self, Vector3 start, Vector3 direction, float length) {
+  Vector3 currentPos = start;
+  for (int i; i < length; i++) {
+    currentPos += direction;
+    Vector3 temp = currentPos.get_whole_tile();
+
+    Tile? far = self.get_tile(temp);
+    if (try far) {
+      if (far.type.visible) {
+        render::draw_mesh(
+          nameMesh:    far.type.model,
+          nameTexture: far.type.texture,
+          position:    temp,
+        );
+        return;
+      }
+    }
+
+    Tile? below = self.get_tile(temp-{0,1,0});
+    if (try below) {
+      if (below.type.visible) {
+        render::draw_mesh(
+          nameMesh:    below.type.model,
+          nameTexture: below.type.texture,
+          position:    temp-{0,1,0},
+        );
+      }
+    }
+    
+  }
+  return;
+}
+
+<**>
+fn Vector3 Vector3.get_whole_tile(&self) {
+  return {
+    (int)((self.x + 0.5).floor()),
+    (int)((self.y + 0.5).floor()),
+    (int)((self.z + 0.5).floor()),
+  };
 }
 
