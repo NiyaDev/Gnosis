@@ -32,8 +32,8 @@ fn int main(String[] args) {
     if (keybinds::down("rotate_left")  && !camera::is_rotating()) camera::rotate(90);
     if (keybinds::down("rotate_right") && !camera::is_rotating()) camera::rotate(-90);
     if (ennoia::scrollwheel != 0) {
-      camera::main.distance -= (Vector3){0, ennoia::scrollwheel, ennoia::scrollwheel} * 0.2;
-      camera::main.distance = camera::main.distance.clamp({0,1,1},{0,8,8});
+      camera::main.distance = {0,camera::main.distance.y - (ennoia::scrollwheel * 0.6), 4};
+      camera::main.distance = camera::main.distance.clamp({0,2,4},{0,16,4});
     }
     if (keybinds::pressed("debug")) {
       //SkillNode* sn = test.player.skills.get_ref(PERCEPTION)!!;
@@ -52,6 +52,9 @@ fn int main(String[] args) {
     render::draw_mesh(
       nameMesh:    "cube",
       position:    test.player.position,
+    );
+    imm::bar(
+      bounds:{10,10,128,16},
     );
     //render::draw_texture("dirt",{10,10,640,640});
     /*

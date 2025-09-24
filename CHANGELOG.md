@@ -73,3 +73,6 @@
 #### [9/23/25]
 - Changed world drawing from just checking every tile in radius and drawing if visible to sending out "rays" from player and drawing based on that.
 
+#### [9/24/25]
+- Changed camera zoom to stay 4m away from player at all zoom levels.
+

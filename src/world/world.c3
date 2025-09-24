@@ -123,25 +123,36 @@ fn void World.update(&self) {
 fn int World.draw(&self) {
   int tilesRendered;
 
-  //*
   Vector3 pos = self.player.position.get_whole_tile();
 
   // Draw below player
-  Tile t = self.get_tile(pos-{0,1,0})!!;
-  if (t.type.visible) {
-    render::draw_mesh(
-      nameMesh:    t.type.model,
-      nameTexture: t.type.texture,
-      position:    pos-{0,1,0},
-    );
+  Tile? t = self.get_tile(pos-{0,1,0});
+  if (try t) {
+    if (t.type.visible) {
+      render::draw_mesh(
+        nameMesh:    t.type.model,
+        nameTexture: t.type.texture,
+        position:    pos-{0,1,0},
+      );
+    }
   }
 
-  // Send rays in all directions
+  // Send rays in most directions
   int rays = 64;
   for (int i; i < rays; i++) {
     Vector3 dir = (Vector3){0,0,0}.rotate({0,0,1}, (360 / (float)rays) * (float)i);
     self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
   }
+  /*
+  for (int i; i < rays; i++) {
+    Vector3 dir = (Vector3){0,0,0}.rotate({0,1,1}, (360 / (float)rays) * (float)i);
+    self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
+  }
+  for (int i; i < rays; i++) {
+    Vector3 dir = (Vector3){0,0,0}.rotate({0,-1,1}, (360 / (float)rays) * (float)i);
+    self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
+  }
+  */
 
   return tilesRendered;
 }
