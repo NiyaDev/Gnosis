@@ -75,6 +75,16 @@ fn bool World.new_chunk(&self, Vector3 position) {
   chunk.tiles[2][8][4] = tile::new(chunk, DIRT);
   chunk.tiles[1][8][4] = tile::new(chunk, DIRT);
   chunk.tiles[0][8][4] = tile::new(chunk, DIRT);
+
+  chunk.tiles[6][7][10] = tile::new(chunk, EMPTY);
+  chunk.tiles[7][7][10] = tile::new(chunk, EMPTY);
+  chunk.tiles[8][7][10] = tile::new(chunk, EMPTY);
+  chunk.tiles[6][7][11] = tile::new(chunk, EMPTY);
+  chunk.tiles[7][7][11] = tile::new(chunk, EMPTY);
+  chunk.tiles[8][7][11] = tile::new(chunk, EMPTY);
+  chunk.tiles[6][7][12] = tile::new(chunk, EMPTY);
+  chunk.tiles[7][7][12] = tile::new(chunk, EMPTY);
+  chunk.tiles[8][7][12] = tile::new(chunk, EMPTY);
   self.chunks.set(newPos, chunk);
 
   return true;
@@ -138,65 +148,21 @@ fn int World.draw(&self) {
   }
 
   // Send rays in most directions
-  int rays = 64;
+  int rays = 80;
   for (int i; i < rays; i++) {
     Vector3 dir = (Vector3){0,0,0}.rotate({0,0,1}, (360 / (float)rays) * (float)i);
     self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
   }
-  /*
-  for (int i; i < rays; i++) {
-    Vector3 dir = (Vector3){0,0,0}.rotate({0,1,1}, (360 / (float)rays) * (float)i);
-    self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
+  for (float y; y > -1; y -= 0.1) {
+    for (int i; i < rays; i++) {
+      Vector3 dir = (Vector3){0,0,0}.rotate({0,y,1+y}, (360 / (float)rays) * (float)i);
+      self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
+    }
   }
-  for (int i; i < rays; i++) {
-    Vector3 dir = (Vector3){0,0,0}.rotate({0,-1,1}, (360 / (float)rays) * (float)i);
-    self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
-  }
-  */
 
   return tilesRendered;
 }
 
-<* Returns a float describing how visible a tile is to the player *>
-fn float World.tile_visible(&self, Vector3 position) {
-  int[3] chunkPosition = (position / 16).to_int_array();
-  Vector3 tilePosition = position % 16;
-
-  Chunk* chunk = self.chunks[chunkPosition]!!;
-
-  // Check if tile isn't even visible
-  if (!chunk.tiles[(usz)tilePosition.x][(usz)tilePosition.y][(usz)tilePosition.z].type.visible) return 0;
-
-  // Check if outside of player vision
-  // TODO: come back to this once the player and units are made
-  if (self.player.position.distance(position) > 10 + (self.player.skills.get(PERCEPTION)!!.level * 0.2)) return 0;
-  
-  // Check if surrounded
-  float visibleMod = 1;
-
-  bool? top   = !self.get_tile(position + { 0, 1, 0}).type.visible;
-  if (catch top) top = true;
-  bool? bot   = !self.get_tile(position + { 0,-1, 0}).type.visible;
-  if (catch bot) bot = true;
-  bool? north = !self.get_tile(position + { 0, 0,-1}).type.visible;
-  if (catch north) north = true;
-  bool? south = !self.get_tile(position + { 0, 0, 1}).type.visible;
-  if (catch south) south = true;
-  bool? east  = !self.get_tile(position + { 1, 0, 0}).type.visible;
-  if (catch east) east = true;
-  bool? west  = !self.get_tile(position + {-1, 0, 0}).type.visible;
-  if (catch west) west = true;
-
-  if (!top!! && !bot!! && !north!! && !south!! && !east!! && !west!!) return 0;
-
-  // Multiplier for vision
-  // TODO: come back to this once the player and units are made
-  float visionMultiplier = 1;
-  if (self.player.position.distance(position) > 3 + (self.player.skills[PERCEPTION]!!.level * 0.2)) visionMultiplier = 0.8;
-  if (self.player.position.distance(position) > 4 + (self.player.skills[PERCEPTION]!!.level * 0.2)) visionMultiplier = 0.4;
-  
-  return visibleMod * visionMultiplier;
-}
 <**>
 fn void World.check_direction(&self, Vector3 start, Vector3 direction, float length) {
   Vector3 currentPos = start;
@@ -226,9 +192,7 @@ fn void World.check_direction(&self, Vector3 start, Vector3 direction, float len
         );
       }
     }
-    
   }
-  return;
 }
 
 <**>

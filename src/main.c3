@@ -12,8 +12,9 @@ fn int main(String[] args) {
     title: "Gnosis",
   );
   defer ennoia::clean();
+  //ennoia::bgColor = color::BLACK;
 
-  test = world::new("test_2");
+  //test = world::new("test_2");
 
   // Temp
   bulk::load_all("resources/010");
@@ -44,18 +45,20 @@ fn int main(String[] args) {
 
     camera::main.target = test.player.position;
     camera::update();
-    test.update();
 
-    ennoia::start_drawing();
+    system::worldstate_loop();
+    //test.update();
 
-    test.draw();
-    render::draw_mesh(
-      nameMesh:    "cube",
-      position:    test.player.position,
-    );
-    imm::bar(
-      bounds:{10,10,128,16},
-    );
+    //ennoia::start_drawing();
+
+    //test.draw();
+    //render::draw_mesh(
+    //  nameMesh:    "cube",
+    //  position:    test.player.position,
+    //);
+    //imm::bar(
+    //  bounds:{10,10,128,16},
+    //);
     //render::draw_texture("dirt",{10,10,640,640});
     /*
     ennoia::models["cube"]!!.draw(position:test.player.position);
@@ -70,7 +73,8 @@ fn int main(String[] args) {
     ennoia::textures["bar_fill"]!!.draw_tiled(dest:{10,50,128 * ((float)test.player.hnCur / (float)test.player.hnMax),16},layout:THREE_ONE,color:color::GREEN);
     */
 
-    ennoia::end_drawing();
+    //ennoia::end_drawing();
+    //ennoia::drawing();
   }
   
   return 0;

@@ -11,8 +11,9 @@
   - Breath: How long you can hold your breath
     - Also used for inhaled poisons to determine how long until you lose consciousnes
 - Damage resistance
-  - Each level gives maybe 2% reduction in that damage type?
-  - Generally max is 10 (20%)
+    - Each level gives maybe 2% reduction in that damage type?
+    - Generally max is 10 (20%)
+    - Or maybe max 20, 1% each?
   - Slashing
   - Piercing
   - Bludgeoning
@@ -22,8 +23,9 @@
   - Force / Thunder
   - Acid
 - Poison Resistance
-  - Each level gives 10% reduction in negative effects
-  - Generally max is 8 (80%)
+    - Each level gives 10% reduction in negative effects
+    - Generally max is 8 (80%)
+    - Or maybe max 16 5% each?
   - level 10 means full immunity to negative effects while anything over reverses it
   - Some stacks with applications, others get worse over time.
   - Nicotine:     Stacks,    -1 Breath,                  +1 Willpower

@@ -76,3 +76,13 @@
 #### [9/24/25]
 - Changed camera zoom to stay 4m away from player at all zoom levels.
 
+#### [9/25/25]
+- Added vision going downward.
+  - Not perfect, but can be fixed.
+- Removed old/system/camera.c3
+- Removed old/system/debug.c3
+- Created basic main menu with Start, Options, and Quit buttons
+  - All work, but start logic isn't in.
+- Started working on Menu system, starting with option.
+  - Ran into issues with new priority system that I need to fix.
+
