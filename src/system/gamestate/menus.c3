@@ -13,14 +13,21 @@ struct OptionsMenu {
 
 <**>
 fn void draw() {
+  // Draw Option menu
   if (options.open) {
-    // Draw Option menu
-    //imm::label("test");
+    // Background
     imm::texture_tiled(
-      //texture: "bg_bar",
       tint:    color::DARKGRAY,
       bounds:  {50,50,(float)ennoia::renWidth-100,(float)ennoia::renHeight-100},
       scale:   {10,10},
+    );
+
+    // Tabs
+    imm::button(
+      text:    "@{OPTIONS_VIDEO}",
+      texture: "texture",
+      bounds:  {75,25,200,50},
+      textureScale:   {10,10},
     );
   }
 }

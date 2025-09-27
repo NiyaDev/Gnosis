@@ -1,5 +1,5 @@
 
-#### Ver 0.1.0
+#### Ver 0.1
 
 ##### System
 
@@ -105,14 +105,30 @@
 ##### In-Game Wiki
 - Stores two copies of player knowledge? playthrough + profile?
 
+##### Settings
+###### Video
+- Resolution
+- Render Resolution
+###### Audio
+- Master volume
+- Music Volume
+- Sfx Volume
+###### Accessibility
+- UI scale?
+
 
 #### Future
 
-##### NPC hubs          - v0.2.0
-##### Parties           - v0.3.0?
+##### NPC hubs          - v0.2
+##### Parties           - v0.3? maybe v0.2
 ##### Spellbook casting - ??
 ##### Necromancy        - ??
-##### Enchanting        - ??
+##### Enchanting        - ?? v0.1 -> v0.3
+###### Enchantments
+- Damage types (Fire, Cold, Acid, etc)
+- Skill boosts
+  - Increases/Decreases current and max skill values while active.
+  - If an important skill, like Health or Breath, go to 0 or less, you die instantly.
 ##### Divine casting    - ??
 ##### Computers         - ??
 

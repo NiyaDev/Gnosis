@@ -4,7 +4,8 @@ import std::io;
 import ennoia;
 
 
-World test;
+//World test;
+const String GAME_VERSION = "0.0.0 - There was nothing";
 
 fn int main(String[] args) {
   // Initialize
@@ -12,24 +13,21 @@ fn int main(String[] args) {
     title: "Gnosis",
   );
   defer ennoia::clean();
-  //ennoia::bgColor = color::BLACK;
-
-  //test = world::new("test_2");
 
   // Temp
   bulk::load_all("resources/010");
-  test.player.position = {0,8,0};
-  io::printfn("%d/%d",test.player.hpCur,test.player.hpMax);
+  //test.player.position = {0,8,0};
+  //io::printfn("%d/%d",test.player.hpCur,test.player.hpMax);
 
-  //bulk::load_all("resources/030"); // UI textures
+  bulk::load_all("resources/030"); // UI textures
 
   while (!ennoia::window_should_close()) {
-    if (keybinds::down("move_up"))         test.player.position.z -= 4 * (float)ennoia::deltaTime;
-    if (keybinds::down("move_down"))       test.player.position.z += 4 * (float)ennoia::deltaTime;
-    if (keybinds::down("move_right"))      test.player.position.x += 4 * (float)ennoia::deltaTime;
-    if (keybinds::down("move_left"))       test.player.position.x -= 4 * (float)ennoia::deltaTime;
-    if (keybinds::down("ascend"))          test.player.position.y += 4 * (float)ennoia::deltaTime;
-    if (keybinds::down("descend"))         test.player.position.y -= 4 * (float)ennoia::deltaTime;
+    if (keybinds::down("move_up"))         gamestate.world.player.position.z -= 4 * (float)ennoia::deltaTime;
+    if (keybinds::down("move_down"))       gamestate.world.player.position.z += 4 * (float)ennoia::deltaTime;
+    if (keybinds::down("move_right"))      gamestate.world.player.position.x += 4 * (float)ennoia::deltaTime;
+    if (keybinds::down("move_left"))       gamestate.world.player.position.x -= 4 * (float)ennoia::deltaTime;
+    if (keybinds::down("ascend"))          gamestate.world.player.position.y += 4 * (float)ennoia::deltaTime;
+    if (keybinds::down("descend"))         gamestate.world.player.position.y -= 4 * (float)ennoia::deltaTime;
     if (keybinds::down("rotate_left")  && !camera::is_rotating()) camera::rotate(90);
     if (keybinds::down("rotate_right") && !camera::is_rotating()) camera::rotate(-90);
     if (ennoia::scrollwheel != 0) {
@@ -43,19 +41,15 @@ fn int main(String[] args) {
       //io::printfn("%d-%d/%d",test.player.hpTick, test.player.hpCur, test.player.hpMax);
     }
 
-    camera::main.target = test.player.position;
-    camera::update();
+    
 
     system::worldstate_loop();
-    //test.update();
+    //
 
     //ennoia::start_drawing();
 
     //test.draw();
-    //render::draw_mesh(
-    //  nameMesh:    "cube",
-    //  position:    test.player.position,
-    //);
+    
     //imm::bar(
     //  bounds:{10,10,128,16},
     //);

@@ -86,3 +86,6 @@
 - Started working on Menu system, starting with option.
   - Ran into issues with new priority system that I need to fix.
 
+#### [9/27/25]
+- Re-did all of old/system/gamestate.c3.
+
