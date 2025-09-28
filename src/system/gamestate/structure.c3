@@ -30,38 +30,43 @@ fn void worldstate_loop() {
     case TITLE:
       // New game
       if (imm::button(
-        text: "@{MM_NEW}",
+        //text: "@{MM_NEW}",
+        text: "New Game",
+        textScale: {0.9,0.9},
         texture: "texture",
-        bounds: {20,400,192,64},
+        bounds: {20,400,200,64},
         textureScale: {5,5},
         priority: 2,
       )) {
         gamestate.state = OVERWORLD;
-        //gamestate.world = mem::new(World);
         gamestate.world = world::new("test_2");
         gamestate.world.player.position = {0,8,0};
       }
       // Load Game
       if (imm::button(
-        text: "@{MM_LOAD}",
+        //text: "@{MM_LOAD}",
+        text: "Load Game",
+        textScale: {0.9,0.9},
         texture: "texture",
-        bounds: {20,470,192,64},
+        bounds: {20,470,200,64},
         textureScale: {5,5},
         priority: 2,
       )) {
         gamestate.state = OVERWORLD;
       }
       if (imm::button(
-        text: "@{MM_OPTIONS}",
+        //text: "@{MM_OPTIONS}",
+        text: "Options",
         texture: "texture",
-        bounds: {20,540,192,64},
+        bounds: {20,540,200,64},
         textureScale: {5,5},
         priority: 2,
       )) menus::options.open = true;
       if (imm::button(
-        text: "@{MM_QUIT}",
+        //text: "@{MM_QUIT}",
+        text: "Quit",
         texture: "texture",
-        bounds: {20,610,192,64},
+        bounds: {20,610,200,64},
         textureScale: {5,5},
         priority: 2,
       )) ennoia::forceClose = true;
@@ -82,48 +87,7 @@ fn void worldstate_loop() {
         position:    gamestate.world.player.position,
       );
 
-      // Draw Bars
-      float barOffset = 1;
-      imm::bar(
-        textureBg:   "bar_bg",
-        textureFg:   "bar_fill",
-        textureTint: color::RED,
-        bounds: {
-          16, barOffset++ * 18,
-          (float)gamestate.world.player.hpMax * 2,
-          16,
-        },
-      );
-      if (gamestate.world.player.skills.has_key(MANA)) {
-        imm::bar(
-          textureBg:   "bar_bg",
-          textureFg:   "bar_fill",
-          textureTint: color::BLUE,
-          bounds: {
-            16, barOffset++ * 18,
-            (float)gamestate.world.player.mnMax * 2,
-            16,
-          },
-        );
-      }
-      imm::bar(
-        textureBg:   "bar_bg",
-        textureFg:   "bar_fill",
-        textureTint: color::GREEN,
-        bounds: {
-          16, barOffset++ * 18,
-          (float)gamestate.world.player.hnMax * 2,
-          16,
-        },
-      );
-
-
-      // Game version text
-      imm::label(
-        text: gnosis::GAME_VERSION,
-        position: {5,(float)ennoia::renHeight-12-5},
-        scale: {0.5,0.5},
-      );
+      menus::draw();
 
       ennoia::drawing();
     default:

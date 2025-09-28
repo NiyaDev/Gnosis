@@ -89,3 +89,7 @@
 #### [9/27/25]
 - Re-did all of old/system/gamestate.c3.
 
+#### [9/28/27]
+- Removed old/system/settings.c3.
+- Started working on new UI system but now I'm rethinking it all.
+

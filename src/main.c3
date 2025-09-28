@@ -35,6 +35,7 @@ fn int main(String[] args) {
       camera::main.distance = camera::main.distance.clamp({0,2,4},{0,16,4});
     }
     if (keybinds::pressed("debug")) {
+      menus::skills.open = !menus::skills.open;
       //SkillNode* sn = test.player.skills.get_ref(PERCEPTION)!!;
       //sn.level++;
       //test.player.hpCur--;
