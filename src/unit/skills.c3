@@ -15,6 +15,7 @@ enum Skill : int (int modifier, String local) {
 
   SOMNOLENCE   = {12, "SOMNOLENCE"},
   PERCEPTION   = { 5, "PERCEPTION"},
+  STEALTH      = { 0, "STEALTH"},
 }
 
 struct SkillNode {

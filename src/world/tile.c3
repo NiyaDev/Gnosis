@@ -1,5 +1,5 @@
 
-module ennoia::world::tile;
+module gnosis::world::tile;
 import ennoia::bounds;
 
 

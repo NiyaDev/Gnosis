@@ -1,5 +1,5 @@
 
-module ennoia::world;
+module gnosis::world;
 import ennoia::vector;
 
 

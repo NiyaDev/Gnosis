@@ -28,7 +28,7 @@ fn World new(String name) {
   output.name = name;
   output.clock = {6, 0};
 
-  output.player.unit = unit::new();
+  output.player = unit::new_player();
 
   output.new_chunk({0,0,0});
   output.new_chunk({1,0,0});
@@ -128,6 +128,7 @@ fn void World.update(&self) {
   } else {self.clock.ticks++; }
 
   // Update
+  self.player.update();
 }
 <* Draw world *>
 fn int World.draw(&self) {

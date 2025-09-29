@@ -9,21 +9,8 @@ import gnosis::system;
 
 
 struct Unit {
-  Vector3 position;
   Vector3 momentum;
   Texture* sprite;
-  bool grounded;
-  bool stealthed;
-
-  //* General
-  float hp_cur, hp_max, hp_tick;
-  float st_cur, st_max, st_tick;
-  float mn_cur, mn_max, mn_tick;
-  float hn_cur, hn_max, hn_tick;
-
-  //* Information
-  Species species;
-  SkillList skills;
 
   // Personality
   Personality personality;
@@ -36,10 +23,6 @@ enum Personality {
   HOSTILE,
 }
 
-<* Move unit in space *>
-fn void Unit.move(&self, Vector3 movement) {
-  self.position += movement;
-}
 <* Unit update *>
 fn void Unit.update(&self, bool is_player = false) {
   float dt = (float)ennoia::deltaTime;
@@ -100,25 +83,6 @@ fn void Unit.update(&self, bool is_player = false) {
   self.collision(&rotated_dir);
 
   self.move(rotated_dir);
-}
-<* General unit logic *>
-fn void Unit.tick(&self) {
-  // Personaility
-  switch (self.personality) {
-    case HOSTILE:
-    default:
-  }
-
-  // Memories
-  for (int i; i < self.memories.len(); i++) {
-    self.memories[i].timer--;
-
-    if (self.memories[i].timer <= 0) {
-      io::printfn("Forgot %s",self.memories[i].type);
-      self.memories.remove_at(i);
-      i--;
-    }
-  }
 }
 <* Collision checking *>
 fn void Unit.collision(&self, Vector3* rotated_dir) {
@@ -253,24 +217,6 @@ fn int Unit.use_skill(&self, Skills skill, int amount = 1) {
   }
 }
 
-<* Get bounding box for unit based on position and size *>
-fn BoundingBox Unit.unit_bounds(&self) {
-  float modifier = 0.25; // TODO: Size modifier
-  Vector3 pos = self.position;
-  return {
-    {pos.x - modifier, pos.y, pos.z - modifier},
-    {pos.x + modifier, pos.y + (modifier * 2), pos.z + modifier},
-  };
-}
-<* Get grounding bounding box for unit based on position and size *>
-fn BoundingBox Unit.ground_bounds(&self) {
-  float modifier = 0.23; // TODO: Size modifier
-  Vector3 pos = self.position;
-  return {
-    {pos.x - modifier, pos.y - (modifier / 4), pos.z - modifier},
-    {pos.x + modifier, pos.y + (modifier / 2), pos.z + modifier},
-  };
-}
 
 <* Returns Unit position in whole tiles *>
 fn Vector3 Vector3.get_tile_pos(&self) {

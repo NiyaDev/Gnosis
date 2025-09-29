@@ -89,7 +89,18 @@
 #### [9/27/25]
 - Re-did all of old/system/gamestate.c3.
 
-#### [9/28/27]
+#### [9/28/25]
 - Removed old/system/settings.c3.
 - Started working on new UI system but now I'm rethinking it all.
+
+#### [9/29/25]
+- How the f*** did i miss that tile and chunk where in the ennoia module?
+- Started re-adding Collision.
+  - Finished basic version of gravity.
+  - Started on, but didn't finish, movement collision.
+- Removed old/units/body.c3.
+- Removed old/units/player.c3.
+- Removed old/units/skills.c3.
+- removed old/units/species.c3.
+- Cleaned up main.c3.
 
