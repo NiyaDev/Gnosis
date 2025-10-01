@@ -28,9 +28,10 @@ fn World new(String name) {
   output.name = name;
   output.clock = {6, 0};
 
-  output.player = unit::new_player();
+  output.player = unit::new_player(position:{2,9,2});
 
   output.new_chunk({0,0,0});
+  output.chunks[{0,0,0}]!!.save("test",{0,0,0});
   output.new_chunk({1,0,0});
   output.new_chunk({2,0,0});
   output.new_chunk({0,0,1});
@@ -49,13 +50,14 @@ fn bool World.new_chunk(&self, Vector3 position) {
 
   // Check for false conditions
   if (self.chunks.has_key(newPos)) {
-    io::printfn("[WARNING] - GNOSIS::WORLD::NEW_CHUNK [Attempted to generate a new chunk over old one.]");
+    debug::warning("Attempted to generate a new chunk over old one.");
     return false;
   }
+  
   // NOTE: Maybe load it instead of just throwing an error?
   String path = string::tformat("saves/%s/data/%d_%d_%d.dat", self.name, newPos[0], newPos[1], newPos[2]);
   if (file::exists(path)) {
-    io::printfn("[WARNING] - GNOSIS::WORLD::NEW_CHUNK [Attempted to generate new chunk when one already exists on file]");
+    debug::warning("Attempted to generate new chunk when one already exists on file.");
     return false;
   }
 
@@ -113,7 +115,39 @@ fn Tile? World.get_tile(&self, Vector3 position) {
 }
 
 <* Save world to file *>
-fn void World.save(&self) {}
+fn void World.save(&self) {
+  // Open file
+  String path = string::tformat("saves/%s/worlddata.dat", self.name);
+  
+  File? file = file::open(path, "wb");
+  if (catch file) {
+    debug::warning("Failed to open world save file.");
+    return;
+  }
+
+  // Player data
+  file.write_float(self.player.position.x);
+  file.write_float(self.player.position.y);
+  file.write_float(self.player.position.z);
+  file.write_int(self.player.hpCur);
+  file.write_int(self.player.mnCur);
+  file.write_int(self.player.hnCur);
+  file.write_int((int)self.player.skills.len());
+  self.player.skills.@each(; Skill key, SkillNode val) {
+    file.write_int(key.ordinal);
+    file.write_int(val.level);
+    file.write_int(val.exp);
+  };
+
+  if (catch file.close()) {
+    debug::warning("Failed to close world save file.");
+    return;
+  }
+
+  self.chunks.@each(; int[3] pos, Chunk* ch) {
+    ch.save(self.name, pos);
+  };
+}
 <* Load world from file *>
 fn World load() { return {}; }
 

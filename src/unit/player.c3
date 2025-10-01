@@ -50,18 +50,10 @@ fn Player new_player(
 
 <* Player update *>
 fn void Player.update(&self) {
-  //if (keybinds::down("move_up"))         gamestate.world.player.position.z -= 4 * (float)ennoia::deltaTime;
-  //if (keybinds::down("move_down"))       gamestate.world.player.position.z += 4 * (float)ennoia::deltaTime;
-  //if (keybinds::down("move_right"))      gamestate.world.player.position.x += 4 * (float)ennoia::deltaTime;
-  //if (keybinds::down("move_left"))       gamestate.world.player.position.x -= 4 * (float)ennoia::deltaTime;
-  //if (keybinds::down("ascend"))          gamestate.world.player.position.y += 4 * (float)ennoia::deltaTime;
-  //if (keybinds::down("descend"))         gamestate.world.player.position.y -= 4 * (float)ennoia::deltaTime;
   if (keybinds::down("move_up"))    gamestate.world.player.momentum.z -= 4;// * (float)ennoia::deltaTime;
   if (keybinds::down("move_down"))  gamestate.world.player.momentum.z += 4;// * (float)ennoia::deltaTime;
   if (keybinds::down("move_right")) gamestate.world.player.momentum.x += 4;// * (float)ennoia::deltaTime;
   if (keybinds::down("move_left"))  gamestate.world.player.momentum.x -= 4;// * (float)ennoia::deltaTime;
-  //if (keybinds::down("ascend"))          gamestate.world.player.position.y += 4 * (float)ennoia::deltaTime;
-  //if (keybinds::down("descend"))         gamestate.world.player.position.y -= 4 * (float)ennoia::deltaTime;
   if (keybinds::down("rotate_right") && !camera::is_rotating()) camera::rotate(-90);
   if (keybinds::down("rotate_left")  && !camera::is_rotating()) camera::rotate( 90);
   if (ennoia::scrollwheel != 0) {

@@ -104,3 +104,15 @@
 - removed old/units/species.c3.
 - Cleaned up main.c3.
 
+#### [10/1/25]
+- Fixed collision.
+- Re-added chunk saving and loading.
+- Re-added world saving.
+- Re-organized gamestate structure.
+- Cleaned up error checking.
+- Removed old/units/units.c3.
+- Removed old/world/world.c3.
+- Removed old/world/chunk.c3.
+- Removed old/main.c3.
+  - Finished moving to new engine!
+

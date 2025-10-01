@@ -31,7 +31,7 @@ fn Unit new(
   Unit output = {
     position,
     {0,0,0}, // Momentum
-    1,     // Size
+    0.75,     // Size
     false, // Grounded
     false, // Hidden
     0,0,0, // HP
@@ -147,36 +147,33 @@ fn void Unit.collision(&self, Vector3* rotatedDirection) {
 
   // North
   Tile? north = gamestate.world.get_tile(pos + {0,0,-1});
-  if (try north) {
-    tBounds = {north.type.bounds.min + pos, north.type.bounds.max + pos};
-    if (north.type.solid && bounds::check_boxes(fBounds, tBounds)) {
+  if (try north && north.type.solid) {
+    tBounds = {north.type.bounds.min + pos + {0,0,-1}, north.type.bounds.max + pos + {0,0,-1}};
+    if (bounds::check_boxes(fBounds, tBounds)) {
       if (rotatedDirection.z < 0) rotatedDirection.z = 0;
     }
   }
-
   // South
   Tile? south = gamestate.world.get_tile(pos + {0,0,1});
-  if (try south) {
-    tBounds = {south.type.bounds.min + pos, south.type.bounds.max + pos};
-    if (south.type.solid && bounds::check_boxes(fBounds, tBounds)) {
+  if (try south && south.type.solid) {
+    tBounds = {south.type.bounds.min + pos + {0,0,1}, south.type.bounds.max + pos + {0,0,1}};
+    if (bounds::check_boxes(fBounds, tBounds)) {
       if (rotatedDirection.z > 0) rotatedDirection.z = 0;
     }
   }
-
   // East
-  Tile? east = gamestate.world.get_tile(pos + {0,0,1});
-  if (try east) {
-    tBounds = {east.type.bounds.min + pos, east.type.bounds.max + pos};
-    if (east.type.solid && bounds::check_boxes(fBounds, tBounds)) {
+  Tile? east = gamestate.world.get_tile(pos + {-1,0,0});
+  if (try east && east.type.solid) {
+    tBounds = {east.type.bounds.min + pos + {-1,0,0}, east.type.bounds.max + pos + {-1,0,0}};
+    if (bounds::check_boxes(fBounds, tBounds)) {
       if (rotatedDirection.x < 0) rotatedDirection.x = 0;
     }
   }
-
   // West
-  Tile? west = gamestate.world.get_tile(pos + {0,0,1});
-  if (try west) {
-    tBounds = {west.type.bounds.min + pos, west.type.bounds.max + pos};
-    if (west.type.solid && bounds::check_boxes(fBounds, tBounds)) {
+  Tile? west = gamestate.world.get_tile(pos + {1,0,0});
+  if (try west && west.type.solid) {
+    tBounds = {west.type.bounds.min + pos + {1,0,0}, west.type.bounds.max + pos + {1,0,0}};
+    if (bounds::check_boxes(fBounds, tBounds)) {
       if (rotatedDirection.x > 0) rotatedDirection.x = 0;
     }
   }
@@ -185,15 +182,15 @@ fn void Unit.collision(&self, Vector3* rotatedDirection) {
 <* Creates a bounding box for the unit *>
 fn BoundingBox Unit.unit_bounds(&self) {
   return {
-    {self.position.x - self.size, self.position.y,                   self.position.z - self.size},
-    {self.position.x + self.size, self.position.y + (self.size * 2), self.position.z + self.size},
+    {self.position.x - (0.5 * self.size), self.position.y,                   self.position.z - (0.5 * self.size)},
+    {self.position.x + (0.5 * self.size), self.position.y + (1 * self.size), self.position.z + (0.5 * self.size)},
   };
 }
 <* Creates a bounding box for units feet *>
 fn BoundingBox Unit.ground_bounds(&self) {
   return {
-    {self.position.x - self.size, self.position.y - (self.size / 4), self.position.z - self.size},
-    {self.position.x + self.size, self.position.y + (self.size / 2), self.position.z + self.size},
+    {self.position.x - (0.5 * self.size), self.position.y - (0.5 * self.size), self.position.z - (0.5 * self.size)},
+    {self.position.x + (0.5 * self.size), self.position.y + (0.5 * self.size), self.position.z + (0.5 * self.size)},
   };
 }
 
