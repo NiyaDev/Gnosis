@@ -116,3 +116,7 @@
 - Removed old/main.c3.
   - Finished moving to new engine!
 
+#### [10/2/25]
+- Adjusted for using new VecXfs.
+  - Not the new matrixes yet. Those are still not done.
+

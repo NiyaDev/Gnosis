@@ -45,8 +45,8 @@ fn World new(String name) {
   @param position: "Position to generate at"
   @return "Whether new chunk was actually generated"
  *>
-fn bool World.new_chunk(&self, Vector3 position) {
-  int[3] newPos = position.to_int_array();
+fn bool World.new_chunk(&self, Vec3f position) {
+  int[3] newPos = (Vec3i)position.xyz;//position.to_int_array();
 
   // Check for false conditions
   if (self.chunks.has_key(newPos)) {
@@ -94,19 +94,19 @@ fn bool World.new_chunk(&self, Vector3 position) {
 
 faultdef NO_TILE;
 <* Gets tile in world *>
-fn Tile? World.get_tile(&self, Vector3 position) {
-  Vector3 chunkPosition = {
+fn Tile? World.get_tile(&self, Vec3f position) {
+  Vec3f chunkPosition = {
     (float)((int)((position.x < 0) ? position.x - 16 : position.x) / 16),
     (float)((int)((position.y < 0) ? position.y - 16 : position.y) / 16),
     (float)((int)((position.z < 0) ? position.z - 16 : position.z) / 16),
   };
-  Vector3 tilePosition = {
+  Vec3f tilePosition = {
     (float)(((position.x < 0) ? (16 + (int)position.x) % 16 : (int)position.x % 16)),
     (float)(((position.y < 0) ? (16 + (int)position.y) % 16 : (int)position.y % 16)),
     (float)(((position.z < 0) ? (16 + (int)position.z) % 16 : (int)position.z % 16)),
   };
 
-  Chunk*? chunk = self.chunks[chunkPosition.to_int_array()];
+  Chunk*? chunk = self.chunks[(Vec3i)chunkPosition];
   if (try chunk) {
     return chunk.tiles[(int)tilePosition.x][(int)tilePosition.y][(int)tilePosition.z];
   }
@@ -168,7 +168,7 @@ fn void World.update(&self) {
 fn int World.draw(&self) {
   int tilesRendered;
 
-  Vector3 pos = self.player.position.get_whole_tile();
+  Vec3f pos = self.player.position.get_whole_tile();
 
   // Draw below player
   Tile? t = self.get_tile(pos-{0,1,0});
@@ -185,12 +185,12 @@ fn int World.draw(&self) {
   // Send rays in most directions
   int rays = 80;
   for (int i; i < rays; i++) {
-    Vector3 dir = (Vector3){0,0,0}.rotate({0,0,1}, (360 / (float)rays) * (float)i);
+    Vec3f dir = (Vec3f){0,0,0}.rotate({0,0,1}, (360 / (float)rays) * (float)i);
     self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
   }
   for (float y; y > -1; y -= 0.1) {
     for (int i; i < rays; i++) {
-      Vector3 dir = (Vector3){0,0,0}.rotate({0,y,1+y}, (360 / (float)rays) * (float)i);
+      Vec3f dir = (Vec3f){0,0,0}.rotate({0,y,1+y}, (360 / (float)rays) * (float)i);
       self.check_direction(pos, dir, 10 + (float)(self.player.skills.get(PERCEPTION)!!.level * 0.2));
     }
   }
@@ -199,11 +199,11 @@ fn int World.draw(&self) {
 }
 
 <**>
-fn void World.check_direction(&self, Vector3 start, Vector3 direction, float length) {
-  Vector3 currentPos = start;
+fn void World.check_direction(&self, Vec3f start, Vec3f direction, float length) {
+  Vec3f currentPos = start;
   for (int i; i < length; i++) {
     currentPos += direction;
-    Vector3 temp = currentPos.get_whole_tile();
+    Vec3f temp = currentPos.get_whole_tile();
 
     Tile? far = self.get_tile(temp);
     if (try far) {
@@ -231,7 +231,7 @@ fn void World.check_direction(&self, Vector3 start, Vector3 direction, float len
 }
 
 <**>
-fn Vector3 Vector3.get_whole_tile(&self) {
+fn Vec3f Vec3f.get_whole_tile(&self) {
   return {
     (int)((self.x + 0.5).floor()),
     (int)((self.y + 0.5).floor()),

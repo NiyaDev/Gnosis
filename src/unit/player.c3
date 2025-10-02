@@ -13,7 +13,7 @@ struct Player {
 
 <* Creates a new player *>
 fn Player new_player(
-  Vector3 position = {0,16,0},
+  Vec3f position = {0,16,0},
   String species = "human",
 ) {
   Player output = {

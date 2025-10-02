@@ -13,9 +13,9 @@ struct OptionsMenu {
 SkillsMenu skills;
 struct SkillsMenu {
   bool open;
-  Vector2 position;
+  Vec2f position;
 
-  Vector2 lastPosition;
+  Vec2f lastPosition;
 }
 
 <**>

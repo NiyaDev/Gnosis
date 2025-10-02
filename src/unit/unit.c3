@@ -7,8 +7,8 @@ import std::io;
 
 
 struct Unit {
-  Vector3 position;
-  Vector3 momentum;
+  Vec3f position;
+  Vec3f momentum;
   float size;
   bool grounded;
   bool hidden;
@@ -25,7 +25,7 @@ struct Unit {
 
 <* Create new Unit *>
 fn Unit new(
-  Vector3 position = {0,0,0},
+  Vec3f position = {0,0,0},
   String species = "human",
 ) {
   Unit output = {
@@ -60,7 +60,7 @@ fn Unit new(
 }
 
 <* Move Unit *>
-fn void Unit.move(&self, Vector3 move) {
+fn void Unit.move(&self, Vec3f move) {
   self.position += move;
 }
 
@@ -75,7 +75,7 @@ fn void Unit.update_stats(&self) {
 fn void Unit.update(&self) {
   // Gravity
   BoundingBox gBounds = self.ground_bounds();
-  Vector3 tilePos = (self.position - {0,1,0}).get_whole_tile();
+  Vec3f tilePos = (self.position - {0,1,0}).get_whole_tile();
   Tile? tile = gamestate.world.get_tile(tilePos);
   if (try tile && tile.type.solid) {
     BoundingBox tBounds = {tile.type.bounds.min + tilePos, tile.type.bounds.max + tilePos};
@@ -101,7 +101,7 @@ fn void Unit.update(&self) {
     self.momentum *= {0.8, 1, 0.8};
   }
 
-  Vector3 rotatedDirection = (Vector3){0,0,0}.rotate(self.momentum, camera::main.rotation);
+  Vec3f rotatedDirection = (Vec3f){0,0,0}.rotate(self.momentum, camera::main.rotation);
 
   // Check Collision
   self.collision(&rotatedDirection);
@@ -140,9 +140,9 @@ fn void Unit.tick(&self) {
 }
 
 <* Collision checking *>
-fn void Unit.collision(&self, Vector3* rotatedDirection) {
+fn void Unit.collision(&self, Vec3f* rotatedDirection) {
   BoundingBox fBounds = self.unit_bounds();
-  Vector3 pos = self.position.get_whole_tile();
+  Vec3f pos = self.position.get_whole_tile();
   BoundingBox tBounds;
 
   // North
